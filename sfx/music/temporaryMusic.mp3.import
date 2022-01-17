@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/temporaryMusic.mp3-26f32a080451c947081be088b2037bbd.mp3str"
+
+[deps]
+
+source_file="res://sfx/music/temporaryMusic.mp3"
+dest_files=[ "res://.import/temporaryMusic.mp3-26f32a080451c947081be088b2037bbd.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
