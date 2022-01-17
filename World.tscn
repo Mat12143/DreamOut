@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/Capybara.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/enemies/pyros_straight_from_hell.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/enemies/capybara_test.tscn" type="PackedScene" id=3]
 
 [node name="World" type="YSort"]
 
@@ -11,10 +12,32 @@ acceleration = 650
 max_speed = 150
 friction = 1000
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="Enemy" parent="." instance=ExtResource( 2 )]
+position = Vector2( 104, 48 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PoolVector2Array( 0, 0, 32, 0, 8, 24, 56, 64, 24, 88, 24, 160, 48, 176, 72, 168, 96, 176, 136, 160, 176, 168, 240, 160, 216, 128, 248, 88, 280, 112, 296, 48, 248, 24, 232, 16, 248, 8, 248, 0, 320, 0, 320, 176, 0, 180 )
+[node name="Enemy2" parent="." instance=ExtResource( 3 )]
+position = Vector2( -104, -40 )
 
-[node name="Capybara" parent="." instance=ExtResource( 2 )]
-position = Vector2( 104, 104 )
+[node name="Enemy3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 272, 144 )
+
+[node name="Enemy4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 296, -24 )
+
+[node name="Enemy5" parent="." instance=ExtResource( 2 )]
+position = Vector2( -48, 168 )
+
+[node name="Enemy6" parent="." instance=ExtResource( 2 )]
+position = Vector2( 120, 168 )
+
+[node name="Enemy7" parent="." instance=ExtResource( 2 )]
+position = Vector2( 16, 40 )
+
+[node name="Enemy8" parent="." instance=ExtResource( 2 )]
+position = Vector2( 144, -24 )
+
+[node name="Enemy9" parent="." instance=ExtResource( 3 )]
+position = Vector2( -40, 96 )
+
+[node name="Enemy10" parent="." instance=ExtResource( 3 )]
+position = Vector2( 168, 184 )

@@ -42,7 +42,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5 ]
 }
 
-[node name="Player" type="KinematicBody2D" groups=["friendlyProjectilesPassThrough"]]
+[node name="Player" type="KinematicBody2D" groups=["Player", "friendlyProjectilesPassThrough"]]
 script = ExtResource( 2 )
 fireDelay = 0.08
 Bullet = ExtResource( 3 )

@@ -4,7 +4,9 @@ export var acceleration = 500
 export var max_speed = 100
 export var friction = 900
 export var fireDelay:float = 0.1
-export var rollDelay:float = 1
+#export var rollDelay:float = 1
+export var maxHealth = 10
+var health = maxHealth
 onready var fireDelayTimer = $FireDelayTimer
 onready var rollDelayTimer = $RollDelayTimer
 
