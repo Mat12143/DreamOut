@@ -1,0 +1,82 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://sprites/Player/giuratore_walk.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Player.gd" type="Script" id=2]
+[ext_resource path="res://scenes/Bullet.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sprites/Bullets/gun.png" type="Texture" id=4]
+[ext_resource path="res://scripts/GunPoint.gd" type="Script" id=5]
+[ext_resource path="res://sfx/shoot.mp3" type="AudioStream" id=6]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 2, 3 )
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "Walk"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5 ]
+}
+
+[node name="Player" type="KinematicBody2D" groups=["friendlyProjectilesPassThrough"]]
+script = ExtResource( 2 )
+fireDelay = 0.08
+Bullet = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+hframes = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 3 )
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 2 )
+anims/Walk = SubResource( 3 )
+
+[node name="Gun" type="Sprite" parent="."]
+position = Vector2( 0, 3 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
+script = ExtResource( 5 )
+
+[node name="Position2D" type="Position2D" parent="Gun"]
+position = Vector2( 14, 0 )
+
+[node name="FireDelayTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="RollDelayTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ShootSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -15.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true

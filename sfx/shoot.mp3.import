@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/shoot.mp3-e2944a614193130b5284ef5c669938cb.mp3str"
+
+[deps]
+
+source_file="res://sfx/shoot.mp3"
+dest_files=[ "res://.import/shoot.mp3-e2944a614193130b5284ef5c669938cb.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
