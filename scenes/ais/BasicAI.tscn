@@ -1,11 +1,12 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [sub_resource type="GDScript" id=4]
 script/source = "extends Node2D
 
 enum State {
 	PATROL,
-	ENGAGE
+	ENGAGE,
+	SHOOT
 }
 
 signal state_changed(new_state)
@@ -16,6 +17,7 @@ var state = State.PATROL setget set_state
 var player = null
 var actor = null
 var weapon = null
+var forceEngage = false
 export var speed = 10
 export var fireDelay = 1.2
 
@@ -40,6 +42,10 @@ func _physics_process(delta):
 				
 			else:
 				print('Engaging, but missing weapon or player')
+		State.SHOOT:
+			if fireDelayTimer.is_stopped() and player != null and weapon != null:
+					fireDelayTimer.start(fireDelay) # - (0.1 * difficulty)
+					weapon.shoot(player)
 		_:
 			print('unknown state!')
 				
@@ -52,17 +58,33 @@ func set_state(new_state: int):
 	
 func _on_PlayerDetection_body_entered(body: Node):
 	if body.is_in_group(\"Player\"):
+		fireDelayTimer.start(1)
 		set_state(State.ENGAGE)
 		player = body
 
 func _on_PlayerDetection_body_exited(body):
-	if body.is_in_group(\"Player\"):
+	if body.is_in_group(\"Player\") and !forceEngage:
 		set_state(State.PATROL)
+		player = body
+
+
+func _on_TooClose_body_entered(body):
+	if body.is_in_group(\"Player\"):
+		set_state(State.SHOOT)
+		player = body
+
+
+func _on_TooClose_body_exited(body):
+	if body.is_in_group(\"Player\"):
+		set_state(State.ENGAGE)
 		player = body
 "
 
 [sub_resource type="CircleShape2D" id=3]
 radius = 104.0
+
+[sub_resource type="CircleShape2D" id=5]
+radius = 37.0135
 
 [node name="AI" type="Node2D"]
 script = SubResource( 4 )
@@ -76,5 +98,14 @@ one_shot = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
 shape = SubResource( 3 )
 
+[node name="TooClose" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TooClose"]
+shape = SubResource( 5 )
+
 [connection signal="body_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]
 [connection signal="body_exited" from="PlayerDetection" to="." method="_on_PlayerDetection_body_exited"]
+[connection signal="body_entered" from="TooClose" to="." method="_on_PlayerDetection_body_entered"]
+[connection signal="body_entered" from="TooClose" to="." method="_on_TooClose_body_entered"]
+[connection signal="body_exited" from="TooClose" to="." method="_on_PlayerDetection_body_exited"]
+[connection signal="body_exited" from="TooClose" to="." method="_on_TooClose_body_exited"]

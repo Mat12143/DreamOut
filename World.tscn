@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/enemies/pyros_straight_from_hell.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/enemies/ninja.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sprites/Player/giuratore.png" type="Texture" id=3]
 [ext_resource path="res://sfx/music/temporaryMusic.mp3" type="AudioStream" id=4]
+[ext_resource path="res://sprites/playerBar.png" type="Texture" id=5]
+[ext_resource path="res://sprites/PlayerPortrait.png" type="Texture" id=6]
+[ext_resource path="res://scripts/GlobalEventManager.gd" type="Script" id=7]
+[ext_resource path="res://scripts/HUD.gd" type="Script" id=8]
+[ext_resource path="res://scenes/enemies/ninja.tscn" type="PackedScene" id=9]
 
 [node name="World" type="YSort"]
 
@@ -13,37 +18,91 @@ acceleration = 650
 max_speed = 150
 friction = 1000
 
-[node name="Enemy" parent="." instance=ExtResource( 2 )]
-position = Vector2( 104, 48 )
-
-[node name="Enemy2" parent="." instance=ExtResource( 3 )]
-position = Vector2( -104, -40 )
+[node name="Enemy" parent="." instance=ExtResource( 9 )]
+position = Vector2( 161, -34 )
 
 [node name="Enemy3" parent="." instance=ExtResource( 2 )]
-position = Vector2( 272, 144 )
-
-[node name="Enemy4" parent="." instance=ExtResource( 2 )]
-position = Vector2( 296, -24 )
-
-[node name="Enemy5" parent="." instance=ExtResource( 2 )]
-position = Vector2( -48, 168 )
-
-[node name="Enemy6" parent="." instance=ExtResource( 2 )]
-position = Vector2( 120, 168 )
-
-[node name="Enemy7" parent="." instance=ExtResource( 2 )]
-position = Vector2( 16, 40 )
-
-[node name="Enemy8" parent="." instance=ExtResource( 2 )]
-position = Vector2( 144, -24 )
-
-[node name="Enemy9" parent="." instance=ExtResource( 3 )]
-position = Vector2( -40, 96 )
-
-[node name="Enemy10" parent="." instance=ExtResource( 3 )]
-position = Vector2( 168, 184 )
+position = Vector2( 158, 199 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
 volume_db = -25.0
 autoplay = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource( 8 )
+
+[node name="PortraitAndHealth" type="Control" parent="HUD"]
+margin_left = 15.0
+margin_top = 10.0
+margin_right = 48.0
+margin_bottom = 43.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Portrait" type="TextureRect" parent="HUD/PortraitAndHealth"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HPBar" type="TextureProgress" parent="HUD/PortraitAndHealth/Portrait"]
+margin_top = 32.0
+margin_right = 32.0
+margin_bottom = 64.0
+rect_rotation = -90.0
+value = 100.0
+texture_progress = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="HUD/PortraitAndHealth/Portrait"]
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 26.0
+margin_bottom = 26.0
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GlobalEventManager" type="Node2D" parent="."]
+script = ExtResource( 7 )
+
+[node name="Enemy2" parent="." instance=ExtResource( 9 )]
+position = Vector2( 304, -41 )
+
+[node name="Enemy4" parent="." instance=ExtResource( 9 )]
+position = Vector2( 6, -49 )
+
+[node name="Enemy5" parent="." instance=ExtResource( 9 )]
+position = Vector2( 132, -114 )
+
+[node name="Enemy6" parent="." instance=ExtResource( 9 )]
+position = Vector2( 213, -124 )
+
+[node name="Enemy7" parent="." instance=ExtResource( 2 )]
+position = Vector2( 81, 79 )
+
+[node name="Enemy8" parent="." instance=ExtResource( 2 )]
+position = Vector2( 213, 82 )
+
+[node name="Enemy9" parent="." instance=ExtResource( 2 )]
+position = Vector2( 160, 16 )
+
+[node name="Enemy10" parent="." instance=ExtResource( 9 )]
+position = Vector2( 358, 82 )
+
+[node name="Enemy11" parent="." instance=ExtResource( 9 )]
+position = Vector2( -20, 89 )
+
+[node name="Enemy12" parent="." instance=ExtResource( 9 )]
+position = Vector2( 43, 139 )
+
+[connection signal="playerHit" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHit"]
+[connection signal="playerHit" from="GlobalEventManager" to="HUD" method="_on_GlobalEventManager_playerHit"]

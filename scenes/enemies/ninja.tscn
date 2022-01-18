@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://sprites/Enemies/ninja.png" type="Texture" id=1]
 [ext_resource path="res://scenes/ais/BasicAI.tscn" type="PackedScene" id=2]
+[ext_resource path="res://sprites/enemyBar.png" type="Texture" id=3]
 [ext_resource path="res://scenes/weapons/Fan3.tscn" type="PackedScene" id=4]
+[ext_resource path="res://sprites/healthRect.png" type="Texture" id=5]
 
 [sub_resource type="GDScript" id=2]
 script/source = "extends KinematicBody2D
@@ -14,6 +16,7 @@ var health = maxHealth
 
 func _ready():
 	AI.initialize(self, weapon)
+	$HPBar.value = 100
 
 func _process(delta):
 	if health < 0 or health == 0:
@@ -71,3 +74,23 @@ shape = SubResource( 1 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 3 )
 anims/Walk = SubResource( 4 )
+
+[node name="HPBar" type="TextureProgress" parent="."]
+visible = false
+margin_left = -8.0
+margin_top = 3.0
+margin_right = 8.0
+margin_bottom = 19.0
+value = 100.0
+texture_progress = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="HPBar"]
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

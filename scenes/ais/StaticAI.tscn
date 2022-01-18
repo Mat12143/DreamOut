@@ -16,6 +16,7 @@ var state = State.PATROL setget set_state
 var player = null
 var actor = null
 var weapon = null
+var forceEngage = false
 export var speed = 10
 export var fireDelay = 1.2
 
@@ -51,11 +52,12 @@ func set_state(new_state: int):
 	
 func _on_PlayerDetection_body_entered(body: Node):
 	if body.is_in_group(\"Player\"):
+		fireDelayTimer.start(1)
 		set_state(State.ENGAGE)
 		player = body
 
 func _on_PlayerDetection_body_exited(body):
-	if body.is_in_group(\"Player\"):
+	if body.is_in_group(\"Player\") and !forceEngage:
 		set_state(State.PATROL)
 		player = body
 "
@@ -65,6 +67,7 @@ radius = 104.0
 
 [node name="AI" type="Node2D"]
 script = SubResource( 4 )
+speed = 0
 
 [node name="FireDelayTimer" type="Timer" parent="."]
 one_shot = true
