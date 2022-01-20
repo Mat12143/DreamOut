@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/enemyHurt.wav-26c24d968e34e8bbe5f84766daaf7cab.sample"
+
+[deps]
+
+source_file="res://sfx/enemyHurt.wav"
+dest_files=[ "res://.import/enemyHurt.wav-26c24d968e34e8bbe5f84766daaf7cab.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

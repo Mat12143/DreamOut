@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Object",
+"class": "RNGTools",
+"language": "GDScript",
+"path": "res://addons/rngtools/RNGTools.gd"
+} ]
+_global_script_class_icons={
+"RNGTools": ""
+}
+
 [application]
 
 config/name="Gioco Pazzo"

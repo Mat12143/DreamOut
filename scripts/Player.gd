@@ -20,6 +20,8 @@ func shoot():
 	var b = Bullet.instance()
 	owner.add_child(b)
 	b.transform = $Gun/Position2D.global_transform
+#	print()
+#	b.rotation += rand_range(0.2, -0.2)
 	$ShootSound.play()
 		
 

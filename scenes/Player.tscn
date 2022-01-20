@@ -5,7 +5,7 @@
 [ext_resource path="res://scenes/Bullet.tscn" type="PackedScene" id=3]
 [ext_resource path="res://sprites/Bullets/gun.png" type="Texture" id=4]
 [ext_resource path="res://scripts/GunPoint.gd" type="Script" id=5]
-[ext_resource path="res://sfx/shoot.mp3" type="AudioStream" id=6]
+[ext_resource path="res://sfx/projectilehit.wav" type="AudioStream" id=6]
 [ext_resource path="res://sprites/Bullets/playerPointer.png" type="Texture" id=7]
 [ext_resource path="res://sfx/hitHurt.wav" type="AudioStream" id=8]
 
