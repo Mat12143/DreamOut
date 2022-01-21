@@ -1,10 +1,11 @@
 extends Area2D
 
 export (String, "projSpeed", "charSpeed", "fireRate", "damage") var key
-export (int) var value
+export (int) var value = 1
 export (float) var spawnChance # Questo poi servira' a MAT FORSE FORSE FORSE
 export (bool) var forceQuality = false
-export (int, "common", "fantastic", "incredible", "crazy") var forcedQuality = 0
+export (int, "common", "nice", "good", "crazy") var forcedQuality = 0
+
 enum {
 	COMMON,
 	NICE,

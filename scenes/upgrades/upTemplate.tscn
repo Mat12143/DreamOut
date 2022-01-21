@@ -10,7 +10,6 @@ extents = Vector2( 16, 16 )
 scale = Vector2( 0.995059, 1.01221 )
 script = ExtResource( 2 )
 key = "charSpeed"
-value = 1
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
