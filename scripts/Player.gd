@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
-export var acceleration = 500
-export var max_speed = 100
+export var acceleration = 50
+export var max_speed = 15
 export var friction = 900
 export var fireDelay:float = 0.1
 #export var rollDelay:float = 1
