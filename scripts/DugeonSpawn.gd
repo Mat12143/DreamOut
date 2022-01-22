@@ -27,4 +27,3 @@ func make_start_room():
 	
 	pickedRoom.visible = true
 	
-	

@@ -3,7 +3,7 @@
 [ext_resource path="res://sprites/Player/giuratore_walk.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://scenes/Bullet.tscn" type="PackedScene" id=3]
-[ext_resource path="res://sprites/Bullets/gun.png" type="Texture" id=4]
+[ext_resource path="res://sprites/Bullets/gunsheet.png" type="Texture" id=4]
 [ext_resource path="res://scripts/GunPoint.gd" type="Script" id=5]
 [ext_resource path="res://sfx/projectilehit.wav" type="AudioStream" id=6]
 [ext_resource path="res://sprites/Bullets/playerPointer.png" type="Texture" id=7]
@@ -46,6 +46,8 @@ tracks/0/keys = {
 
 [node name="Player" type="KinematicBody2D" groups=["Player", "friendlyProjectilesPassThrough"]]
 script = ExtResource( 2 )
+acceleration = 0
+max_speed = 1
 fireDelay = 0.08
 Bullet = ExtResource( 3 )
 
@@ -65,10 +67,33 @@ anims/Walk = SubResource( 3 )
 position = Vector2( 0, 3 )
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 4 )
+hframes = 6
 script = ExtResource( 5 )
 
 [node name="Position2D" type="Position2D" parent="Gun"]
+visible = false
 position = Vector2( 14, 0 )
+
+[node name="ShotGuns" type="Node2D" parent="Gun"]
+
+[node name="Position2D" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -2 )
+
+[node name="Position2D2" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, 2 )
+rotation = 0.0872665
+
+[node name="Position2D3" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, 6 )
+rotation = 0.174533
+
+[node name="Position2D4" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -6 )
+rotation = -0.0872665
+
+[node name="Position2D5" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -10 )
+rotation = -0.174533
 
 [node name="FireDelayTimer" type="Timer" parent="."]
 one_shot = true

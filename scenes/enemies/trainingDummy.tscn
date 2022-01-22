@@ -6,23 +6,7 @@
 [ext_resource path="res://scenes/ais/StaticAI.tscn" type="PackedScene" id=4]
 [ext_resource path="res://sprites/healthRect.png" type="Texture" id=5]
 [ext_resource path="res://sfx/enemyHurt.wav" type="AudioStream" id=6]
-
-[sub_resource type="GDScript" id=2]
-script/source = "extends KinematicBody2D
-
-onready var AI = $AI
-onready var weapon = $Weapon
-export var maxHealth = 5
-onready var health = maxHealth
-
-func _ready():
-	AI.initialize(self, weapon)
-	$HPBar.value = 100
-
-func _process(delta):
-	if health < 0 or health == 0:
-		queue_free()
-"
+[ext_resource path="res://scripts/enemy.gd" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
@@ -59,8 +43,7 @@ tracks/0/keys = {
 }
 
 [node name="Enemy" type="KinematicBody2D" groups=["mobs"]]
-script = SubResource( 2 )
-maxHealth = 999999
+script = ExtResource( 7 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
