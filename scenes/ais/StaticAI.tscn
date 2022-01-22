@@ -8,6 +8,8 @@ script/source = "extends Node2D
 enum State {
 	PATROL,
 	ENGAGE
+	SHOOT,
+	DEAD
 }
 
 signal state_changed(new_state)
@@ -26,7 +28,7 @@ func initialize(actor, weapon):
 	self.actor = actor
 	self.weapon = weapon
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	match state:
 		State.PATROL:
 			pass
@@ -39,9 +41,13 @@ func _physics_process(delta):
 				if fireDelayTimer.is_stopped():
 					fireDelayTimer.start(fireDelay)
 					weapon.shoot(player)
-				
 			else:
 				print('Engaging, but missing weapon or player')
+		State.SHOOT:
+			pass
+		State.DEAD:
+			pass	
+			
 		_:
 			print('unknown state!')
 				

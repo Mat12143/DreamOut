@@ -21,43 +21,60 @@ enum Guns {
 export (PackedScene) var Bullet
 
 var data = { # Questo verra' salvato
+	"upgrades": {
+		"damage": 0,
+		"fireRate": 0,
+		"projSpeed": 0,
+		"charSpeed": 0,
+	},
+	"selectedGun": Guns.SMG, # Viene salvato come numero (ENUM GUNS)
+	"name": "Player"
+} 
+
+var gunData = {
 	"damage": 0,
 	"fireRate": 0,
 	"projSpeed": 0,
 	"charSpeed": 0,
 	"autoFire": true,
-	"selectedGun": Guns.PYROS, # Viene salvato come numero (ENUM GUNS)
-	"name": "Player"
 }
 
-func _ready():
+func updateGun():
 	match data.selectedGun:
 		Guns.SMG:
-			data.damage = 1
-			data.fireRate = 0.2
-			data.projSpeed = 500
+			gunData.damage = 1
+			gunData.fireRate = 0.2
+			gunData.projSpeed = 500
 		Guns.PISTOL:
-			data.damage = 0.5
-			data.fireRate = 0.00001
-			data.projSpeed = 500
-			data.autoFire = false
+			gunData.damage = 1
+			gunData.fireRate = 0.00001
+			gunData.projSpeed = 500
+			gunData.autoFire = false
 		Guns.SHOTGUN:
-			data.damage = 0.7
-			data.fireRate = 1
-			data.projSpeed = 500
+			gunData.damage = 0.7
+			gunData.fireRate = 1
+			gunData.projSpeed = 500
 		Guns.RIFLE:
-			data.damage = 4
-			data.fireRate = 1.5
-			data.projSpeed = 1500
+			gunData.damage = 5
+			gunData.fireRate = 1.5
+			gunData.projSpeed = 1500
 		Guns.PYROS:
-			data.damage = 100
-			data.fireRate = 0.000000001
-			data.projSpeed = 1500
+			gunData.damage = 100
+			gunData.fireRate = 0.000000001
+			gunData.projSpeed = 1500
 		_:
 			print("NO GUN FOUND")
 	$Gun.frame = data.selectedGun
-	
-#		data.charSpeed
+
+func _ready():
+	var save = owner.get_node("SaveManager").loadSave("user://plr.save")
+	print(save)
+	if !!save:
+		data = save
+	else:
+		print('plr.save not found, loading defaults')
+		owner.get_node("SaveManager").save(data, "user://plr.save")
+	updateGun()
 
 var velocity = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer
@@ -65,14 +82,14 @@ onready var animationPlayer = $AnimationPlayer
 func shoot():
 	if data.selectedGun != Guns.SHOTGUN:
 		var b = Bullet.instance()
-		b.initialize(data.damage, data.projSpeed, data.selectedGun)
+		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun)
 		get_tree().current_scene.add_child(b)
 		b.transform = $Gun/Position2D.global_transform
 		$ShootSound.play()
 	else:
 		for i in $Gun/ShotGuns.get_children():
 			var b = Bullet.instance()
-			b.initialize(data.damage, data.projSpeed, data.selectedGun)
+			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun)
 			get_tree().current_scene.add_child(b)
 			b.transform = i.global_transform
 		$ShootSound.play()
@@ -80,8 +97,8 @@ func shoot():
 func _physics_process(delta):
 #	print(position)
 	var input_vector = Vector2.ZERO
-	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+	input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 	input_vector = input_vector.normalized()
 	if input_vector != Vector2.ZERO:
 		animationPlayer.play("Walk")
@@ -92,9 +109,9 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide(velocity)
 	
-	var pressedShoot = Input.is_action_pressed("shoot") if data.autoFire else Input.is_action_just_pressed("shoot")
+	var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
 	if pressedShoot and fireDelayTimer.is_stopped():
-		fireDelayTimer.start(data.fireRate)
+		fireDelayTimer.start(gunData.fireRate - data.upgrades.fireRate / 100)
 		shoot()
 
 func _on_GlobalEventManager_playerHit(damage):
@@ -102,7 +119,7 @@ func _on_GlobalEventManager_playerHit(damage):
 		$IFrameTimer.start(0.5)
 		health -= damage
 		$HitSound.play()
-		for i in range(0, 10):
+		for _i in range(0, 10):
 			yield(get_tree().create_timer(0.05), "timeout")
 			if visible:
 				hide()

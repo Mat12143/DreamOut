@@ -60,15 +60,19 @@ func set_state(new_state: int):
 		return
 	state = new_state
 	emit_signal(\"state_changed\", state)
+
+func get_state_banana():
+	return state # Non fare domande
 	
 func _on_PlayerDetection_body_entered(body: Node):
 	if body.is_in_group(\"Player\"):
+#		if state != State.SHOOT:
 		$Exclamation.show()
 		if ($Exclamation.frame == 0):
 			$Exclamation/AnimationPlayer.play(\"Disappear\")
 		fireDelayTimer.start(1)
 		set_state(State.ENGAGE)
-#		$Exclamation.hide()
+	#		$Exclamation.hide()
 		player = body
 
 func _on_PlayerDetection_body_exited(body):
@@ -85,15 +89,15 @@ func _on_TooClose_body_entered(body):
 
 func _on_TooClose_body_exited(body):
 	if body.is_in_group(\"Player\"):
-		set_state(State.ENGAGE)
 		player = body
+		set_state(State.ENGAGE)
 "
 
 [sub_resource type="CircleShape2D" id=3]
-radius = 104.0
+radius = 136.0
 
 [sub_resource type="CircleShape2D" id=5]
-radius = 37.0135
+radius = 32.0
 
 [sub_resource type="Animation" id=6]
 resource_name = "Disappear"

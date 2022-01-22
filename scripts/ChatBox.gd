@@ -6,6 +6,7 @@ onready var inputField = get_node("VBoxContainer/LineEdit")
 
 func _ready():
 	inputField.hide()
+	$VBoxContainer/ChatLog.get_child(0).rect_scale.x = 0
 
 func _input(event):
 	if event is InputEventKey:
@@ -28,9 +29,9 @@ func _on_LineEdit_text_entered(new_text):
 		inputField.hide()
 
 func _process(delta):
-	if $VBoxContainer/ChatSweeper.is_stopped():
+	if $VBoxContainer/ChatSweeper.is_stopped() and !inputField.visible:
 		chatLog.hide()
-		print("GIUR")
+#		print("GIUR")
 		
 
 func _on_GlobalEventManager_messageEntered():

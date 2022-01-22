@@ -5,22 +5,18 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Node2D
 export (PackedScene) var Bullet
-var maxSkipBullets = 10
-var skipBullets = 0
 
-func shoot(player):
-	for times in range(0, 10):
+func shoot(_player):
+	for _times in range(0, 10):
 #		print('giuro')
 #		yield(get_tree().create_timer(0.05), \"timeout\") # PER SPIRALE
 		for i in $Cannons.get_children():
-			if randi() % 2 or skipBullets >= maxSkipBullets:
+			if randi() % 3:
 				var b = Bullet.instance()
 				i.rotation += 1
 #				print(i.owner.owner.owner)
 				i.owner.owner.owner.add_child(b)
 				b.transform = i.global_transform
-			else:
-				skipBullets += 1
 "
 
 [node name="Weapon" type="Node2D"]

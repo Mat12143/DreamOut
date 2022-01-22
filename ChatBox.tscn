@@ -30,7 +30,6 @@ margin_bottom = 96.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 bbcode_enabled = true
-scroll_active = false
 scroll_following = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -45,5 +44,6 @@ placeholder_text = "Yo we got chat in here :)"
 placeholder_alpha = 0.251
 
 [node name="ChatSweeper" type="Timer" parent="VBoxContainer"]
+one_shot = true
 
 [connection signal="text_entered" from="VBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]

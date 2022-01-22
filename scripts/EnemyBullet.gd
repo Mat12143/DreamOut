@@ -7,6 +7,7 @@ func _physics_process(delta):
 		position += transform.x * speed * delta
 
 func _on_Bullet_body_entered(body):
+		get_tree().current_scene.get_node("BulletSounds").play()
 		if body.is_in_group("Player"):
 			get_tree().get_current_scene().get_node("GlobalEventManager").emit_signal("playerHit", damage)
 #				body.health -= 1mmmkmlmlm
