@@ -75,7 +75,6 @@ script = ExtResource( 9 )
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 160, 90 )
 current = true
-zoom = Vector2( 5, 5 )
 
 [connection signal="messageEntered" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="playerHit" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHit"]
