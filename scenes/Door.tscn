@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scripts/Door.gd" type="Script" id=1]
+[ext_resource path="res://sprites/door.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 8.26301, 7.71192 )
+
+[node name="Door" type="Area2D"]
+scale = Vector2( 1.00842, 1.0112 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2( 1, 1.0067 )
+shape = SubResource( 3 )
+
+[node name="Cast" type="RayCast2D" parent="."]
+cast_to = Vector2( 0, -100 )
+collide_with_areas = true
+
+[connection signal="body_entered" from="." to="." method="_on_Door_body_entered"]
