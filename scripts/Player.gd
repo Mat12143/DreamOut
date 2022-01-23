@@ -100,23 +100,24 @@ func shoot():
 	
 func _physics_process(delta):
 #	print(position)
-	var input_vector = Vector2.ZERO
-	input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
-	input_vector = input_vector.normalized()
-	if input_vector != Vector2.ZERO:
-		animationPlayer.play("Walk")
-		velocity = velocity.move_toward(input_vector * max_speed, acceleration * delta)
-	else:
-		animationPlayer.play("RESET")
-		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-	
-	velocity = move_and_slide(velocity)
-	
-	var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
-	if pressedShoot and fireDelayTimer.is_stopped():
-		fireDelayTimer.start(gunData.fireRate - data.upgrades.fireRate / 100)
-		shoot()
+	if !owner.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible():
+		var input_vector = Vector2.ZERO
+		input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+		input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
+		input_vector = input_vector.normalized()
+		if input_vector != Vector2.ZERO:
+			animationPlayer.play("Walk")
+			velocity = velocity.move_toward(input_vector * max_speed, acceleration * delta)
+		else:
+			animationPlayer.play("RESET")
+			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+		
+		velocity = move_and_slide(velocity)
+		
+		var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
+		if pressedShoot and fireDelayTimer.is_stopped():
+			fireDelayTimer.start(gunData.fireRate - data.upgrades.fireRate / 100)
+			shoot()
 
 func _on_GlobalEventManager_playerHit(damage):
 	if $IFrameTimer.is_stopped():

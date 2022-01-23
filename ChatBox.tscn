@@ -26,7 +26,7 @@ __meta__ = {
 
 [node name="ChatLog" type="RichTextLabel" parent="VBoxContainer"]
 margin_right = 224.0
-margin_bottom = 96.0
+margin_bottom = 104.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 bbcode_enabled = true
@@ -36,7 +36,7 @@ __meta__ = {
 }
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
-margin_top = 100.0
+margin_top = 108.0
 margin_right = 224.0
 margin_bottom = 128.0
 size_flags_horizontal = 3

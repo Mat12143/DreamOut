@@ -1,9 +1,9 @@
 [gd_resource type="Theme" load_steps=3 format=2]
 
-[ext_resource path="res://sprites/font.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://sprites/Pixolletta8px.ttf" type="DynamicFontData" id=1]
 
 [sub_resource type="DynamicFont" id=1]
-size = 14
+size = 10
 font_data = ExtResource( 1 )
 
 [resource]

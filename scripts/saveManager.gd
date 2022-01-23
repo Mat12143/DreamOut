@@ -5,7 +5,7 @@ func _ready():
 	pass
 
 func loadSave(path):
-	print("Loading save")
+#	print("Loading save")
 	var file = File.new()
 	if not file.file_exists(path):
 		return false
@@ -15,7 +15,7 @@ func loadSave(path):
 	return save
 	
 func save(save, path):
-	print("Saving")
+#	print("Saving")
 	var file = File.new()
 	file.open_encrypted_with_pass(path, File.WRITE, "pyrosGiuroSpaccoTuttoBananoide1nsdf89123m")	
 	file.store_var(save)
