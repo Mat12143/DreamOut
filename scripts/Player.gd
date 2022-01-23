@@ -45,6 +45,7 @@ func updateGun():
 			gunData.damage = 1
 			gunData.fireRate = 0.2
 			gunData.projSpeed = 500
+			gunData.autoFire = true
 		Guns.PISTOL:
 			gunData.damage = 1
 			gunData.fireRate = 0.00001
@@ -54,14 +55,17 @@ func updateGun():
 			gunData.damage = 0.7
 			gunData.fireRate = 1
 			gunData.projSpeed = 500
+			gunData.autoFire = true
 		Guns.RIFLE:
 			gunData.damage = 5
 			gunData.fireRate = 1.5
 			gunData.projSpeed = 1500
+			gunData.autoFire = true
 		Guns.PYROS:
 			gunData.damage = 100
 			gunData.fireRate = 0.000000001
 			gunData.projSpeed = 1500
+			gunData.autoFire = true
 		_:
 			print("NO GUN FOUND")
 	$Gun.frame = data.selectedGun

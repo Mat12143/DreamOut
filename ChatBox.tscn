@@ -40,7 +40,7 @@ margin_top = 100.0
 margin_right = 224.0
 margin_bottom = 128.0
 size_flags_horizontal = 3
-placeholder_text = "Yo we got chat in here :)"
+placeholder_text = "Use / for commands and ESC to go back"
 placeholder_alpha = 0.251
 
 [node name="ChatSweeper" type="Timer" parent="VBoxContainer"]

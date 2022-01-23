@@ -24,7 +24,7 @@ func _on_LineEdit_text_entered(new_text):
 	if (new_text != ''):
 		print(new_text)
 		inputField.text = ''
-		get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", "Player", new_text)
+		get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", get_tree().current_scene.get_node("Player").data.name, new_text)
 		inputField.release_focus()
 		inputField.hide()
 

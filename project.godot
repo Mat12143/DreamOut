@@ -21,9 +21,11 @@ _global_script_class_icons={
 [application]
 
 config/name="Gioco Pazzo"
-run/main_scene="res://World.tscn"
+config/description="Bullet-hell Roguelite playable on the browser"
+run/main_scene="res://MatWorld.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="giocoPazzo"
+boot_splash/image="res://theo.png"
 
 [display]
 
