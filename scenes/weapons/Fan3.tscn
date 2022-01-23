@@ -8,11 +8,12 @@ script/source = "extends Node2D
 export (PackedScene) var Bullet
 
 func shoot(player):
+#	print(player)
 	for i in $Cannons.get_children():
-#		print(i)
+#		print('')
 		i.owner.look_at(player.global_position)
 		var b = Bullet.instance()
-		i.owner.owner.owner.add_child(b)
+		get_tree().current_scene.add_child(b)
 #		print(i.global)
 		b.transform = i.global_transform
 #	$ShootSound.play()

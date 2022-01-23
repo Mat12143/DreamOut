@@ -31,6 +31,8 @@ var data = { # Questo verra' salvato
 	"name": "Player"
 } 
 
+var baseData = data.duplicate()
+
 var gunData = {
 	"damage": 0,
 	"fireRate": 0,
@@ -116,7 +118,12 @@ func _physics_process(delta):
 		
 		var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
 		if pressedShoot and fireDelayTimer.is_stopped():
-			fireDelayTimer.start(gunData.fireRate - data.upgrades.fireRate / 100)
+			var upgradeFireRate = (float(data.upgrades.fireRate) / 100)
+#			print([float(gunData.fireRate), upgradeFireRate])
+			var fireRate = gunData.fireRate - upgradeFireRate
+			if (fireRate <= 0):
+				fireRate = 0.05
+			fireDelayTimer.start(fireRate)
 			shoot()
 
 func _on_GlobalEventManager_playerHit(damage):
@@ -130,3 +137,9 @@ func _on_GlobalEventManager_playerHit(damage):
 				hide()
 			else:
 				show()
+
+
+func _on_GlobalEventManager_upgradePickedUp(key, value):
+	print("ASASD")
+	data.upgrades[key] += value
+	get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", "Upgrade", "%s + %s" % [key, String(value)])

@@ -97,6 +97,7 @@ position = Vector2( 16, -10 )
 rotation = -0.174533
 
 [node name="FireDelayTimer" type="Timer" parent="."]
+wait_time = 0.001
 one_shot = true
 
 [node name="RollDelayTimer" type="Timer" parent="."]

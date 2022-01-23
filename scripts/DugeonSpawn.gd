@@ -122,5 +122,6 @@ func make_room(position, spawnDoorPosition):
 	return room
 	
 func _ready():
+#	rand_seed(2)
 	randomize()
 	make_room(get_parent().position, "None")

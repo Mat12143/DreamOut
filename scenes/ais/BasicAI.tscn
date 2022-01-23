@@ -46,6 +46,7 @@ func _physics_process(delta):
 			else:
 				print('Engaging, but missing weapon or player')
 		State.SHOOT:
+#			print(player, weapon)
 			if fireDelayTimer.is_stopped() and player != null and weapon != null:
 					fireDelayTimer.start(fireDelay) # - (0.1 * difficulty)
 					weapon.shoot(player)
@@ -56,6 +57,7 @@ func _physics_process(delta):
 				
 
 func set_state(new_state: int):
+#	print(new_state)
 	if new_state == state:
 		return
 	state = new_state
@@ -80,7 +82,6 @@ func _on_PlayerDetection_body_exited(body):
 		set_state(State.PATROL)
 		player = body
 
-
 func _on_TooClose_body_entered(body):
 	if body.is_in_group(\"Player\"):
 		set_state(State.SHOOT)
@@ -94,7 +95,7 @@ func _on_TooClose_body_exited(body):
 "
 
 [sub_resource type="CircleShape2D" id=3]
-radius = 136.0
+radius = 120.0
 
 [sub_resource type="CircleShape2D" id=5]
 radius = 32.0

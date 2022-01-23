@@ -15,7 +15,7 @@ func shoot(_player):
 				var b = Bullet.instance()
 				i.rotation += 1
 #				print(i.owner.owner.owner)
-				i.owner.owner.owner.add_child(b)
+				get_tree().current_scene.add_child(b)
 				b.transform = i.global_transform
 "
 
