@@ -9,7 +9,8 @@ extents = Vector2( 16, 16 )
 [node name="Module" type="Area2D"]
 scale = Vector2( 0.995059, 1.01221 )
 script = ExtResource( 2 )
-key = "fireRate"
+key = "gunRange"
+value = 3
 itemName = "Generic Fire Rate"
 
 [node name="Sprite" type="Sprite" parent="."]

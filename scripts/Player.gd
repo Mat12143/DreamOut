@@ -26,6 +26,7 @@ var data = { # Questo verra' salvato
 		"fireRate": 0,
 		"projSpeed": 0,
 		"charSpeed": 0,
+		"gunRange": 0,
 	},
 	"selectedGun": Guns.SMG, # Viene salvato come numero (ENUM GUNS)
 	"name": "Player"
@@ -38,6 +39,7 @@ var gunData = {
 	"fireRate": 0,
 	"projSpeed": 0,
 	"charSpeed": 0,
+	"gunRange": 0,
 	"autoFire": true,
 }
 
@@ -48,25 +50,36 @@ func updateGun():
 			gunData.fireRate = 0.2
 			gunData.projSpeed = 500
 			gunData.autoFire = true
+			gunData.gunRange = 40
 		Guns.PISTOL:
 			gunData.damage = 1
 			gunData.fireRate = 0.00001
 			gunData.projSpeed = 500
 			gunData.autoFire = false
+			gunData.gunRange = 25
 		Guns.SHOTGUN:
 			gunData.damage = 0.7
 			gunData.fireRate = 1
 			gunData.projSpeed = 500
 			gunData.autoFire = true
+			gunData.gunRange = 20
+		Guns.ROCKET:
+			gunData.damage = 5
+			gunData.fireRate = 2
+			gunData.projSpeed = 250
+			gunData.autoFire = true
+			gunData.gunRange = 50
 		Guns.RIFLE:
 			gunData.damage = 5
 			gunData.fireRate = 1.5
 			gunData.projSpeed = 1500
 			gunData.autoFire = true
+			gunData.gunRange = 1000
 		Guns.PYROS:
 			gunData.damage = 100
 			gunData.fireRate = 0.000000001
 			gunData.projSpeed = 1500
+			gunData.gunRange = 1000
 			gunData.autoFire = true
 		_:
 			print("NO GUN FOUND")
@@ -88,14 +101,14 @@ onready var animationPlayer = $AnimationPlayer
 func shoot():
 	if data.selectedGun != Guns.SHOTGUN:
 		var b = Bullet.instance()
-		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun)
+		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange)
 		get_tree().current_scene.add_child(b)
 		b.transform = $Gun/Position2D.global_transform
 		$ShootSound.play()
 	else:
 		for i in $Gun/ShotGuns.get_children():
 			var b = Bullet.instance()
-			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun)
+			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange)
 			get_tree().current_scene.add_child(b)
 			b.transform = i.global_transform
 		$ShootSound.play()
