@@ -70,7 +70,7 @@ func updateGun():
 			gunData.autoFire = true
 			gunData.gunRange = 50
 		Guns.RIFLE:
-			gunData.damage = 5
+			gunData.damage = 4
 			gunData.fireRate = 1.5
 			gunData.projSpeed = 1500
 			gunData.autoFire = true

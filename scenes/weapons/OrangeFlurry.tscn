@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/bullets/Orange.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/weapons/Cross4.tscn" type="PackedScene" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+export (PackedScene) var Bullet
+
+func shoot(_player):
+	for _times in range(0, 3):
+		yield(get_tree().create_timer(0.3), \"timeout\") # controlla la distanza tra una riga e l'altra
+		for i in owner.owner.get_node(\"OrangeFlurryCannons\").get_children():
+			for _times_times in range(0, 8): # controlla quanto sara' fitta la piogga
+				randomize()
+				if round(rand_range(0, 100)) < 15: # controlla quanto sara' fitta la piogga
+					if i.get_name().begins_with(\"Vertical\"):
+						i.position.x = rand_range(24, 297)
+					if i.get_name().begins_with(\"Horizontal\"):
+						i.position.y = rand_range(24, 254)
+#					print(i.position.x)
+					var b = Bullet.instance()
+	#				i.rotation += 1
+	#				print(i.owner.owner.owner)
+					get_tree().current_scene.add_child(b)
+					b.transform = i.global_transform
+#			i.position.x = 24
+#			i.position.y = 24
+"
+
+[node name="Weapon" type="Node2D"]
+script = SubResource( 1 )
+Bullet = ExtResource( 1 )
+
+[node name="Cross" parent="." instance=ExtResource( 2 )]
+Bullet = ExtResource( 1 )

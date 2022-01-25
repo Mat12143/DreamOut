@@ -1,0 +1,101 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://tile.png" type="Texture" id=1]
+[ext_resource path="res://scenes/bullets/Explosion.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/enemies/capybaraMiniboss.tscn" type="PackedScene" id=3]
+
+[sub_resource type="ConvexPolygonShape2D" id=1]
+points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
+
+[sub_resource type="TileSet" id=2]
+0/name = "tile.png 0"
+0/texture = ExtResource( 1 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 16, 16 )
+0/tile_mode = 1
+0/autotile/bitmask_mode = 0
+0/autotile/bitmask_flags = [  ]
+0/autotile/icon_coordinate = Vector2( 0, 0 )
+0/autotile/tile_size = Vector2( 16, 16 )
+0/autotile/spacing = 0
+0/autotile/occluder_map = [  ]
+0/autotile/navpoly_map = [  ]
+0/autotile/priority_map = [  ]
+0/autotile/z_index_map = [  ]
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape = SubResource( 1 )
+0/shape_one_way = false
+0/shape_one_way_margin = 1.0
+0/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 1 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+0/z_index = 0
+
+[node name="Room" type="Node2D"]
+scale = Vector2( 0.968171, 1.03736 )
+__meta__ = {
+"_edit_horizontal_guides_": [  ]
+}
+
+[node name="Map" type="TileMap" parent="."]
+tile_set = SubResource( 2 )
+cell_size = Vector2( 16, 16 )
+show_collision = true
+format = 1
+tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 0, -65535, 0, 0, -65534, 0, 0, -65533, 0, 0, -65532, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65528, 0, 0, -65527, 0, 0, -65526, 0, 0, -65525, 0, 0, -65524, 0, 0, -65523, 0, 0, -65522, 0, 0, -65521, 0, 0, -65520, 0, 0, -65519, 0, 0, -65518, 0, 0, -65517, 0, 0, -65516, 0, 0, 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 18, 0, 0, 19, 0, 0, 20, 0, 0, 131071, 0, 0, 65536, 0, 0, 65555, 0, 0, 65556, 0, 0, 196607, 0, 0, 131072, 0, 0, 131091, 0, 0, 131092, 0, 0, 262143, 0, 0, 196608, 0, 0, 196627, 0, 0, 196628, 0, 0, 327679, 0, 0, 262144, 0, 0, 262163, 0, 0, 262164, 0, 0, 393215, 0, 0, 327680, 0, 0, 327699, 0, 0, 327700, 0, 0, 458751, 0, 0, 393216, 0, 0, 393235, 0, 0, 393236, 0, 0, 524287, 0, 0, 458752, 0, 0, 458771, 0, 0, 458772, 0, 0, 589823, 0, 0, 524288, 0, 0, 524307, 0, 0, 524308, 0, 0, 655359, 0, 0, 589824, 0, 0, 589843, 0, 0, 589844, 0, 0, 720895, 0, 0, 655360, 0, 0, 655361, 0, 0, 655362, 0, 0, 655363, 0, 0, 655364, 0, 0, 655365, 0, 0, 655366, 0, 0, 655367, 0, 0, 655368, 0, 0, 655369, 0, 0, 655370, 0, 0, 655371, 0, 0, 655372, 0, 0, 655373, 0, 0, 655374, 0, 0, 655375, 0, 0, 655376, 0, 0, 655377, 0, 0, 655378, 0, 0, 655379, 0, 0, 655380, 0, 0, 786431, 0, 0, 720896, 0, 0, 720897, 0, 0, 720898, 0, 0, 720899, 0, 0, 720900, 0, 0, 720901, 0, 0, 720902, 0, 0, 720903, 0, 0, 720904, 0, 0, 720905, 0, 0, 720906, 0, 0, 720907, 0, 0, 720908, 0, 0, 720909, 0, 0, 720910, 0, 0, 720911, 0, 0, 720912, 0, 0, 720913, 0, 0, 720914, 0, 0, 720915, 0, 0, 720916, 0, 0 )
+
+[node name="Up" type="Node2D" parent="."]
+position = Vector2( 153, 15.424 )
+
+[node name="Left" type="Node2D" parent="."]
+position = Vector2( 15.493, 90 )
+
+[node name="Right" type="Node2D" parent="."]
+position = Vector2( 304.698, 90 )
+
+[node name="Down" type="Node2D" parent="."]
+position = Vector2( 153, 160.022 )
+
+[node name="CameraPlayerSpawn" type="Node2D" parent="."]
+position = Vector2( 153.898, 90.6146 )
+
+[node name="Enemy" parent="." instance=ExtResource( 3 )]
+position = Vector2( 153.898, 90.6146 )
+
+[node name="explosions" type="Node2D" parent="."]
+
+[node name="Particles2D4" parent="explosions" instance=ExtResource( 2 )]
+position = Vector2( 66.104, 61.6951 )
+
+[node name="Particles2D2" parent="explosions" instance=ExtResource( 2 )]
+position = Vector2( 247.89, 123.39 )
+
+[node name="Particles2D" parent="explosions" instance=ExtResource( 2 )]
+position = Vector2( 66.104, 123.39 )
+
+[node name="Particles2D3" parent="explosions" instance=ExtResource( 2 )]
+position = Vector2( 247.89, 61.6951 )
+
+[node name="OrangeFlurryCannons" type="Node2D" parent="."]
+
+[node name="Vertical" type="Position2D" parent="OrangeFlurryCannons"]
+position = Vector2( 24, 24 )
+rotation = 1.5708
+
+[node name="Vertical2" type="Position2D" parent="OrangeFlurryCannons"]
+position = Vector2( 24, 154.754 )
+rotation = -1.5708
+
+[node name="Horizontal" type="Position2D" parent="OrangeFlurryCannons"]
+position = Vector2( 24, 24 )
+
+[node name="Horizontal2" type="Position2D" parent="OrangeFlurryCannons"]
+position = Vector2( 297, 24 )

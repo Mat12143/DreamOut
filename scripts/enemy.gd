@@ -16,7 +16,7 @@ func _process(_delta):
 		$HPBar.hide()
 		$AI.set_state(3)
 		$AnimationPlayer.stop()
-		$AnimationPlayer.play("RESET")
+		if $AnimationPlayer.has_animation("RESET"): $AnimationPlayer.play("RESET")
 		if (toTweenOrNotToTween):
 			$Tween.interpolate_property(
 				self, "modulate", Color('ffffff'), Color('00ffffff'), 0.3
@@ -37,3 +37,5 @@ func _process(_delta):
 
 func _on_Tween_tween_completed(object, key):
 	queue_free()
+	
+	
