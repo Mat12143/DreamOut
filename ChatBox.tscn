@@ -18,14 +18,14 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_top = -16.0
-margin_right = 224.0
+margin_right = 240.0
 margin_bottom = 112.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ChatLog" type="RichTextLabel" parent="VBoxContainer"]
-margin_right = 224.0
+margin_right = 240.0
 margin_bottom = 104.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -37,7 +37,7 @@ __meta__ = {
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
 margin_top = 108.0
-margin_right = 224.0
+margin_right = 240.0
 margin_bottom = 128.0
 size_flags_horizontal = 3
 placeholder_text = "Use / for commands and ESC to go back"

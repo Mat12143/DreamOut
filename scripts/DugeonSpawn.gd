@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var roomTemplate = preload("res://rooms/StartRoom.tscn")
+onready var roomTemplate = preload("res://rooms/CapybaraMiniboss.tscn")
 onready var door = preload("res://scenes/Door.tscn")
 onready var Player = get_tree().get_current_scene().get_node("Player")
 onready var camera = get_tree().get_current_scene().get_node("Camera2D")
