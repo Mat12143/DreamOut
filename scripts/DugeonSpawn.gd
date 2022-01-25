@@ -1,47 +1,43 @@
 extends Node2D
 
-onready var roomTemplate = preload("res://rooms/CapybaraMiniboss.tscn")
+var roomsGrid = {}
+var roomSize = Vector2(340, 215)
+var spaceBetweenRooms = 10
+var playerRoom = null
+
+onready var roomTemplates = [
+	preload("res://rooms/StartRoom.tscn"),
+	#preload("res://rooms/CapybaraMiniboss.tscn")
+	#preload("res://rooms/hell.tscn")
+]
 onready var door = preload("res://scenes/Door.tscn")
 onready var Player = get_tree().get_current_scene().get_node("Player")
 onready var camera = get_tree().get_current_scene().get_node("Camera2D")
 
-const roomSizeX = 340
-const roomSizeY = 215
-const spaceBeetweenRooms = 10
+var posAndDirections = {
+	"Up" : Vector2(0, -1),
+	"Down" : Vector2(0, 1),
+	"Right" : Vector2(1, 0),
+	"Left" : Vector2(-1, 0)
+}
 
-var rooms = []
-var playerMoves = []
+var directions = [
+	"Up",
+	"Down",
+	"Left",
+	"Right"
+]
 
-var directions = ["Up", "Down", "Left", "Right"]
-var newDirections
 const addX = 153
 const addY = 90
 
-func getNewDoorPlayer(centerPosition, roomPosition, doorDirection):
-	
-	doorDirection = invertDirection(doorDirection)
-	
-	var addRangeY = 0
-	var addRangeX = 0
-	var distance = 60
-	
-	if (doorDirection == "Up"):
-		addRangeY += distance
-		
-	elif (doorDirection == "Down"):
-		addRangeY -= distance
-		
-	elif (doorDirection == "Right"):
-		addRangeX -= distance
-		
-	elif (doorDirection == "Left"):
-		addRangeX += distance
-		
-	print(str(addRangeX) + "/" + str(addRangeY))
-	
-	
-	return Vector2(roomPosition.x + centerPosition.x + addRangeX, roomPosition.y + addRangeY + centerPosition.y)
-	
+var doorZones = {
+	"Up" : Vector2(0, -60),
+	"Down": Vector2(0, 60),
+	"Right": Vector2(60, 0),
+	"Left" : Vector2(-60, 0)
+}
+
 func invertDirection(direction):
 	if direction == "Up":
 		return "Down"
@@ -52,122 +48,114 @@ func invertDirection(direction):
 	elif direction == "Left":
 		return "Right"
 
-func invertRoomPos(room, startDirection):
+func checkRoomByGrid(grid):
 	
-	var newRoomPos
-	var spawnDirection
-	
-	if (startDirection == "Up"):
-		spawnDirection = "Down"
-		newRoomPos = Vector2(room.position.x, room.position.y - roomSizeY - spaceBeetweenRooms)
-		
-	if (startDirection == "Down"):
-		spawnDirection = "Up"
-		newRoomPos = Vector2(room.position.x , room.position.y + roomSizeY + spaceBeetweenRooms)
-		
-	if (startDirection == "Right"):
-		spawnDirection = "Left"
-		newRoomPos = Vector2(room.position.x + roomSizeX + spaceBeetweenRooms, room.position.y)
-		
-	if (startDirection == "Left"):
-		spawnDirection = "Right"
-		newRoomPos = Vector2(room.position.x - roomSizeX - spaceBeetweenRooms, room.position.y)
-		
-	return [spawnDirection, newRoomPos]
+	return roomsGrid.has(grid)
 
-func make_new_room(lastRoom, startDirection):
+func getRoomByGrid(grid):
 	
-	var returns = invertRoomPos(lastRoom, startDirection)
-	var spawnDirection = returns[0]
-	var newRoomPos = returns[1]
-		
-	return make_room(newRoomPos, spawnDirection)
+	print(grid)
+	
+	return roomsGrid[grid].room
 
-func spawnPlayerCamera(playerPos, cameraPos):
+func movePlayerAndCamera(grid, direction):
+	
+	var room = roomsGrid[grid].room
+	
+	var cameraPos = Vector2(room.position.x + addX, room.position.y + addY) 
 	
 	camera.position = cameraPos
-	Player.position = playerPos
-	
-	print(playerPos)
+	Player.position = Vector2(room.position.x + roomSize.x / 2 , room.position.y + roomSize.y / 2)
 	
 	
-func next_room(roomToGo, direction):
+func goToRoom(direction):
 	
-	var cameraPos = Vector2(roomToGo.position.x + addX, roomToGo.position.y + addY)
+	var grid = convertDirectionToGrid(direction)
 	
-	var centerPos = roomToGo.get_node("Center").position
+	var roomPosition
+	var room = null
 	
-	var playerPos = getNewDoorPlayer(centerPos, roomToGo.position, invertDirection(direction))
+	for gridLayout in roomsGrid:
+		if roomsGrid[gridLayout].room == playerRoom:
+			roomPosition = gridLayout
+			
+	var gridToMove = Vector2(roomPosition.x + grid.x, roomPosition.y + grid.y)
+	
+	if checkRoomByGrid(gridToMove) == false:
+		create_room(gridToMove, direction)
+		movePlayerAndCamera(gridToMove, direction)
+	else:
+		movePlayerAndCamera(gridToMove, direction)
 
-	spawnPlayerCamera(playerPos, cameraPos)
+	playerRoom = getRoomByGrid(gridToMove)
 	
-	playerMoves.append(roomToGo)
+	print(playerRoom)
 
-func back_room(room, direction):
+func convertDirectionToGrid(direction):
 	
-	var doorRoomPosition = playerMoves.find(room)
-	var backRoom = playerMoves[doorRoomPosition - 1]
-	
-	var cameraPos = Vector2(backRoom.position.x + addX, backRoom.position.y + addY) 
-	var playerPos = getNewDoorPlayer(backRoom.get_node("Center").position, backRoom.position, invertDirection(direction))
-	
-	spawnPlayerCamera(playerPos, cameraPos)
-	
-	playerMoves.append(backRoom)
-	
+	if (direction == null):
+		return Vector2(0, 0)
+	else:
+		return posAndDirections[str(direction)]
 
-func make_room(position, spawnDoorPosition):
-	
-	var room = roomTemplate.instance()
+func create_room(gridLayout, backDoor = null):
+		
+	var room = roomTemplates[randi() % len(roomTemplates) - 1].instance()
 	add_child(room)
-	room.position = position
+	
+	var yPos = gridLayout.y * (roomSize.y + spaceBetweenRooms)
+	
+	var xPos = gridLayout.x * (roomSize.x + spaceBetweenRooms)
+	
+	var roomPosition = Vector2(xPos, yPos)
+	
+	var doors = []
+	
+	room.position = roomPosition
 	
 	var maxIndex = 3
+	var updatedDirections = directions.duplicate()
 	
-	if (spawnDoorPosition != "None"):
+	if backDoor != null:
 		maxIndex = 2
-		newDirections = directions.duplicate()
-		newDirections.erase(spawnDoorPosition)
-		
-		var lastDoor = door.instance()
-		room.add_child(lastDoor)
-		lastDoor.position = room.get_node(spawnDoorPosition).position
-		lastDoor.set_back_door()
-		lastDoor.set_current_room(room, spawnDoorPosition)
-		
-	else:
-		newDirections = directions
+		updatedDirections.erase(invertDirection(backDoor))
+		print(updatedDirections)
 	
-	var randI = randi() % maxIndex
+	var randIndex = randi() % maxIndex
 	var pickedDirection
 	
-	for i in range(0, maxIndex):
-		if (i == randI):
-			pickedDirection = newDirections[i]
-			break
-			
-	var posToSpawn = room.get_node(pickedDirection)
+	for index in range(0, maxIndex):
+		if randIndex == index:
+			pickedDirection = updatedDirections[index]
+	
 	var spawnedDoor = door.instance()
 	room.add_child(spawnedDoor)
-	spawnedDoor.set_current_room(room, pickedDirection)
-	spawnedDoor.position = posToSpawn.position
+	spawnedDoor.position = room.get_node(str(pickedDirection)).position	
+	spawnedDoor.set_direction(pickedDirection)
 	
-	var cameraPos = Vector2(room.position.x + addX, room.position.y + addY)
-	var playerPos = cameraPos
+	doors.append(pickedDirection)
 	
-	if (spawnDoorPosition != "None"):
+	if (backDoor != null):
 		
-		var centerPos = room.get_node("Center").position
+		var direction = backDoor
+		
+		backDoor = door.instance()
+		room.add_child(backDoor)
+		backDoor.position = room.get_node(str(invertDirection(direction))).position
+		backDoor.set_direction(invertDirection(direction))
+		
+		doors.append(backDoor)
 	
-		playerPos = getNewDoorPlayer(centerPos, room.position, spawnDoorPosition)
+	roomsGrid[gridLayout] = {
+		"room" : room,
+		"doors" : doors
+	}
 	
-	spawnPlayerCamera(playerPos, cameraPos)
-	
-	rooms.append(room)
-	playerMoves.append(room)
+	if (gridLayout == Vector2.ZERO):
+		playerRoom = room
+		
 	return room
-	
+
 func _ready():
-	rand_seed(2)
-	randomize()
-	make_room(get_parent().position, "None")
+	randomize()	
+	create_room(Vector2.ZERO, null)
