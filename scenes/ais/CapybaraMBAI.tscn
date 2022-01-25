@@ -28,39 +28,126 @@ var weapon = null
 var forceEngage = true
 export var speed = 10
 var healthPercent = 100
-
+var dontChangeStateOnHit = true
+onready var events = get_tree().current_scene.get_node(\"GlobalEventManager\")
 func initialize(actor, weapon):
 	self.actor = actor
 	self.weapon = weapon
-
+	
 func _physics_process(_delta):
 	healthPercent = (float(owner.health) / owner.maxHealth) * 100
-	match state:
-		State.PATROL:
-			pass
-		State.ENGAGE:
+#	print(healthPercent)
+#	if healthPercent >= 100:
+#		set_state(State.PHASE1)
+	if state != State.PATROL:
+		if healthPercent > 75:
+	#		print_debug(\"[Capybara] Phase1\")
 			set_state(State.PHASE1)
-		State.PHASE1:
-			if player != null and weapon != null:
-#				print(player, actor, weapon)
-#				actor.look_at(player.global_position)
-#				var velocity = actor.global_position.direction_to(player.global_position)
-#				actor.move_and_collide(velocity * speed * delta)
-				if fireDelayTimer.is_stopped():
-#					fireDelayTimer.start(1)
-					weapon.shoot(player)
-			else:
-				print('Engaging, but missing weapon or player')
-		State.PHASE2:
-			weapon.get_node('Cross').shoot()
-		State.SHOOT:
-			pass
-		State.DEAD:
-			pass	
-			
-		_:
-			print('unknown state!')
+		elif healthPercent > 50:
+	#		print_debug(\"[Capybara] Phase2\")
+			set_state(State.PHASE2)
+		elif healthPercent > 25:
+	#		print_debug(\"[Capybara] Phase3\")
+			set_state(State.PHASE3)
+		elif healthPercent > 0:
+	#		print_debug(\"[Capybara] Phase4\")
+			set_state(State.PHASE4)
 
+
+#	match state:
+#		State.PATROL:
+#			pass
+#		State.ENGAGE:
+#			set_state(State.PHASE1)
+#		State.PHASE1:
+##				print(player, actor, weapon)
+##				actor.look_at(player.global_position)
+##				var velocity = actor.global_position.direction_to(player.global_position)
+##				actor.move_and_collide(velocity * speed * delta)
+#				
+#			else:
+#				print('Engaging, but missing weapon or player')
+#		State.PHASE2:
+#			weapon.get_node('Cross').shoot()
+#		State.SHOOT:
+#			pass
+#		State.DEAD:
+#			pass	
+#		_:
+#			print('unknown state!')
+func _on_AI_state_changed(new_state):
+	if player != null and weapon != null:
+		match new_state:
+			State.ENGAGE:
+				set_state(State.PHASE1)
+			State.PHASE1:
+				owner.get_node(\"AnimationPlayer\").play(\"Phase1\")
+#				var t = Tween.new()
+#				owner.add_child(t)
+#				while state == State.PHASE1:
+#					for i in owner.owner.get_node(\"EscapePositions\").get_children():
+#						t.interpolate_property(
+#							owner, \"position\", 
+#							owner.position, i.position , 0.7
+#							)
+#						t.start()
+#						yield(get_tree().create_timer(1), \"timeout\")
+					
+#				owner.get_node(\"Music1\").play()
+#				if fireDelayTimer.is_stopped():
+#					fireDelayTimer.start(1)
+#				while state == State.PHASE1:
+#					pass
+#					
+#
+			State.PHASE2:
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]You're gonna pay for this.[/color]\")
+				owner.get_node(\"AnimationPlayer\").stop()
+				owner.get_node(\"Sprite\").frame = 2
+				while state == State.PHASE2:
+					# Pioggia
+					owner.invincible = true
+					owner.get_node(\"HPBar\").hide()
+					for _i in range(20):
+						weapon.flurry(player)
+	#						print('flyrr')
+						yield(get_tree().create_timer(0.3), \"timeout\")
+					owner.invincible = false
+					owner.get_node(\"HPBar\").show()
+					# Croce
+					for _i in range(5):
+						weapon.cross(player)
+						yield(get_tree().create_timer(0.1), \"timeout\")
+
+					yield(get_tree().create_timer(0.3), \"timeout\")
+					weapon.get_node(\"Cross\").rotation = deg2rad(45)
+
+					# Croce 45
+					for _i in range(5):
+						weapon.cross(player)
+						yield(get_tree().create_timer(0.1), \"timeout\")
+
+					yield(get_tree().create_timer(0.5), \"timeout\")
+					
+					# Spirale
+					for _i in range(105):
+						weapon.cross(player)
+						weapon.get_node(\"Cross\").rotation += deg2rad(1)
+						yield(get_tree().create_timer(0.01), \"timeout\")
+
+					weapon.get_node(\"Cross\").rotation = deg2rad(0)
+					yield(get_tree().create_timer(1), \"timeout\")
+			State.PHASE3:
+				owner.get_node(\"AnimationPlayer\").play(\"Phase3\")
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]Unbeliavable.[/color]\")
+			State.PHASE4:
+				owner.get_node(\"AnimationPlayer\").play(\"Phase4\")
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]It's all your fault.[/color]\")
+		print(\"Changed phase to \" + String(state))
+	else:
+		print(\"Player or weapon is null\")
+		print([player, weapon])
+		
 func set_state(new_state: int):
 	if new_state == state:
 		return
@@ -68,22 +155,25 @@ func set_state(new_state: int):
 	emit_signal(\"state_changed\", state)
 	
 func _on_PlayerDetection_body_entered(body: Node):
+	player = body
 	if body.is_in_group(\"Player\"):
 		$Exclamation.show()
 		if ($Exclamation.frame == 0):
 			$Exclamation/AnimationPlayer.play(\"Disappear\")
 		fireDelayTimer.start(1)
-		set_state(State.ENGAGE)
-		player = body
+		yield(get_tree().create_timer(0.1), \"timeout\")
+		print(state)
+		if state == State.PATROL or state == State.ENGAGE:
+			set_state(State.ENGAGE)
 
 func _on_PlayerDetection_body_exited(body):
 	if body.is_in_group(\"Player\") and !forceEngage:
-		set_state(State.PATROL)
 		player = body
+#		set_state(State.PATROL)
 "
 
-[sub_resource type="CircleShape2D" id=3]
-radius = 104.0
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 152, 72 )
 
 [sub_resource type="Animation" id=5]
 resource_name = "Disappear"
@@ -126,7 +216,7 @@ one_shot = true
 [node name="PlayerDetection" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
-shape = SubResource( 3 )
+shape = SubResource( 7 )
 
 [node name="Exclamation" type="Sprite" parent="."]
 visible = false
@@ -139,5 +229,6 @@ hframes = 16
 anims/Disappear = SubResource( 5 )
 anims/RESET = SubResource( 6 )
 
+[connection signal="state_changed" from="." to="." method="_on_AI_state_changed"]
 [connection signal="body_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]
 [connection signal="body_exited" from="PlayerDetection" to="." method="_on_PlayerDetection_body_exited"]
