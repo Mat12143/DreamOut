@@ -1,9 +1,5 @@
 extends Node2D
 
-
-func _ready():
-	pass
-
 func loadSave(path):
 #	print("Loading save")
 	var file = File.new()

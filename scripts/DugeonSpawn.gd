@@ -12,70 +12,113 @@ const spaceBeetweenRooms = 10
 var rooms = []
 var playerMoves = []
 
-func make_new_room(lastRoom, startDirection):
-	
-	var spawnDirection
-	var newRoomPos
-	
-	if (startDirection == "Up"):
-		spawnDirection = "Down"
-		newRoomPos = Vector2(lastRoom.position.x, lastRoom.position.y - roomSizeY - spaceBeetweenRooms)
-		
-	if (startDirection == "Down"):
-		spawnDirection = "Up"
-		newRoomPos = Vector2(lastRoom.position.x , lastRoom.position.y + roomSizeY + spaceBeetweenRooms)
-		
-	if (startDirection == "Right"):
-		spawnDirection = "Left"
-		newRoomPos = Vector2(lastRoom.position.x + roomSizeX + spaceBeetweenRooms, lastRoom.position.y)
-		
-	if (startDirection == "Left"):
-		spawnDirection = "Right"
-		newRoomPos = Vector2(lastRoom.position.x - roomSizeX - spaceBeetweenRooms, lastRoom.position.y)
-		
-	return make_room(newRoomPos, spawnDirection)
-
 var directions = ["Up", "Down", "Left", "Right"]
 var newDirections
-var room
 const addX = 153
 const addY = 90
 
-var lastRoomDeleted 
+func getNewDoorPlayer(centerPosition, roomPosition, doorDirection):
+	
+	doorDirection = invertDirection(doorDirection)
+	
+	var addRangeY = 0
+	var addRangeX = 0
+	var distance = 60
+	
+	if (doorDirection == "Up"):
+		addRangeY += distance
+		
+	elif (doorDirection == "Down"):
+		addRangeY -= distance
+		
+	elif (doorDirection == "Right"):
+		addRangeX -= distance
+		
+	elif (doorDirection == "Left"):
+		addRangeX += distance
+		
+	print(str(addRangeX) + "/" + str(addRangeY))
+	
+	
+	return Vector2(roomPosition.x + centerPosition.x + addRangeX, roomPosition.y + addRangeY + centerPosition.y)
+	
+func invertDirection(direction):
+	if direction == "Up":
+		return "Down"
+	elif direction == "Down":
+		return "Up"
+	elif direction == "Right":
+		return "Left"
+	elif direction == "Left":
+		return "Right"
 
-func map(value, InputA, InputB, OutputA, OutputB):
-	return(value - InputA) / (InputB - InputA) * (OutputB - OutputA) + OutputA
+func invertRoomPos(room, startDirection):
+	
+	var newRoomPos
+	var spawnDirection
+	
+	if (startDirection == "Up"):
+		spawnDirection = "Down"
+		newRoomPos = Vector2(room.position.x, room.position.y - roomSizeY - spaceBeetweenRooms)
+		
+	if (startDirection == "Down"):
+		spawnDirection = "Up"
+		newRoomPos = Vector2(room.position.x , room.position.y + roomSizeY + spaceBeetweenRooms)
+		
+	if (startDirection == "Right"):
+		spawnDirection = "Left"
+		newRoomPos = Vector2(room.position.x + roomSizeX + spaceBeetweenRooms, room.position.y)
+		
+	if (startDirection == "Left"):
+		spawnDirection = "Right"
+		newRoomPos = Vector2(room.position.x - roomSizeX - spaceBeetweenRooms, room.position.y)
+		
+	return [spawnDirection, newRoomPos]
 
-func next_room(roomToGo):
+func make_new_room(lastRoom, startDirection):
 	
-	var room = roomToGo
-	
-	var newPos = Vector2(room.position.x + addX, room.position.y + addY) 
-	
-	camera.position = newPos
-	Player.position = newPos
-	
-	playerMoves.append(room)
+	var returns = invertRoomPos(lastRoom, startDirection)
+	var spawnDirection = returns[0]
+	var newRoomPos = returns[1]
+		
+	return make_room(newRoomPos, spawnDirection)
 
-func back_door(room):
+func spawnPlayerCamera(playerPos, cameraPos):
 	
-	var doorRoom = playerMoves.find(room)
-	var backRoom = playerMoves[doorRoom - 1]
+	camera.position = cameraPos
+	Player.position = playerPos
 	
-	room = backRoom
+	print(playerPos)
 	
-	var newPos = Vector2(room.position.x + addX, room.position.y + addY) 
 	
-	camera.position = newPos
-	Player.position = newPos
+func next_room(roomToGo, direction):
 	
-	playerMoves.append(room)
+	var cameraPos = Vector2(roomToGo.position.x + addX, roomToGo.position.y + addY)
 	
+	var centerPos = roomToGo.get_node("Center").position
+	
+	var playerPos = getNewDoorPlayer(centerPos, roomToGo.position, invertDirection(direction))
+
+	spawnPlayerCamera(playerPos, cameraPos)
+	
+	playerMoves.append(roomToGo)
+
+func back_room(room, direction):
+	
+	var doorRoomPosition = playerMoves.find(room)
+	var backRoom = playerMoves[doorRoomPosition - 1]
+	
+	var cameraPos = Vector2(backRoom.position.x + addX, backRoom.position.y + addY) 
+	var playerPos = getNewDoorPlayer(backRoom.get_node("Center").position, backRoom.position, invertDirection(direction))
+	
+	spawnPlayerCamera(playerPos, cameraPos)
+	
+	playerMoves.append(backRoom)
 	
 
 func make_room(position, spawnDoorPosition):
 	
-	room = roomTemplate.instance()
+	var room = roomTemplate.instance()
 	add_child(room)
 	room.position = position
 	
@@ -86,16 +129,14 @@ func make_room(position, spawnDoorPosition):
 		newDirections = directions.duplicate()
 		newDirections.erase(spawnDoorPosition)
 		
-		var lastRoom = door.instance()
-		room.add_child(lastRoom)
-		lastRoom.position = room.get_node(spawnDoorPosition).position
-		lastRoom.set_back_door()
-		lastRoom.set_current_room(room, spawnDoorPosition)
+		var lastDoor = door.instance()
+		room.add_child(lastDoor)
+		lastDoor.position = room.get_node(spawnDoorPosition).position
+		lastDoor.set_back_door()
+		lastDoor.set_current_room(room, spawnDoorPosition)
 		
 	else:
 		newDirections = directions
-
-	print(newDirections)
 	
 	var randI = randi() % maxIndex
 	var pickedDirection
@@ -105,23 +146,28 @@ func make_room(position, spawnDoorPosition):
 			pickedDirection = newDirections[i]
 			break
 			
-	print(pickedDirection)
 	var posToSpawn = room.get_node(pickedDirection)
 	var spawnedDoor = door.instance()
 	room.add_child(spawnedDoor)
 	spawnedDoor.set_current_room(room, pickedDirection)
 	spawnedDoor.position = posToSpawn.position
 	
-	var newPos = Vector2(room.position.x + addX, room.position.y + addY) 
+	var cameraPos = Vector2(room.position.x + addX, room.position.y + addY)
+	var playerPos = cameraPos
 	
-	camera.position = newPos
-	Player.position = newPos
+	if (spawnDoorPosition != "None"):
+		
+		var centerPos = room.get_node("Center").position
+	
+		playerPos = getNewDoorPlayer(centerPos, room.position, spawnDoorPosition)
+	
+	spawnPlayerCamera(playerPos, cameraPos)
 	
 	rooms.append(room)
 	playerMoves.append(room)
 	return room
 	
 func _ready():
-#	rand_seed(2)
+	rand_seed(2)
 	randomize()
 	make_room(get_parent().position, "None")

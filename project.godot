@@ -25,6 +25,7 @@ config/description="Bullet-hell Roguelite playable on the browser"
 run/main_scene="res://MatWorld.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="giocoPazzo"
+config/icon="res://icon.png"
 
 [display]
 
@@ -96,6 +97,11 @@ shoot={
 roll={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+open_chat={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":84,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 move_up={

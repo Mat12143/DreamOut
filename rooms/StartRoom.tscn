@@ -67,9 +67,6 @@ position = Vector2( 304.698, 90 )
 [node name="Down" type="Node2D" parent="."]
 position = Vector2( 153, 160.022 )
 
-[node name="CameraPlayerSpawn" type="Node2D" parent="."]
-position = Vector2( 153.898, 90.6146 )
-
 [node name="Module2" parent="." instance=ExtResource( 3 )]
 position = Vector2( 49.578, 138.814 )
 key = "fireRate"
@@ -84,3 +81,6 @@ position = Vector2( 289.205, 100.255 )
 
 [node name="Enemy4" parent="." instance=ExtResource( 4 )]
 position = Vector2( 289.205, 69.407 )
+
+[node name="Center" type="Node2D" parent="."]
+position = Vector2( 153.898, 90.6146 )

@@ -16,22 +16,16 @@ func set_back_door():
 
 func _on_Door_body_entered(body):
 	
-	if (body.get_name() != "Player"): return 0
-	
-	#if (collided == 2): return true
-	#else:
-		#collided += 1
+	if (body.get_name() != "Player"): return false
 	
 	var dungeonSpawn = get_tree().get_current_scene().get_node("DungeonSpawn")
 	
-	print(nextRoom)
-	
 	if (passedDoor):
-		dungeonSpawn.next_room(nextRoom)
+		dungeonSpawn.next_room(nextRoom, direction)
 		
 	
 	elif (backDoor):
-		dungeonSpawn.back_door(room)
+		dungeonSpawn.back_room(room, direction)
 	
 	else:
 	
