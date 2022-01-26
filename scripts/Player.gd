@@ -76,11 +76,11 @@ func updateGun():
 			gunData.autoFire = true
 			gunData.gunRange = 1000
 		Guns.PYROS:
-			gunData.damage = 100
+			gunData.damage = 99
 			gunData.fireRate = 0.000000001
 			gunData.projSpeed = 1500
 			gunData.gunRange = 1000
-			gunData.autoFire = true
+			gunData.autoFire = false
 		_:
 			print("NO GUN FOUND")
 	$Gun.frame = data.selectedGun
@@ -141,11 +141,11 @@ func _physics_process(delta):
 
 func _on_GlobalEventManager_playerHit(damage):
 	if $IFrameTimer.is_stopped():
-		$IFrameTimer.start(0.5)
+		$IFrameTimer.start(1)
 		health -= damage
 		$HitSound.play()
 		for _i in range(0, 10):
-			yield(get_tree().create_timer(0.05), "timeout")
+			yield(get_tree().create_timer(0.1), "timeout")
 			if visible:
 				hide()
 			else:

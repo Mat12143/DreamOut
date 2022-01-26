@@ -100,6 +100,7 @@ position = Vector2( 24, 24 )
 
 [node name="Horizontal2" type="Position2D" parent="OrangeFlurryCannons"]
 position = Vector2( 297.468, 23.1357 )
+rotation = 3.14159
 
 [node name="Module" parent="." instance=ExtResource( 4 )]
 position = Vector2( 33.052, 146.526 )

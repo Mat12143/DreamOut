@@ -38,7 +38,7 @@ func initialize(newDamage, newSpeed, newType, newRange):
 	speed = newSpeed
 	bulletType = newType
 	gunRange = newRange
-	print([damage, speed, bulletType, gunRange])
+#	print([damage, speed, bulletType, gunRange])
 
 func _on_Bullet_body_entered(body):
 		if body.is_in_group("mobs"):

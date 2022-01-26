@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://sprites/PlayerPortrait.png" type="Texture" id=6]
 [ext_resource path="res://scripts/GlobalEventManager.gd" type="Script" id=7]
 [ext_resource path="res://scripts/HUD.gd" type="Script" id=8]
+[ext_resource path="res://World.gd" type="Script" id=9]
 [ext_resource path="res://scripts/SaveManager.gd" type="Script" id=10]
 [ext_resource path="res://sfx/wallHit.wav" type="AudioStream" id=11]
 [ext_resource path="res://ChatBox.tscn" type="PackedScene" id=12]
@@ -15,6 +16,7 @@
 [ext_resource path="res://CommandManager.gd" type="Script" id=14]
 
 [node name="World" type="YSort"]
+script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": "s"
 }
