@@ -104,6 +104,7 @@ func _on_AI_state_changed(new_state):
 				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]You're gonna pay for this.[/color]\")
 				owner.get_node(\"AnimationPlayer\").stop()
 				owner.get_node(\"Sprite\").frame = 2
+				yield(get_tree().create_timer(1), \"timeout\")
 				while state == State.PHASE2:
 					# Pioggia
 					owner.invincible = true
@@ -137,9 +138,65 @@ func _on_AI_state_changed(new_state):
 
 					weapon.get_node(\"Cross\").rotation = deg2rad(0)
 					yield(get_tree().create_timer(1), \"timeout\")
+					
 			State.PHASE3:
 				owner.get_node(\"AnimationPlayer\").play(\"Phase3\")
 				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]Unbeliavable.[/color]\")
+				yield(get_tree().create_timer(1), \"timeout\")
+				
+				
+				# Pioggia
+				owner.invincible = true
+				owner.get_node(\"HPBar\").hide()
+				
+				for i in range(20):
+					weapon.flurry(player)
+					if (i in [10, 19]): 
+						for ii in range(5): 
+							weapon.cross(player)
+							yield(get_tree().create_timer(0.1), \"timeout\")
+						weapon.get_node(\"Cross\").rotation = deg2rad(45)
+					yield(get_tree().create_timer(0.3), \"timeout\")
+				weapon.get_node(\"Cross\").rotation = deg2rad(0)
+				# Croce
+				for _i in range(10):
+					weapon.cross(player)
+					weapon.get_node(\"Cross\").rotation = deg2rad(45)
+					weapon.cross(player)
+					weapon.get_node(\"Cross\").rotation = deg2rad(0)
+					yield(get_tree().create_timer(0.05), \"timeout\")
+#					weapon.get_node(\"Cross\").rotation = deg2rad(45)
+
+#					# Croce 45
+#					for _i in range(5):
+#						weapon.cross(player)
+#						yield(get_tree().create_timer(0.1), \"timeout\")
+
+				yield(get_tree().create_timer(0.2), \"timeout\")
+				
+				# Spirale
+				for _i in range(105):
+					weapon.cross(player)
+					weapon.get_node(\"Cross\").rotation += deg2rad(1)
+					yield(get_tree().create_timer(0.01), \"timeout\")
+
+				weapon.get_node(\"Cross\").rotation = deg2rad(0)
+				
+				yield(get_tree().create_timer(1), \"timeout\")
+				weapon.scal(player)
+				
+				yield(get_tree().create_timer(1), \"timeout\")
+				
+				owner.invincible = false
+				owner.get_node(\"HPBar\").show()
+				while state == State.PHASE3:
+					for i in range(10):
+						weapon.missile(player)
+						yield(get_tree().create_timer(0.5), \"timeout\")
+					weapon.scal(player)
+					yield(get_tree().create_timer(1), \"timeout\")
+					
+				
 			State.PHASE4:
 				owner.get_node(\"AnimationPlayer\").play(\"Phase4\")
 				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]It's all your fault.[/color]\")
