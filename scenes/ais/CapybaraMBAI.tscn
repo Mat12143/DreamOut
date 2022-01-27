@@ -16,11 +16,11 @@ enum State {
 	PHASE3,
 	PHASE4
 }
-
 signal state_changed(new_state)
 
 onready var playerDetectionZone = $PlayerDetection
 onready var fireDelayTimer = $FireDelayTimer
+var explosion = preload(\"res://scenes/bullets/Explosion.tscn\")
 var state = State.PATROL setget set_state
 var player = null
 var actor = null
@@ -28,62 +28,272 @@ var weapon = null
 var forceEngage = true
 export var speed = 10
 var healthPercent = 100
-
+var dontChangeStateOnHit = true
+var canChangePhase = true
+onready var events = get_tree().current_scene.get_node(\"GlobalEventManager\")
+onready var music:AudioStreamPlayer = owner.get_node(\"Music\")
 func initialize(actor, weapon):
 	self.actor = actor
 	self.weapon = weapon
-
+	
 func _physics_process(_delta):
 	healthPercent = (float(owner.health) / owner.maxHealth) * 100
-	match state:
-		State.PATROL:
-			pass
-		State.ENGAGE:
+#	print(healthPercent)
+#	if healthPercent >= 100:
+#		set_state(State.PHASE1)
+	if state != State.PATROL:
+		if healthPercent > 75:
+	#		print_debug(\"[Capybara] Phase1\")
 			set_state(State.PHASE1)
-		State.PHASE1:
-			if player != null and weapon != null:
-#				print(player, actor, weapon)
-#				actor.look_at(player.global_position)
-#				var velocity = actor.global_position.direction_to(player.global_position)
-#				actor.move_and_collide(velocity * speed * delta)
-				if fireDelayTimer.is_stopped():
-#					fireDelayTimer.start(1)
-					weapon.shoot(player)
-			else:
-				print('Engaging, but missing weapon or player')
-		State.PHASE2:
-			weapon.get_node('Cross').shoot()
-		State.SHOOT:
-			pass
-		State.DEAD:
-			pass	
-			
-		_:
-			print('unknown state!')
+		elif healthPercent > 50:
+	#		print_debug(\"[Capybara] Phase2\")
+			set_state(State.PHASE2)
+		elif healthPercent > 25:
+	#		print_debug(\"[Capybara] Phase3\")
+			set_state(State.PHASE3)
+		elif healthPercent > 0:
+	#		print_debug(\"[Capybara] Phase4\")
+			set_state(State.PHASE4)
+		elif healthPercent <= 0:
+			set_state(State.DEAD)
 
+
+func _on_AI_state_changed(new_state):
+	if player != null and weapon != null:
+		match new_state:
+			State.ENGAGE:
+				set_state(State.PHASE1)
+			State.PHASE1:
+				owner.get_node(\"AnimationPlayer\").play(\"Phase1\")
+#				var t = Tween.new()
+#				owner.add_child(t)
+#				while state == State.PHASE1:
+#					for i in owner.owner.get_node(\"EscapePositions\").get_children():
+#						t.interpolate_property(
+#							owner, \"position\", 
+#							owner.position, i.position , 0.7
+#							)
+#						t.start()
+#						yield(get_tree().create_timer(1), \"timeout\")
+					
+#				owner.get_node(\"Music1\").play()
+#				if fireDelayTimer.is_stopped():
+#					fireDelayTimer.start(1)
+#				while state == State.PHASE1:
+#					pass
+#					
+#
+			State.PHASE2:
+				music.play()
+				
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]You're gonna pay for this.[/color]\")
+				owner.get_node(\"AnimationPlayer\").stop()
+				owner.get_node(\"Sprite\").frame = 2
+				canChangePhase = false
+				yield(get_tree().create_timer(1), \"timeout\")
+				while state == State.PHASE2:
+					canChangePhase = false
+#					if state == State.PHASE3:
+#						owner.invincible = false
+#						owner.get_node(\"HPBar\").show()
+					# Pioggia
+					owner.invincible = true
+					owner.get_node(\"HPBar\").hide()
+					for _i in range(20):
+						weapon.flurry(player)
+	#						print('flyrr')
+						yield(get_tree().create_timer(0.3), \"timeout\")
+					owner.invincible = false
+					owner.get_node(\"HPBar\").show()
+					# Croce
+					for _i in range(5):
+						weapon.cross(player)
+						yield(get_tree().create_timer(0.1), \"timeout\")
+
+					yield(get_tree().create_timer(0.3), \"timeout\")
+					weapon.get_node(\"Cross\").rotation = deg2rad(45)
+
+					# Croce 45
+					for _i in range(5):
+						weapon.cross(player)
+						yield(get_tree().create_timer(0.1), \"timeout\")
+
+					yield(get_tree().create_timer(0.5), \"timeout\")
+					
+					# Spirale
+					for _i in range(105):
+						weapon.cross(player)
+						weapon.get_node(\"Cross\").rotation += deg2rad(1)
+						yield(get_tree().create_timer(0.01), \"timeout\")
+
+					weapon.get_node(\"Cross\").rotation = deg2rad(0)
+					canChangePhase = true
+					yield(get_tree().create_timer(1), \"timeout\")
+					
+			State.PHASE3:
+				music.play(195)
+				canChangePhase = false
+				owner.get_node(\"AnimationPlayer\").play(\"Phase3\")
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]Unbeliavable.[/color]\")
+				yield(get_tree().create_timer(1), \"timeout\")
+				
+				
+				# Pioggia
+				owner.invincible = true
+				owner.get_node(\"HPBar\").hide()
+				for i in range(20):
+					weapon.flurry(player)
+					if (i in [10, 19]): 
+						for ii in range(5): 
+							weapon.cross(player)
+							yield(get_tree().create_timer(0.1), \"timeout\")
+						weapon.get_node(\"Cross\").rotation = deg2rad(45)
+					yield(get_tree().create_timer(0.3), \"timeout\")
+				weapon.get_node(\"Cross\").rotation = deg2rad(0)		
+				
+				# Asterisco
+				for _i in range(10):
+					weapon.cross(player)
+					weapon.get_node(\"Cross\").rotation = deg2rad(45)
+					weapon.cross(player)
+					weapon.get_node(\"Cross\").rotation = deg2rad(0)
+					yield(get_tree().create_timer(0.05), \"timeout\")
+
+				yield(get_tree().create_timer(0.2), \"timeout\")
+				
+				
+				# Spirale
+				for _i in range(105):
+					weapon.cross(player)
+					weapon.get_node(\"Cross\").rotation += deg2rad(1)
+					yield(get_tree().create_timer(0.01), \"timeout\")
+
+				weapon.get_node(\"Cross\").rotation = deg2rad(0)
+				
+				yield(get_tree().create_timer(2), \"timeout\")
+				
+				# SUBFASE 3.1
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]This is getting boring. Hit me.[/color]\")
+				owner.invincible = false
+				owner.get_node(\"HPBar\").show()
+				while state == State.PHASE3:
+					# if (forceStopPhase): break
+					for ii in range(2):
+						weapon.missile(player)
+						yield(get_tree().create_timer(0.5), \"timeout\")
+					canChangePhase = false
+					
+					for _i in range(10):
+						weapon.missile(player)
+						if _i == 2 or _i == 4:
+							for _ii in range(5):
+								weapon.cross(player)
+								weapon.get_node(\"Cross\").rotation = deg2rad(45)
+								weapon.cross(player)
+								weapon.get_node(\"Cross\").rotation = deg2rad(0)
+								yield(get_tree().create_timer(0.05), \"timeout\")
+	#						print('flyrr')
+						yield(get_tree().create_timer(0.3), \"timeout\")
+					canChangePhase = true
+					# if (forceStopPhase): break
+					
+					
+						
+					
+				
+			State.PHASE4:
+				# ANIMAZIONE
+				music.play(340)
+				owner.invincible = true
+				
+				owner.get_node('HPBar').hide()
+				
+				yield(get_tree().create_timer(1), \"timeout\")
+				
+				var t = Tween.new()
+				owner.add_child(t)
+				t.interpolate_property(
+					owner, \"position:y\", owner.position.y, owner.position.y - 15, 11
+				)
+				t.start()
+				
+				yield(get_tree().create_timer(11), \"timeout\")
+
+				owner.add_child(explosion.instance())
+#				get_tree().current_scene.get_node(\"Camera\").shake
+				
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]Ugh... Here we go again.[/color]\")
+				
+				t.interpolate_property(
+					owner, \"position:y\", owner.position.y, owner.position.y + 15, 0.3 
+				)
+				owner.get_node(\"AnimationPlayer\").play(\"Phase4\")
+				t.start()
+				
+#				owner.get_node('HPBar').show()
+#				owner.invincible = false
+				
+				
+				# COMBATTIMENTO
+				for _i in range(100):
+						weapon.flurry(player)
+	#						print('flyrr')
+						yield(get_tree().create_timer(0.3), \"timeout\")
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]I will not die from someone like you.[/color]\")
+				for _i in range(50):
+						weapon.flurry(player)
+	#						print('flyrr')
+						yield(get_tree().create_timer(0.2), \"timeout\")
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]You will not win this easily.[/color]\")
+				for _i in range(20):
+						weapon.flurry(player)
+	#						print('flyrr')
+						yield(get_tree().create_timer(0.2), \"timeout\")
+				events.emit_signal(\"messageEntered\", \"Capy\", \"[color=red]Are you kidding me?[/color]\")
+				for _i in range(20):
+					weapon.missile(player)
+					weapon.get_node(\"Homing\").rotation += deg2rad(90)
+					weapon.cross(player)
+					weapon.get_node(\"Cross\").rotation += deg2rad(1)
+					yield(get_tree().create_timer(0.01), \"timeout\")
+					
+				
+				
+		print(\"Changed phase to \" + String(state))
+	else:
+		print(\"Player or weapon is null\")
+		print([player, weapon])
+		
 func set_state(new_state: int):
 	if new_state == state:
+		return
+	if !canChangePhase:
+		owner.invincible = true
+		owner.get_node(\"HPBar\").hide()
 		return
 	state = new_state
 	emit_signal(\"state_changed\", state)
 	
 func _on_PlayerDetection_body_entered(body: Node):
+	player = body
 	if body.is_in_group(\"Player\"):
 		$Exclamation.show()
 		if ($Exclamation.frame == 0):
 			$Exclamation/AnimationPlayer.play(\"Disappear\")
 		fireDelayTimer.start(1)
-		set_state(State.ENGAGE)
-		player = body
+		yield(get_tree().create_timer(0.1), \"timeout\")
+		print(state)
+		if state == State.PATROL or state == State.ENGAGE:
+			set_state(State.ENGAGE)
 
 func _on_PlayerDetection_body_exited(body):
 	if body.is_in_group(\"Player\") and !forceEngage:
-		set_state(State.PATROL)
 		player = body
+#		set_state(State.PATROL)
 "
 
-[sub_resource type="CircleShape2D" id=3]
-radius = 104.0
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 152, 72 )
 
 [sub_resource type="Animation" id=5]
 resource_name = "Disappear"
@@ -126,7 +336,7 @@ one_shot = true
 [node name="PlayerDetection" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
-shape = SubResource( 3 )
+shape = SubResource( 7 )
 
 [node name="Exclamation" type="Sprite" parent="."]
 visible = false
@@ -139,5 +349,6 @@ hframes = 16
 anims/Disappear = SubResource( 5 )
 anims/RESET = SubResource( 6 )
 
+[connection signal="state_changed" from="." to="." method="_on_AI_state_changed"]
 [connection signal="body_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]
 [connection signal="body_exited" from="PlayerDetection" to="." method="_on_PlayerDetection_body_exited"]

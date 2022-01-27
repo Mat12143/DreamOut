@@ -13,9 +13,21 @@ _global_script_classes=[ {
 "class": "RNGTools",
 "language": "GDScript",
 "path": "res://addons/rngtools/RNGTools.gd"
+}, {
+"base": "Camera",
+"class": "ShakeCamera",
+"language": "GDScript",
+"path": "res://addons/camera_shake/camera_scripts/shake_camera.gd"
+}, {
+"base": "Camera2D",
+"class": "ShakeCamera2D",
+"language": "GDScript",
+"path": "res://addons/camera_shake/camera_scripts/shake_camera_2D.gd"
 } ]
 _global_script_class_icons={
-"RNGTools": ""
+"RNGTools": "",
+"ShakeCamera": "",
+"ShakeCamera2D": ""
 }
 
 [application]

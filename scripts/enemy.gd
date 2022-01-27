@@ -6,6 +6,7 @@ export var maxHealth = 5
 onready var health = maxHealth
 var hitFromShotGun = false
 var toTweenOrNotToTween = true
+var invincible = false
 
 func _ready():
 	AI.initialize(self, weapon)

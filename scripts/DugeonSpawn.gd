@@ -6,7 +6,7 @@ var spaceBetweenRooms = 10
 var playerRoom = null
 
 onready var roomTemplates = [
-	preload("res://rooms/StartRoom.tscn"),
+	preload("res://rooms/CapybaraMiniboss.tscn"),
 	#preload("res://rooms/CapybaraMiniboss.tscn")
 	#preload("res://rooms/hell.tscn")
 ]

@@ -23,6 +23,7 @@ var weapon = null
 var forceEngage = false
 export var speed = 10
 export var fireDelay = 1.2
+var dontChangeStateOnHit = false
 
 func initialize(actor, weapon):
 	self.actor = actor
