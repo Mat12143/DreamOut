@@ -38,7 +38,18 @@ script = ExtResource( 8 )
 
 [node name="ChatBox" parent="HUD" instance=ExtResource( 12 )]
 
+[node name="Health" type="HBoxContainer" parent="HUD"]
+margin_left = 24.0
+margin_top = 16.0
+margin_right = 64.0
+margin_bottom = 56.0
+custom_constants/separation = 9
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="PortraitAndHealth" type="Control" parent="HUD"]
+visible = false
 margin_left = 15.0
 margin_top = 10.0
 margin_right = 48.0
@@ -48,6 +59,7 @@ __meta__ = {
 }
 
 [node name="Portrait" type="TextureRect" parent="HUD/PortraitAndHealth"]
+visible = false
 margin_right = 32.0
 margin_bottom = 32.0
 texture = ExtResource( 6 )
@@ -153,6 +165,7 @@ script = ExtResource( 14 )
 [connection signal="tween_completed" from="HUD/PopupText/Tween" to="GlobalEventManager" method="_on_Tween_tween_completed"]
 [connection signal="messageEntered" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="messageEntered" from="GlobalEventManager" to="CommandManager" method="_on_GlobalEventManager_messageEntered"]
+[connection signal="playerHeal" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHeal"]
 [connection signal="playerHit" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHit"]
 [connection signal="playerHit" from="GlobalEventManager" to="HUD" method="_on_GlobalEventManager_playerHit"]
 [connection signal="popupText" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_popupText"]

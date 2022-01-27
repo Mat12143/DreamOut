@@ -62,11 +62,21 @@ func getRoomByGrid(grid):
 func movePlayerAndCamera(grid, direction):
 	
 	var room = roomsGrid[grid].room
-	
 	var cameraPos = Vector2(room.position.x + addX, room.position.y + addY) 
 	
-	camera.position = cameraPos
+	var t = Tween.new()
+	add_child(t)
+	t.interpolate_property(
+		camera,
+		"position", camera.position, cameraPos, 0.2
+	)
+	t.start()
+#	room.hide()
+	
+#	camera.position = cameraPos
 	Player.position = Vector2(room.position.x + roomSize.x / 2 , room.position.y + roomSize.y / 2)
+#	yield(get_tree().create_timer(1), "timeout")
+#	room.show()
 	
 	
 func goToRoom(direction):

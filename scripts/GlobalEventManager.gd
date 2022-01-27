@@ -1,6 +1,7 @@
 extends Node2D
 
 signal playerHit
+signal playerHeal(value)
 signal upgradePickedUp
 signal messageEntered(author, text)
 signal popupText(title, subtitle)

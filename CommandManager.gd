@@ -22,6 +22,16 @@ func reset(args):
 	event.emit_signal("messageEntered", "Console", "Reset all data")
 	player.updateGun()
 
+func heal(args):
+	player.data.health = player.maxHealth + player.data.upgrades.maxHealth
+	event.emit_signal("messageEntered", "Console", "Fully healed")
+	event.emit_signal("playerHit", 0)
+
+func damage(args):
+#	player.data.health = player.maxHealth + player.data.upgrades.maxHealth
+	event.emit_signal("playerHit", 0.5)
+	event.emit_signal("messageEntered", "Console", "Fully healed")
+
 var helpPages = {
 		"guns": {
 			"title": "List of guns",

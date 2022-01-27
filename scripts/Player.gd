@@ -27,7 +27,9 @@ var data = { # Questo verra' salvato
 		"projSpeed": 0,
 		"charSpeed": 0,
 		"gunRange": 0,
+		"maxHealth": 0,
 	},
+	"health": maxHealth,
 	"selectedGun": Guns.SMG, # Viene salvato come numero (ENUM GUNS)
 	"name": "Player"
 } 
@@ -142,7 +144,7 @@ func _physics_process(delta):
 func _on_GlobalEventManager_playerHit(damage):
 	if $IFrameTimer.is_stopped():
 		$IFrameTimer.start(1)
-		health -= damage
+		data.health -= damage
 		$HitSound.play()
 		for _i in range(0, 10):
 			yield(get_tree().create_timer(0.1), "timeout")
@@ -153,6 +155,13 @@ func _on_GlobalEventManager_playerHit(damage):
 
 
 func _on_GlobalEventManager_upgradePickedUp(key, value):
-	print("ASASD")
+#	print("ASASD")
 	data.upgrades[key] += value
-	get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", "Upgrade", "%s + %s" % [key, String(value)])
+	if key == "maxHealth":
+		get_tree().current_scene.get_node("HUD").updateHealth()
+#	get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", "Upgrade", "%s + %s" % [key, String(value)])
+
+
+func _on_GlobalEventManager_playerHeal(value):
+	data.health = clamp(data.health + value, 0, maxHealth + data.upgrades.maxHealth)
+	get_tree().current_scene.get_node("HUD").updateHealth()

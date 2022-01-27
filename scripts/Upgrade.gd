@@ -1,6 +1,6 @@
 extends Area2D
 
-export (String, "projSpeed", "charSpeed", "fireRate", "damage", "gunRange") var key
+export (String, "projSpeed", "charSpeed", "fireRate", "damage", "gunRange", "maxHealth") var key
 export (int) var value = 1
 export (String) var itemName = "Upgrade"
 
@@ -9,7 +9,8 @@ var humanReadables = {
 	"charSpeed": "[color=green]Agility[/color]",
 	"fireRate": "[color=yellow]Dexterity[/color]",
 	"damage": "[color=red]Power[/color]",
-	"gunRange": "[color=purple]Range[/color]"
+	"gunRange": "[color=purple]Range[/color]",
+	"maxHealth": "[color=red]Health[/color]"
 }
 #export (float) var spawnChance # Questo poi servira' a MAT FORSE FORSE FORSE
 #export (bool) var forceQuality = false
@@ -41,7 +42,8 @@ var toTweenOrNotToTween = true
 func _on_Module_body_entered(body: Node):
 	if (body.is_in_group("Player")):
 		get_tree().get_current_scene().get_node("GlobalEventManager").emit_signal("upgradePickedUp", key, value)
-		get_tree().get_current_scene().get_node("GlobalEventManager").emit_signal("popupText", itemName, humanReadables[key] + " UP")
+		get_tree().get_current_scene().get_node("GlobalEventManager").emit_signal("popupText", itemName, humanReadables[key] + (" UP" if value > 0 else " DOWN"))
+		$AudioStreamPlayer2D.play()
 		$Tween.interpolate_property(
 			self, "modulate", Color('ffffff'), Color('00ffffff'), 0.3
 		)
