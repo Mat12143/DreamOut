@@ -12,7 +12,11 @@ var moreDoorsProb = 70
 onready var roomTemplates = [
 	preload("res://rooms/CapyBara.tscn"),
 	preload("res://rooms/StartRoom.tscn"),
+<<<<<<< HEAD
 	#preload("res://rooms/aRoomTemplate.tscn")
+=======
+	preload("res://rooms/idkRooms/theRock.tscn"),
+>>>>>>> f62e4c708eca4a40ac03c85905f2cf5f4a8905bb
 ]
 onready var door = preload("res://scenes/Door.tscn")
 onready var Player = get_tree().get_current_scene().get_node("Player")

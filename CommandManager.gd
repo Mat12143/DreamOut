@@ -1,7 +1,15 @@
 extends Node2D
 onready var player = owner.get_node("Player")
 onready var event = owner.get_node('GlobalEventManager')
-	
+
+func dev(args):
+	player.data.dev = !player.data.dev
+	event.emit_signal("messageEntered", "Console", "Toggled dev mode bro.....")	
+
+func givemebombs(args):
+	player.data.bombs = 100
+	event.emit_signal("messageEntered", "Console", "Ay homie here\'s some bombs")	
+
 func setgun(args):
 	var selected = args[1].to_int()
 #			print(selected)
