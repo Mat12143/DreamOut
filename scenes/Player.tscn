@@ -53,6 +53,7 @@ fireDelay = 0.08
 Bullet = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
+z_index = 1
 texture = ExtResource( 1 )
 hframes = 6
 
@@ -67,41 +68,41 @@ anims/Walk = SubResource( 3 )
 [node name="Gun" type="Sprite" parent="."]
 position = Vector2( 0, 3 )
 scale = Vector2( 0.5, 0.5 )
+z_index = 2
 texture = ExtResource( 4 )
 hframes = 6
 script = ExtResource( 5 )
 
 [node name="Position2D" type="Position2D" parent="Gun"]
-visible = false
 position = Vector2( 14, 0 )
 
 [node name="ShotGuns" type="Node2D" parent="Gun"]
 
 [node name="Position2D" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -2 )
+position = Vector2( 14, 0 )
 rotation = 0.0872665
 
 [node name="Position2D7" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -2 )
+position = Vector2( 14, 0 )
 
 [node name="Position2D2" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -2 )
+position = Vector2( 14, 0 )
 rotation = 0.174533
 
 [node name="Position2D3" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -2 )
+position = Vector2( 14, 0 )
 rotation = 0.261799
 
 [node name="Position2D6" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -2 )
+position = Vector2( 14, 0 )
 rotation = -0.0872665
 
 [node name="Position2D4" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -2 )
+position = Vector2( 14, 0 )
 rotation = -0.174533
 
 [node name="Position2D5" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -2 )
+position = Vector2( 14, 0 )
 rotation = -0.261799
 
 [node name="FireDelayTimer" type="Timer" parent="."]

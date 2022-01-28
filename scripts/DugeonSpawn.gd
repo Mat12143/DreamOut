@@ -9,10 +9,11 @@ var createdRooms = 0
 var nearDoorProb = 45
 var moreDoorsProb = 70
 
+onready var firstRoom =	preload("res://rooms/tutorialRoom.tscn")
 onready var roomTemplates = [
 	preload("res://rooms/CapyBara.tscn"),
 	preload("res://rooms/StartRoom.tscn"),
-	#preload("res://rooms/aRoomTemplate.tscn")
+	preload("res://rooms/idkRooms/theRock.tscn")
 ]
 onready var door = preload("res://scenes/Door.tscn")
 onready var Player = get_tree().get_current_scene().get_node("Player")
@@ -116,8 +117,9 @@ func convertDirectionToGrid(direction):
 		return posAndDirections[str(direction)]
 
 func create_room(gridLayout, backDoor = null):
-	
-	var room = roomTemplates[randi() % len(roomTemplates) - 1].instance()
+	var room
+	if createdRooms == 0: room = firstRoom.instance()
+	else: room = roomTemplates[randi() % len(roomTemplates) - 1].instance()
 	add_child(room)
 	
 	var yPos = gridLayout.y * (roomSize.y + spaceBetweenRooms)
