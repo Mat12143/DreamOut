@@ -79,22 +79,30 @@ position = Vector2( 14, 0 )
 
 [node name="Position2D" type="Position2D" parent="Gun/ShotGuns"]
 position = Vector2( 16, -2 )
-
-[node name="Position2D2" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, 2 )
 rotation = 0.0872665
 
-[node name="Position2D3" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, 6 )
+[node name="Position2D7" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -2 )
+
+[node name="Position2D2" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -2 )
 rotation = 0.174533
 
-[node name="Position2D4" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -6 )
+[node name="Position2D3" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -2 )
+rotation = 0.261799
+
+[node name="Position2D6" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -2 )
 rotation = -0.0872665
 
-[node name="Position2D5" type="Position2D" parent="Gun/ShotGuns"]
-position = Vector2( 16, -10 )
+[node name="Position2D4" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -2 )
 rotation = -0.174533
+
+[node name="Position2D5" type="Position2D" parent="Gun/ShotGuns"]
+position = Vector2( 16, -2 )
+rotation = -0.261799
 
 [node name="FireDelayTimer" type="Timer" parent="."]
 wait_time = 0.001

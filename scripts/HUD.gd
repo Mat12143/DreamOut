@@ -2,6 +2,11 @@ extends CanvasLayer
 
 onready var heart = preload("res://scenes/Heart.tscn")
 
+func updateHud():
+	updateHealth()
+	$Items/BombCount.text = String(get_parent().get_node("Player").data.bombs)
+	$Items/KeyCount.text = String(get_parent().get_node("Player").data.keys)
+
 func updateHealth():
 	var body = get_parent().get_node("Player")
 	var totalMaxHealth = (body.maxHealth + body.data.upgrades.maxHealth)
@@ -10,7 +15,7 @@ func updateHealth():
 	var half = body.data.health - fulls == 0.5
 	var index = 0
 	
-	print([body.data.health, [fulls, empties, half]])
+	print([body.data.health, [fulls, empties, half], totalMaxHealth])
 	
 	if ($Health.get_child_count() < totalMaxHealth):
 		for _i in range(totalMaxHealth - $Health.get_child_count()):
@@ -27,7 +32,8 @@ func updateHealth():
 		$Health.get_children()[index].get_node("Sprite").frame = 2
 		index += 1
 	
-	if half: $Health.get_children()[fulls].get_node("Sprite").frame = 1
+	if $Health.get_children().size() != fulls:
+		if half: $Health.get_children()[fulls].get_node("Sprite").frame = 1
 	
 	# TODO Gestire cambiamenti di vita BLU (temporanea) e vita massima	
 	
@@ -65,7 +71,8 @@ func updateHealth():
 #	for i in range(body.data.health)
 
 func _ready():
-	updateHealth()
+	updateHud()
+	pass
 #	var body = get_parent().get_node("Player")
 #	$PortraitAndHealth/Portrait/HPBar.value = (float(body.data.health) / (body.maxHealth + body.data.upgrades.maxHealth) * 100)
 

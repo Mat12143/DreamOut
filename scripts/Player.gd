@@ -5,10 +5,12 @@ export var max_speed = 15
 export var friction = 900
 export var fireDelay:float = 0.1
 #export var rollDelay:float = 1
-export var maxHealth = 10
+var maxHealth = 10
 var health = maxHealth
 onready var fireDelayTimer = $FireDelayTimer
 onready var rollDelayTimer = $RollDelayTimer
+onready var bomb = preload("res://scenes/bullets/Bomb.tscn")
+#var canMove = true
 
 enum Guns {
 	SMG, # 0
@@ -29,6 +31,9 @@ var data = { # Questo verra' salvato
 		"gunRange": 0,
 		"maxHealth": 0,
 	},
+	"dev": false,
+	"bombs": 0,
+	"keys": 0,
 	"health": maxHealth,
 	"selectedGun": Guns.SMG, # Viene salvato come numero (ENUM GUNS)
 	"name": "Player"
@@ -60,7 +65,7 @@ func updateGun():
 			gunData.autoFire = false
 			gunData.gunRange = 25
 		Guns.SHOTGUN:
-			gunData.damage = 0.7
+			gunData.damage = 0.5
 			gunData.fireRate = 1
 			gunData.projSpeed = 500
 			gunData.autoFire = true
@@ -117,7 +122,7 @@ func shoot():
 	
 func _physics_process(delta):
 #	print(position)
-	if !owner.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible():
+	if !owner.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
 		var input_vector = Vector2.ZERO
 		input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 		input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
@@ -140,9 +145,15 @@ func _physics_process(delta):
 				fireRate = 0.05
 			fireDelayTimer.start(fireRate)
 			shoot()
+		if Input.is_action_just_pressed("bomb") and data.bombs > 0:
+			var b = bomb.instance()
+			get_tree().current_scene.add_child(b)
+			b.position = position
+			data.bombs -= 1
+			get_tree().current_scene.get_node("HUD").updateHud()			
 
 func _on_GlobalEventManager_playerHit(damage):
-	if $IFrameTimer.is_stopped():
+	if $IFrameTimer.is_stopped() and !data.dev:
 		$IFrameTimer.start(1)
 		data.health -= damage
 		$HitSound.play()
@@ -159,6 +170,7 @@ func _on_GlobalEventManager_upgradePickedUp(key, value):
 	data.upgrades[key] += value
 	if key == "maxHealth":
 		get_tree().current_scene.get_node("HUD").updateHealth()
+		data.health = clamp(data.health, 0, maxHealth + data.upgrades.maxHealth)
 #	get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", "Upgrade", "%s + %s" % [key, String(value)])
 
 

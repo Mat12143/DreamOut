@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
@@ -14,8 +14,10 @@
 [ext_resource path="res://ChatBox.tscn" type="PackedScene" id=12]
 [ext_resource path="res://sprites/theme_of_themes.tres" type="Theme" id=13]
 [ext_resource path="res://CommandManager.gd" type="Script" id=14]
+[ext_resource path="res://sprites/UI/bomb.png" type="Texture" id=15]
+[ext_resource path="res://sprites/UI/key.png" type="Texture" id=16]
 
-[node name="World" type="YSort"]
+[node name="World" type="Node2D"]
 script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": "s"
@@ -47,6 +49,42 @@ custom_constants/separation = 9
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Items" type="HBoxContainer" parent="HUD"]
+margin_left = 24.0
+margin_top = 22.0
+margin_right = 64.0
+margin_bottom = 32.0
+theme = ExtResource( 13 )
+custom_constants/separation = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="HUD/Items"]
+margin_right = 8.0
+margin_bottom = 10.0
+texture = ExtResource( 15 )
+stretch_mode = 4
+
+[node name="BombCount" type="Label" parent="HUD/Items"]
+margin_left = 12.0
+margin_right = 18.0
+margin_bottom = 10.0
+text = "0"
+
+[node name="TextureRect2" type="TextureRect" parent="HUD/Items"]
+margin_left = 22.0
+margin_right = 30.0
+margin_bottom = 10.0
+texture = ExtResource( 16 )
+stretch_mode = 4
+
+[node name="KeyCount" type="Label" parent="HUD/Items"]
+margin_left = 34.0
+margin_right = 40.0
+margin_bottom = 10.0
+text = "0"
 
 [node name="PortraitAndHealth" type="Control" parent="HUD"]
 visible = false

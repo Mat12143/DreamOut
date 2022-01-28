@@ -1,23 +1,10 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://sprites/UI/health/hearts.png" type="Texture" id=1]
-[ext_resource path="res://sfx/heal.wav" type="AudioStream" id=2]
-[ext_resource path="res://scripts/Float.gd" type="Script" id=3]
+[ext_resource path="res://sprites/Bullets/bomb.png" type="Texture" id=1]
+[ext_resource path="res://sfx/bombKey.wav" type="AudioStream" id=2]
 
 [sub_resource type="GDScript" id=2]
 script/source = "extends Area2D
-
-export (float, 0.5, 1.0) var value = 1
-
-func _ready():
-	if value == 1:
-		$Sprite.frame = 0
-		$AudioStreamPlayer2D.pitch_scale = 1
-	elif value == 0.5:
-		$Sprite.frame = 1
-		$AudioStreamPlayer2D.pitch_scale = 0.5
-	else:
-		print_debug(\"Please specify a valid value\")
 
 var toTweenOrNotToTween = true
 	
@@ -29,10 +16,7 @@ func _on_Tween_tween_completed(object, key):
 func _on_Heart_body_entered(body):
 	if (body.is_in_group(\"Player\")):
 #		print(body.health < body.maxHealth + body.data.upgrades.maxHealth)
-		if (body.data.health < body.maxHealth + body.data.upgrades.maxHealth):
-	#		get_tree().get_current_scene().get_node(\"GlobalEventManager\").emit_signal(\"upgradePickedUp\", key, value)
-			get_tree().get_current_scene().get_node(\"GlobalEventManager\").emit_signal(\"playerHeal\", value)
-			
+#		if (body.data.health < body.maxHealth + body.data.upgrades.maxHealth):
 			$AudioStreamPlayer2D.play()
 			$Tween.interpolate_property(
 				self, \"modulate\", Color('ffffff'), Color('00ffffff'), 0.2
@@ -40,19 +24,39 @@ func _on_Heart_body_entered(body):
 			if (toTweenOrNotToTween):
 				$Tween.start()
 			toTweenOrNotToTween = false
+			body.data.bombs += 1
 	#		queue_free()
+			get_tree().get_current_scene().get_node(\"HUD\").updateHud()
 "
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8.03972, 7.9035 )
 
-[node name="Heart" type="Area2D"]
-scale = Vector2( 0.995059, 1.01221 )
+[sub_resource type="GDScript" id=3]
+script/source = "extends Tween
+
+var okLetsGo = -5
+
+func _ready():
+	interpolate_property(owner, \"position:y\", owner.position.y, owner.position.y + okLetsGo, 0.5)
+	start()
+
+
+
+
+func _on_Float_tween_completed(object, key):
+	okLetsGo *= -1
+	interpolate_property(owner, \"position:y\", owner.position.y, owner.position.y + okLetsGo, 0.5)
+	start()
+"
+
+[node name="Bomb" type="Area2D"]
 script = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.75, 0.75 )
 texture = ExtResource( 1 )
-hframes = 5
+hframes = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -64,7 +68,7 @@ one_way_collision_margin = 0.0
 stream = ExtResource( 2 )
 
 [node name="Float" type="Tween" parent="."]
-script = ExtResource( 3 )
+script = SubResource( 3 )
 
 [connection signal="body_entered" from="." to="." method="_on_Heart_body_entered"]
 [connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]
