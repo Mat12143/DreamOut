@@ -1,17 +1,18 @@
 extends Node2D
 
 var roomsGrid = {}
-var roomSize = Vector2(340, 215)
-var spaceBetweenRooms = 10
+var roomSize = Vector2(320, 180)
+var spaceBetweenRooms = 20
 var playerRoom = null
-var maxNumberRoom = 100
+var maxNumberRoom = 1000
 var createdRooms = 0
 var nearDoorProb = 45
-var moreDoorsProb = 50
+var moreDoorsProb = 70
 
 onready var roomTemplates = [
-	preload("res://rooms/CapybaraMiniboss.tscn"),
+	preload("res://rooms/CapyBara.tscn"),
 	preload("res://rooms/StartRoom.tscn"),
+	#preload("res://rooms/aRoomTemplate.tscn")
 ]
 onready var door = preload("res://scenes/Door.tscn")
 onready var Player = get_tree().get_current_scene().get_node("Player")
@@ -30,9 +31,6 @@ var directions = [
 	"Left",
 	"Right"
 ]
-
-const addX = 153
-const addY = 90
 
 var doorZones = {
 	"Up" : Vector2(0, -60),
@@ -58,11 +56,20 @@ func checkRoomByGrid(grid):
 func getRoomByGrid(grid):
 	
 	return roomsGrid[grid].room
+	
+func createDoor(room, direction):
+	
+	var roomDoorPos = room.get_node(direction).position
+	var doorRoom = door.instance()
+	room.add_child(doorRoom)
+	doorRoom.position = roomDoorPos
+	doorRoom.set_direction(direction)
+	
 
 func movePlayerAndCamera(grid, direction):
 	
-	var room = roomsGrid[grid].room
-	var cameraPos = Vector2(room.position.x + addX, room.position.y + addY) 
+	var room = getRoomByGrid(grid)
+	var cameraPos = Vector2(room.position.x + roomSize.x / 2, room.position.y + roomSize.y / 2) 
 	
 	var t = Tween.new()
 	add_child(t)
@@ -85,7 +92,7 @@ func goToRoom(direction):
 	var grid = convertDirectionToGrid(direction)
 	
 	var roomPosition
-	var room = null
+	var room
 	
 	for gridLayout in roomsGrid:
 		if roomsGrid[gridLayout].room == playerRoom:
@@ -123,131 +130,98 @@ func create_room(gridLayout, backDoor = null):
 	
 	room.position = roomPosition
 	
-	var maxIndex = 3
 	var updatedDirections = directions.duplicate()
 	
-	var spawnNearRoomDoor = randi() % 100 + 1	
-	if (backDoor != null and spawnNearRoomDoor <= nearDoorProb):
-		var newDirections = directions.duplicate()
-		newDirections.erase(invertDirection(backDoor))
-		
-		for direction in newDirections:
-			
-			var grid = convertDirectionToGrid(direction)
-			var nearRoomGrid = Vector2(gridLayout.x + grid.x, gridLayout.y + grid.y)
-			
-			if (checkRoomByGrid(nearRoomGrid)):
-				
-				updatedDirections.erase(direction)
-				
-				var nearRoom = getRoomByGrid(nearRoomGrid)
-				var otherDoorPos = nearRoom.get_node(invertDirection(direction)).position
-
-				var otherDoor = door.instance()
-				nearRoom.add_child(otherDoor)
-				otherDoor.position = otherDoorPos
-				otherDoor.set_direction(invertDirection(direction))
-				
-				var roomDoorPos = room.get_node(direction).position
-				var doorRoom = door.instance()
-				room.add_child(doorRoom)
-				doorRoom.position = roomDoorPos
-				doorRoom.set_direction(direction)
-				
-				doors.append(direction)
-				roomsGrid[nearRoomGrid].doors.append(invertDirection(direction))
-				
-				break
-				
-	if backDoor != null:
-		maxIndex = maxIndex - 1
-		updatedDirections.erase(invertDirection(backDoor))
-	
-	var randIndex = randi() % maxIndex
-	var pickedDirection
-	
-	updatedDirections.shuffle()
-	
-	for index in range(0, maxIndex):
-		if randIndex == index:
-			pickedDirection = updatedDirections[index]
-			
-	if (createdRooms != maxNumberRoom - 1):
-	
-		var spawnedDoor = door.instance()
-		room.add_child(spawnedDoor)
-		spawnedDoor.position = room.get_node(str(pickedDirection)).position	
-		spawnedDoor.set_direction(pickedDirection)
-		
-		updatedDirections.erase(pickedDirection)
-		updatedDirections.shuffle()
-		
-		doors.append(pickedDirection)
-		
-		var gridDir = convertDirectionToGrid(pickedDirection)
-		var roomToGoGrid = Vector2(gridLayout.x + gridDir.x, gridLayout.y + gridDir.y)
-		
-		if (checkRoomByGrid(roomToGoGrid)):
-			
-			var nearRoom = getRoomByGrid(roomToGoGrid)
-			var nearDoor = door.instance()
-			nearRoom.add_child(nearDoor)
-			nearDoor.position = nearRoom.get_node(invertDirection(pickedDirection)).position
-			nearDoor.set_direction(invertDirection(pickedDirection))
-			roomsGrid[roomToGoGrid].doors.append(invertDirection(pickedDirection))
-			
-
-			
-		var prob = randi() % 100
-		
-		if (prob <= moreDoorsProb and backDoor != null):
-			
-			var doorNum = randi() % 2
-			
-			for i in range(0, doorNum):
-								
-				pickedDirection = updatedDirections[randi() % len(updatedDirections) - 1]
-				
-				var gridToMove = convertDirectionToGrid(pickedDirection)
-				var gridToGo = Vector2(gridLayout.x + gridToMove.x, gridLayout.y + gridToMove.y)
-				
-				if (checkRoomByGrid(gridToGo)):
-					
-					var nearRoom = getRoomByGrid(gridToGo)
-					var nearDoor = door.instance()
-					nearDoor.add_child(nearDoor)
-					roomsGrid[gridToGo].doors.append(invertDirection(pickedDirection))
-					nearDoor.position = nearRoom.get_node(pickedDirection).position
-					nearDoor.set_direction(invertDirection(pickedDirection))
-					
-				var newDoor = door.instance()
-				room.add_child(newDoor)
-				newDoor.position = room.get_node(pickedDirection).position
-				newDoor.set_direction(pickedDirection)
-				
-				doors.append(pickedDirection)
-				
-				updatedDirections.erase(pickedDirection)
-				updatedDirections.shuffle()
+	var spawnNearRoomDoor = randi() % 100 + 1
 	
 	if (backDoor != null):
 		
-		var direction = backDoor
-		
-		backDoor = door.instance()
-		room.add_child(backDoor)
-		backDoor.position = room.get_node(str(invertDirection(direction))).position
-		backDoor.set_direction(invertDirection(direction))
-		
-		doors.append(direction)
+		# Spawno la door per tornare indietro
+		createDoor(room, invertDirection(backDoor))
+		doors.append(backDoor)
+		updatedDirections.erase(backDoor)
 	
+	updatedDirections.shuffle()
+			
+	# Controllo il numero massimo di stanze
+	if (createdRooms != maxNumberRoom - 1):
+		
+		# Controllo tutte le direzioni rimanenti per evitare di spawnare
+		# porte nelle direzioni dove ci sono già stanze spawnate
+		
+		var noRoomDirections = []
+		var roomDirections = []
+		
+		for direction in updatedDirections:
+			
+			var gridDirection = convertDirectionToGrid(direction)
+			var gridToMove = Vector2(gridLayout.x + gridDirection.x, gridLayout.y + gridDirection.y)
+			
+			if (checkRoomByGrid(gridToMove) == false):
+				noRoomDirections.append(direction)
+			else:
+				roomDirections.append(direction)
+				
+#		if (randi() % 100 <= nearDoorProb and len(roomDirections) != 0):
+#
+#			var randomDirection = roomDirections[randi() % len(roomDirections) - 1]
+#
+#			var grid = convertDirectionToGrid(randomDirection)
+#			var nearRoomGrid = Vector2(gridLayout.x + grid.x , gridLayout.y + grid.y)
+#
+#			var nearRoom = getRoomByGrid(nearRoomGrid)
+#
+#			createDoor(room, randomDirection)
+#			doors.append(randomDirection)
+#
+#			createDoor(nearRoom, invertDirection(randomDirection))
+#			roomsGrid[nearRoomGrid].doors.append(invertDirection(randomDirection))
+#
+#			roomDirections.erase(randomDirection)
+#			if (noRoomDirections.has(randomDirection)) : noRoomDirections.erase(randomDirection)
+			
+		if (len(noRoomDirections) != 0):
+			
+			noRoomDirections.shuffle()
+			var randomDirection = noRoomDirections[randi() % len(noRoomDirections) - 1]
+			
+			createDoor(room, randomDirection)
+			doors.append(randomDirection)
+			
+			noRoomDirections.erase(randomDirection)
+			noRoomDirections.shuffle()
+			
+			if (len(noRoomDirections) != 0 and randi() % 100 <= moreDoorsProb):
+				
+				var newDirection = noRoomDirections[randi() % len(noRoomDirections) - 1]
+				createDoor(room, newDirection)
+				doors.append(newDirection)
+		
+		else:
+			
+			updatedDirections.shuffle()
+			
+			var randomDirection = roomDirections[randi() % len(updatedDirections) - 1]
+			
+			createDoor(room, randomDirection)
+			doors.append(randomDirection)
+			
+			var grid = convertDirectionToGrid(randomDirection)
+			var gridToRoom = Vector2(gridLayout.x + grid.x, gridLayout.y + grid.y)
+			
+			var nearRoom = getRoomByGrid(gridToRoom)
+			createDoor(nearRoom, invertDirection(randomDirection))
+			roomsGrid[gridToRoom].doors.append(invertDirection(randomDirection))
+			
+			roomDirections.erase(randomDirection)
+		
+		
+
 	roomsGrid[gridLayout] = {
 		"room" : room,
 		"doors" : doors
 	}
 	
-	if (gridLayout == Vector2.ZERO):
-		playerRoom = room
 		
 	createdRooms += 1
 		
@@ -255,4 +229,5 @@ func create_room(gridLayout, backDoor = null):
 
 func _ready():
 	randomize()	
-	create_room(Vector2.ZERO, null)
+	var firstRoom = create_room(Vector2.ZERO, null)
+	playerRoom = firstRoom
