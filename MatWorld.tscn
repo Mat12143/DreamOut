@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-[gd_scene load_steps=14 format=2]
-=======
 [gd_scene load_steps=17 format=2]
->>>>>>> f62e4c708eca4a40ac03c85905f2cf5f4a8905bb
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
@@ -17,12 +13,9 @@
 [ext_resource path="res://sfx/wallHit.wav" type="AudioStream" id=11]
 [ext_resource path="res://ChatBox.tscn" type="PackedScene" id=12]
 [ext_resource path="res://sprites/theme_of_themes.tres" type="Theme" id=13]
-<<<<<<< HEAD
-=======
 [ext_resource path="res://CommandManager.gd" type="Script" id=14]
 [ext_resource path="res://sprites/UI/bomb.png" type="Texture" id=15]
 [ext_resource path="res://sprites/UI/key.png" type="Texture" id=16]
->>>>>>> f62e4c708eca4a40ac03c85905f2cf5f4a8905bb
 
 [node name="World" type="Node2D"]
 script = ExtResource( 9 )
@@ -189,9 +182,6 @@ __meta__ = {
 [node name="GlobalEventManager" type="Node2D" parent="."]
 script = ExtResource( 7 )
 
-[node name="Node2D" type="Node2D" parent="."]
-script = ExtResource( 10 )
-
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 160, 90 )
 current = true
@@ -204,8 +194,12 @@ volume_db = -80.0
 position = Vector2( 160, -32 )
 script = ExtResource( 10 )
 
+[node name="CommandManager" type="Node2D" parent="."]
+script = ExtResource( 14 )
+
 [connection signal="tween_completed" from="HUD/PopupText/Tween" to="GlobalEventManager" method="_on_Tween_tween_completed"]
 [connection signal="messageEntered" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_messageEntered"]
+[connection signal="messageEntered" from="GlobalEventManager" to="CommandManager" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="playerHeal" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHeal"]
 [connection signal="playerHit" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHit"]
 [connection signal="playerHit" from="GlobalEventManager" to="HUD" method="_on_GlobalEventManager_playerHit"]
