@@ -29,6 +29,7 @@ script/source = "extends Particles2D
 
 
 func explode():
+	get_tree().current_scene.get_node(\"GlobalEventManager\").emit_signal(\"shake\", 0.3, 20, 5, 1)
 	$AudioStreamPlayer2D.play()
 	emitting = true
 	get_tree().create_timer(0.3).connect(\"timeout\", $Collisioner, \"queue_free\")

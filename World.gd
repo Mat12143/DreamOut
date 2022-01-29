@@ -12,6 +12,9 @@ func _ready():
 		"Look mother, I am a hat",
 		"No autoclickers allowed",
 		"Officina Tecnologica",
-		"John China"
+		"John China",
+		"Imagine using joomla...",
+		"Hilarious",
+		"Godot Engine"
 	]
 	OS.set_window_title("Gioco Pazzo: %s!" % RNGTools.pick(titles))

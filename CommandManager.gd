@@ -2,6 +2,10 @@ extends Node2D
 onready var player = owner.get_node("Player")
 onready var event = owner.get_node('GlobalEventManager')
 
+func toggleshake(args):
+	player.data.settings.screenShake = !player.data.settings.screenShake
+	event.emit_signal("messageEntered", "Console", "Toggled screenshake")	
+
 func dev(args):
 	player.data.dev = !player.data.dev
 	event.emit_signal("messageEntered", "Console", "Toggled dev mode bro.....")	
@@ -38,14 +42,8 @@ func heal(args):
 func damage(args):
 #	player.data.health = player.maxHealth + player.data.upgrades.maxHealth
 	event.emit_signal("playerHit", 0.5)
-	event.emit_signal("messageEntered", "Console", "Fully healed")
+	event.emit_signal("messageEntered", "Console", "Damaged you")
 
-var helpPages = {
-		"guns": {
-			"title": "List of guns",
-			"description": "0: SMG\n1: Pistol\n2: Shotgun\n3: Rocket Launcher\n4: Rifle\n5: Pyros Gun (available only with cheats)",
-		}
-	}
 var commands = {
 	"setgun": {
 		"description": "Sets your gun",
@@ -64,11 +62,43 @@ var commands = {
 		"cheat": false
 	},
 	"reset": {
-		"description": "Resets your character permanently",
+		"description": "Resets your character",
+		"args": 0,
+		"cheat": false
+	},
+	"dev": {
+		"description": "Toggles DEV mode",
+		"args": 0,
+		"cheat": true
+	},
+	"givemebombs": {
+		"description": "Gives you 100 bombs",
+		"args": 0,
+		"cheat": true
+	},
+	"heal": {
+		"description": "Fully heals you",
+		"args": 0,
+		"cheat": true
+	},
+	"damage": {
+		"description": "Damages you for 0.5",
+		"args": 0,
+		"cheat": true
+	},
+	"toggleshake": {
+		"description": "Toggles screen shake",
 		"args": 0,
 		"cheat": false
 	},
 }
+
+var helpPages = {
+		"guns": {
+			"title": "List of guns",
+			"description": "0: SMG\n1: Pistol\n2: Shotgun\n3: Rocket Launcher\n4: Rifle\n5: Pyros Gun (available only with cheats)",
+		}
+	}
 
 func help(args:PoolStringArray):
 	if args.size() == 1:

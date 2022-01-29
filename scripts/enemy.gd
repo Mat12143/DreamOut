@@ -7,6 +7,7 @@ onready var health = maxHealth
 var hitFromShotGun = false
 var toTweenOrNotToTween = true
 var invincible = false
+onready var blood = preload("res://scenes/particles/EnemyDeath.tscn")
 
 func _ready():
 	AI.initialize(self, weapon)
@@ -19,6 +20,9 @@ func _process(_delta):
 		$AnimationPlayer.stop()
 		if $AnimationPlayer.has_animation("RESET"): $AnimationPlayer.play("RESET")
 		if (toTweenOrNotToTween):
+			var b = blood.instance()
+			owner.add_child(b)
+			b.transform = transform
 			$Tween.interpolate_property(
 				self, "modulate", Color('ffffff'), Color('00ffffff'), 0.3
 			)

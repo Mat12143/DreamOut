@@ -10,6 +10,16 @@ var health = maxHealth
 onready var fireDelayTimer = $FireDelayTimer
 onready var rollDelayTimer = $RollDelayTimer
 onready var bomb = preload("res://scenes/bullets/Bomb.tscn")
+onready var bulletShell = preload("res://scenes/BulletShell.tscn")
+onready var event = get_tree().current_scene.get_node("GlobalEventManager")
+onready var gunSounds = [
+	preload("res://sfx/projectilehit.wav"),
+	preload("res://sfx/projectilehit.wav"),
+	preload("res://sfx/shotgun.wav"),
+	preload("res://sfx/projectilehit.wav"),
+	preload("res://sfx/sniper.wav"),
+	preload("res://sfx/projectilehit.wav"),
+]
 #var canMove = true
 
 enum Guns {
@@ -30,6 +40,10 @@ var data = { # Questo verra' salvato
 		"charSpeed": 0,
 		"gunRange": 0,
 		"maxHealth": 0,
+		"accuracy": 0,
+	},
+	"settings": {
+		"screenShake": true
 	},
 	"dev": false,
 	"bombs": 0,
@@ -47,8 +61,18 @@ var gunData = {
 	"projSpeed": 0,
 	"charSpeed": 0,
 	"gunRange": 0,
+	"power": 0,
+	"spread": 0,
 	"autoFire": true,
 }
+
+func getFireRate():
+	var upgradeFireRate = (float(data.upgrades.fireRate) / 100)
+#			print([float(gunData.fireRate), upgradeFireRate])
+	var fireRate = gunData.fireRate - upgradeFireRate
+	if (fireRate <= 0):
+		fireRate = 0.05
+	return fireRate
 
 func updateGun():
 	match data.selectedGun:
@@ -58,39 +82,53 @@ func updateGun():
 			gunData.projSpeed = 500
 			gunData.autoFire = true
 			gunData.gunRange = 40
+			gunData.power = 0
+			gunData.spread = 15
 		Guns.PISTOL:
 			gunData.damage = 1
 			gunData.fireRate = 0.00001
 			gunData.projSpeed = 500
 			gunData.autoFire = false
 			gunData.gunRange = 25
+			gunData.power = 0
+			gunData.spread = 5
 		Guns.SHOTGUN:
 			gunData.damage = 0.5
 			gunData.fireRate = 1
 			gunData.projSpeed = 500
 			gunData.autoFire = true
 			gunData.gunRange = 20
+			gunData.power = 4
+			gunData.spread = 0
 		Guns.ROCKET:
 			gunData.damage = 5
 			gunData.fireRate = 2
 			gunData.projSpeed = 250
 			gunData.autoFire = true
 			gunData.gunRange = 50
+			gunData.power = 0
+			gunData.spread = 0
 		Guns.RIFLE:
 			gunData.damage = 4
 			gunData.fireRate = 1.5
 			gunData.projSpeed = 1500
 			gunData.autoFire = true
 			gunData.gunRange = 1000
+			gunData.power = 3
+			gunData.spread = 0
+			$ShootSound.volume_db = 15
 		Guns.PYROS:
 			gunData.damage = 99
 			gunData.fireRate = 0.000000001
 			gunData.projSpeed = 1500
 			gunData.gunRange = 1000
+			gunData.power = 0
+			gunData.spread = 0
 			gunData.autoFire = false
 		_:
 			print("NO GUN FOUND")
-	$Gun.frame = data.selectedGun
+	$Gun/Sprite.frame = data.selectedGun
+	$ShootSound.stream = gunSounds[data.selectedGun]
 
 func _ready():
 	var save = owner.get_node("SaveManager").loadSave("user://plr.save")
@@ -106,12 +144,25 @@ var velocity = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer
 
 func shoot():
+#	var t = $GunRecoil
+#	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4))
+#	t.start()
+	event.emit_signal("shake", 0.2, 7* gunData.power, 1 * gunData.power, 0)	
 	if data.selectedGun != Guns.SHOTGUN:
 		var b = Bullet.instance()
 		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange)
 		get_tree().current_scene.add_child(b)
 		b.transform = $Gun/Position2D.global_transform
+		var spread = gunData.spread - data.upgrades.accuracy
+		if spread < 0:
+			spread = 0
+		b.rotation += deg2rad(rand_range(-spread, spread))
 		$ShootSound.play()
+		
+#		var sh = bulletShell.instance()
+#		get_tree().current_scene.add_child(sh)
+#		sh.position = $Gun.global_position
+#		sh.rotation = deg2rad(rand_range(0, 360))
 	else:
 		for i in $Gun/ShotGuns.get_children():
 			var b = Bullet.instance()
@@ -138,11 +189,7 @@ func _physics_process(delta):
 		
 		var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
 		if pressedShoot and fireDelayTimer.is_stopped():
-			var upgradeFireRate = (float(data.upgrades.fireRate) / 100)
-#			print([float(gunData.fireRate), upgradeFireRate])
-			var fireRate = gunData.fireRate - upgradeFireRate
-			if (fireRate <= 0):
-				fireRate = 0.05
+			var fireRate = getFireRate()
 			fireDelayTimer.start(fireRate)
 			shoot()
 		if Input.is_action_just_pressed("bomb") and data.bombs > 0:
@@ -153,6 +200,7 @@ func _physics_process(delta):
 			get_tree().current_scene.get_node("HUD").updateHud()			
 
 func _on_GlobalEventManager_playerHit(damage):
+	event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	
 	if $IFrameTimer.is_stopped() and !data.dev:
 		$IFrameTimer.start(1)
 		data.health -= damage
@@ -177,3 +225,9 @@ func _on_GlobalEventManager_upgradePickedUp(key, value):
 func _on_GlobalEventManager_playerHeal(value):
 	data.health = clamp(data.health + value, 0, maxHealth + data.upgrades.maxHealth)
 	get_tree().current_scene.get_node("HUD").updateHealth()
+
+
+func _on_GunRecoil_tween_completed(object, key):
+	return
+#	$GunRecoil2.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation + deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4) * 3)
+#	$GunRecoil2.start()

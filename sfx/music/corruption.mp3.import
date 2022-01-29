@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/corruption.mp3-4a6eec4e93a49af436c1654e7b54c622.mp3str"
+
+[deps]
+
+source_file="res://sfx/music/corruption.mp3"
+dest_files=[ "res://.import/corruption.mp3-4a6eec4e93a49af436c1654e7b54c622.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
