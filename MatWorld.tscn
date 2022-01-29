@@ -36,7 +36,6 @@ script = ExtResource( 2 )
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
 volume_db = -25.0
-autoplay = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource( 8 )
