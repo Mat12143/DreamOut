@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "Item",
+"language": "GDScript",
+"path": "res://items/templatev2.gd"
+}, {
 "base": "Object",
 "class": "RNGTools",
 "language": "GDScript",
@@ -25,6 +30,7 @@ _global_script_classes=[ {
 "path": "res://addons/camera_shake/camera_scripts/shake_camera_2D.gd"
 } ]
 _global_script_class_icons={
+"Item": "",
 "RNGTools": "",
 "ShakeCamera": "",
 "ShakeCamera2D": ""

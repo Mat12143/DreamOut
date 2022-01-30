@@ -21,6 +21,8 @@ func _on_Bullet_body_entered(body):
 #				get_parent().get_node('HUD/PortraitAndHealth/BarEmpty/HPBar').value = (float(body.health) / body.maxHealth * 100)
 #				body.queue_free()
 #		print(body.is_in_group("friendlyProjectilesPassThrough"))
+		if body.is_in_group('Soft'):
+			body.health -= 1
 		if !body.is_in_group('mobs'):
 			queue_free()
 

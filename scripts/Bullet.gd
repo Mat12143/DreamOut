@@ -86,6 +86,8 @@ func _on_Bullet_body_entered(body):
 			
 					
 #		print(body.is_in_group("friendlyProjectilesPassThrough"))
+		if body.is_in_group('Soft'):
+			body.health -= 1
 		if !body.is_in_group('friendlyProjectilesPassThrough') and $CollisionShape2D.shape.radius != explosionRadius:
 			reason = HITWALL
 			destroy(reason, body)

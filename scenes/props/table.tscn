@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://sprites/Props/tableTemp.png" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends StaticBody2D
+
+var maxHealth = 7
+var health = maxHealth
+
+func _process(delta):
+	if health <= 0:
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 1.5, 8 )
+
+[node name="Table" type="StaticBody2D" groups=["Breakable", "Soft"]]
+scale = Vector2( 2, 2 )
+script = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -0.5, 0 )
+shape = SubResource( 1 )
