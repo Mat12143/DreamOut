@@ -139,7 +139,7 @@ func help(args:PoolStringArray):
 func _on_GlobalEventManager_messageEntered(author, text:String):
 	text = text.strip_edges()
 	var args = text.split(" ")
-	print(args)
+#	print(args)
 	if text.begins_with('/'):
 		if has_method(args[0].replace("/", "")):
 			call(args[0].replace("/", ""), args)

@@ -53,6 +53,8 @@ max_speed = 1
 fireDelay = 0.08
 Bullet = ExtResource( 3 )
 
+[node name="Items" type="Node2D" parent="."]
+
 [node name="Light2D" type="Light2D" parent="."]
 visible = false
 texture = ExtResource( 10 )

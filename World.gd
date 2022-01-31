@@ -5,8 +5,7 @@ func _ready():
 	randomize()
 	var titles = [
 		"Capybaras are always valid",
-		"Giuro",
-		"pyros",
+		"made by pyros.dev",
 		"Ok lets go",
 		"Avoid PHP at all costs",
 		"Look mother, I am a hat",
@@ -15,6 +14,11 @@ func _ready():
 		"John China",
 		"Imagine using joomla...",
 		"Hilarious",
-		"Godot Engine"
+		"Godot Engine",
+		"Hehehe HA",
+		"What a giullare...",
+		"Ole ole",
+		"I swear",
+		"Check out pyros.dev"
 	]
 	OS.set_window_title("Gioco Pazzo: %s!" % RNGTools.pick(titles))

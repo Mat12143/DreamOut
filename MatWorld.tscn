@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
@@ -17,12 +17,16 @@
 [ext_resource path="res://sprites/UI/bomb.png" type="Texture" id=15]
 [ext_resource path="res://sprites/UI/key.png" type="Texture" id=16]
 [ext_resource path="res://scripts/ScreenShake.gd" type="Script" id=17]
+[ext_resource path="res://items/scripts/itemDB.gd" type="Script" id=18]
 
 [node name="World" type="Node2D"]
 script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": "s"
 }
+
+[node name="ItemDB" type="Node" parent="."]
+script = ExtResource( 18 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 158, 89 )
@@ -158,6 +162,7 @@ size_flags_vertical = 0
 bbcode_enabled = true
 bbcode_text = "[center]Title[/center]"
 text = "Title"
+scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -166,13 +171,14 @@ __meta__ = {
 margin_left = 2.0
 margin_top = 72.0
 margin_right = 643.0
-margin_bottom = 94.0
+margin_bottom = 120.0
 rect_scale = Vector2( 0.5, 0.5 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 bbcode_enabled = true
 bbcode_text = "[center]Subtitle[/center]"
 text = "Subtitle"
+scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -20,7 +20,6 @@ onready var gunSounds = [
 	preload("res://sfx/sniper.wav"),
 	preload("res://sfx/projectilehit.wav"),
 ]
-#var canMove = true
 
 enum Guns {
 	SMG, # 0
@@ -45,14 +44,14 @@ var data = { # Questo verra' salvato
 	"settings": {
 		"screenShake": true
 	},
+	"inventory": [],
 	"dev": false,
 	"bombs": 0,
 	"keys": 0,
 	"health": maxHealth,
 	"selectedGun": Guns.SMG, # Viene salvato come numero (ENUM GUNS)
 	"name": "Player"
-} 
-
+}
 var baseData = data.duplicate()
 
 var gunData = {
@@ -64,6 +63,12 @@ var gunData = {
 	"power": 0,
 	"spread": 0,
 	"autoFire": true,
+}
+
+var loadInv = {}
+
+var modifiers = {
+	"damagedByExplosions": true
 }
 
 func getFireRate():
@@ -131,14 +136,21 @@ func updateGun():
 	$ShootSound.stream = gunSounds[data.selectedGun]
 
 func _ready():
+	# --- Salvataggi ---
 	var save = owner.get_node("SaveManager").loadSave("user://plr.save")
-	print(save)
 	if !!save:
 		data = save
 	else:
 		print('plr.save not found, loading defaults')
 		owner.get_node("SaveManager").save(data, "user://plr.save")
 	updateGun()
+	
+	# --- Esegui restart su ogni oggetto nell'inventario ---
+	var itemDB = get_tree().current_scene.get_node("ItemDB")
+	for i in data.inventory:
+		var item = itemDB.items[i]
+		loadInv[i] = item
+		item.get_node("Logic").restart(self)
 
 var velocity = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer

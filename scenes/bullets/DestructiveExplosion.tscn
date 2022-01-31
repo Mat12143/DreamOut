@@ -43,7 +43,8 @@ func _on_Collisioner_body_entered(body:Node):
 	if body.is_in_group(\"Breakable\"):
 		body.queue_free()
 	if body.is_in_group(\"Player\"):
-		get_tree().get_current_scene().get_node(\"GlobalEventManager\").emit_signal(\"playerHit\", 1)
+		if body.modifiers.damagedByExplosions:
+			get_tree().get_current_scene().get_node(\"GlobalEventManager\").emit_signal(\"playerHit\", 1)
 	# TODO danneggia nemico
 "
 

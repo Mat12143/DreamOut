@@ -28,12 +28,18 @@ _global_script_classes=[ {
 "class": "ShakeCamera2D",
 "language": "GDScript",
 "path": "res://addons/camera_shake/camera_scripts/shake_camera_2D.gd"
+}, {
+"base": "Node",
+"class": "nanoid",
+"language": "GDScript",
+"path": "res://scripts/nanoid.gd"
 } ]
 _global_script_class_icons={
 "Item": "",
 "RNGTools": "",
 "ShakeCamera": "",
-"ShakeCamera2D": ""
+"ShakeCamera2D": "",
+"nanoid": ""
 }
 
 [application]
