@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/NPCs/Dungeon NPC.tscn" type="PackedScene" id=2]
@@ -17,12 +17,16 @@
 [ext_resource path="res://sprites/UI/bomb.png" type="Texture" id=15]
 [ext_resource path="res://sprites/UI/key.png" type="Texture" id=16]
 [ext_resource path="res://scripts/ScreenShake.gd" type="Script" id=17]
+[ext_resource path="res://items/scripts/itemDB.gd" type="Script" id=18]
 
 [node name="Spawn" type="Node2D"]
 script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": "s"
 }
+
+[node name="ItemDB" type="Node" parent="."]
+script = ExtResource( 18 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 158, 89 )
