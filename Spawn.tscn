@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
+[ext_resource path="res://scenes/NPCs/Dungeon NPC.tscn" type="PackedScene" id=2]
 [ext_resource path="res://sprites/Player/giuratore.png" type="Texture" id=3]
 [ext_resource path="res://sfx/music/corruption.mp3" type="AudioStream" id=4]
 [ext_resource path="res://sprites/playerBar.png" type="Texture" id=5]
@@ -18,14 +18,11 @@
 [ext_resource path="res://sprites/UI/key.png" type="Texture" id=16]
 [ext_resource path="res://scripts/ScreenShake.gd" type="Script" id=17]
 
-[node name="World" type="Node2D"]
+[node name="Spawn" type="Node2D"]
 script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": "s"
 }
-
-[node name="DungeonSpawn" type="Node2D" parent="."]
-script = ExtResource( 2 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 158, 89 )
@@ -210,6 +207,9 @@ script = ExtResource( 14 )
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false
 color = Color( 0.611765, 0.611765, 0.611765, 1 )
+
+[node name="Dungeon NPC" parent="." instance=ExtResource( 2 )]
+position = Vector2( 214, 104 )
 
 [connection signal="tween_completed" from="HUD/PopupText/Tween" to="GlobalEventManager" method="_on_Tween_tween_completed"]
 [connection signal="messageEntered" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_messageEntered"]
