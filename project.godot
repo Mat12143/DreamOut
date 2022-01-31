@@ -46,7 +46,7 @@ _global_script_class_icons={
 
 config/name="Gioco Pazzo"
 config/description="Bullet-hell Roguelite playable on the browser"
-run/main_scene="res://MatWorld.tscn"
+run/main_scene="res://Spawn.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="giocoPazzo"
 config/icon="res://icon.png"
@@ -158,6 +158,11 @@ ability3={
 bomb={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":70,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+npc_interact={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":69,"unicode":0,"echo":false,"script":null)
  ]
 }
 
