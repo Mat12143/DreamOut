@@ -2,7 +2,7 @@ extends Node2D
 
 var roomsGrid = {}
 var roomSize = Vector2(320, 180)
-var spaceBetweenRooms = 20
+var spaceBetweenRooms = 30
 var playerRoom = null
 var maxNumberRoom = 1000
 var createdRooms = 0
@@ -24,6 +24,13 @@ var posAndDirections = {
 	"Down" : Vector2(0, 1),
 	"Right" : Vector2(1, 0),
 	"Left" : Vector2(-1, 0)
+}
+
+var spawnDirections = {
+	"Right": Vector2(-20, 0),
+	"Left": Vector2(20, 0),
+	"Down": Vector2(0, -15),
+	"Up": Vector2(0, 15)
 }
 
 var directions = [
@@ -81,8 +88,10 @@ func movePlayerAndCamera(grid, direction):
 	t.start()
 #	room.hide()
 	
+	var Door = room.get_node(invertDirection(direction))
+	
 #	camera.position = cameraPos
-	Player.position = Vector2(room.position.x + roomSize.x / 2 , room.position.y + roomSize.y / 2)
+	Player.position = Vector2(room.position.x + Door.position.x + spawnDirections[invertDirection(direction)].x, room.position.y + Door.position.y + spawnDirections[invertDirection(direction)].y)
 #	yield(get_tree().create_timer(1), "timeout")
 #	room.show()
 	
@@ -106,6 +115,8 @@ func goToRoom(direction):
 		movePlayerAndCamera(gridToMove, direction)
 	else:
 		movePlayerAndCamera(gridToMove, direction)
+	
+	get_tree().current_scene.get_node("GlobalEventManager").emit_signal("roomEnter", getRoomByGrid(gridToMove))
 
 	playerRoom = getRoomByGrid(gridToMove)
 

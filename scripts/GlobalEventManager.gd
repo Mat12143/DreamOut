@@ -6,6 +6,7 @@ signal upgradePickedUp
 signal messageEntered(author, text)
 signal popupText(title, subtitle)
 signal shake(duration, frequency, amplitude, priority)
+signal roomEnter(roomData)
 onready var startPopupPos = get_tree().current_scene.get_node('HUD/PopupText').rect_position
 
 func _on_GlobalEventManager_messageEntered(author:String, text:String):
@@ -38,7 +39,6 @@ func _on_Tween_tween_completed(object, key):
 	var popup = get_tree().current_scene.get_node('HUD/PopupText')
 	popup.hide()
 	popup.rect_position = startPopupPos
-
 
 func _on_GlobalEventManager_shake(duration, frequency, amplitude, priority):
 	pass # Replace with function body.
