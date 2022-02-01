@@ -2,6 +2,7 @@ extends Node2D
 
 
 func _ready():
+	print("TODO: Fixare HUD nello spawn, anzi toglierla proprio se non per la chat.")
 	randomize()
 	var titles = [
 		"Capybaras are always valid",

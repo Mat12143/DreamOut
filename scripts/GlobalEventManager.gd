@@ -38,7 +38,7 @@ func _on_GlobalEventManager_popupText(title, subtitle):
 func _on_Tween_tween_completed(object, key):
 	var popup = get_tree().current_scene.get_node('HUD/PopupText')
 	popup.hide()
-	popup.rect_position = startPopupPos
+	popup.rect_position.y += 100
 
 func _on_GlobalEventManager_shake(duration, frequency, amplitude, priority):
 	pass # Replace with function body.

@@ -1,21 +1,14 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/NPCs/Dungeon NPC.tscn" type="PackedScene" id=2]
-[ext_resource path="res://sprites/Player/giuratore.png" type="Texture" id=3]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=3]
 [ext_resource path="res://sfx/music/corruption.mp3" type="AudioStream" id=4]
-[ext_resource path="res://sprites/playerBar.png" type="Texture" id=5]
-[ext_resource path="res://sprites/PlayerPortrait.png" type="Texture" id=6]
 [ext_resource path="res://scripts/GlobalEventManager.gd" type="Script" id=7]
-[ext_resource path="res://scripts/HUD.gd" type="Script" id=8]
 [ext_resource path="res://World.gd" type="Script" id=9]
 [ext_resource path="res://scripts/SaveManager.gd" type="Script" id=10]
 [ext_resource path="res://sfx/wallHit.wav" type="AudioStream" id=11]
-[ext_resource path="res://ChatBox.tscn" type="PackedScene" id=12]
-[ext_resource path="res://sprites/theme_of_themes.tres" type="Theme" id=13]
 [ext_resource path="res://CommandManager.gd" type="Script" id=14]
-[ext_resource path="res://sprites/UI/bomb.png" type="Texture" id=15]
-[ext_resource path="res://sprites/UI/key.png" type="Texture" id=16]
 [ext_resource path="res://scripts/ScreenShake.gd" type="Script" id=17]
 [ext_resource path="res://items/scripts/itemDB.gd" type="Script" id=18]
 
@@ -28,6 +21,10 @@ __meta__ = {
 [node name="ItemDB" type="Node" parent="."]
 script = ExtResource( 18 )
 
+[node name="SaveManager" type="Node2D" parent="."]
+position = Vector2( 160, -32 )
+script = ExtResource( 10 )
+
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 158, 89 )
 acceleration = 650
@@ -37,149 +34,7 @@ max_speed = 150
 stream = ExtResource( 4 )
 volume_db = -25.0
 
-[node name="HUD" type="CanvasLayer" parent="."]
-script = ExtResource( 8 )
-
-[node name="ChatBox" parent="HUD" instance=ExtResource( 12 )]
-
-[node name="Health" type="HBoxContainer" parent="HUD"]
-margin_left = 24.0
-margin_top = 16.0
-margin_right = 64.0
-margin_bottom = 56.0
-custom_constants/separation = 9
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Items" type="HBoxContainer" parent="HUD"]
-margin_left = 24.0
-margin_top = 22.0
-margin_right = 64.0
-margin_bottom = 32.0
-theme = ExtResource( 13 )
-custom_constants/separation = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="TextureRect" parent="HUD/Items"]
-margin_right = 8.0
-margin_bottom = 10.0
-texture = ExtResource( 15 )
-stretch_mode = 4
-
-[node name="BombCount" type="Label" parent="HUD/Items"]
-margin_left = 12.0
-margin_right = 18.0
-margin_bottom = 10.0
-text = "0"
-
-[node name="TextureRect2" type="TextureRect" parent="HUD/Items"]
-margin_left = 22.0
-margin_right = 30.0
-margin_bottom = 10.0
-texture = ExtResource( 16 )
-stretch_mode = 4
-
-[node name="KeyCount" type="Label" parent="HUD/Items"]
-margin_left = 34.0
-margin_right = 40.0
-margin_bottom = 10.0
-text = "0"
-
-[node name="PortraitAndHealth" type="Control" parent="HUD"]
-visible = false
-margin_left = 15.0
-margin_top = 10.0
-margin_right = 48.0
-margin_bottom = 43.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Portrait" type="TextureRect" parent="HUD/PortraitAndHealth"]
-visible = false
-margin_right = 32.0
-margin_bottom = 32.0
-texture = ExtResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HPBar" type="TextureProgress" parent="HUD/PortraitAndHealth/Portrait"]
-margin_top = 32.0
-margin_right = 32.0
-margin_bottom = 64.0
-rect_rotation = -90.0
-value = 100.0
-texture_progress = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="TextureRect" parent="HUD/PortraitAndHealth/Portrait"]
-margin_left = 6.0
-margin_top = 6.0
-margin_right = 26.0
-margin_bottom = 26.0
-texture = ExtResource( 3 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PopupText" type="Control" parent="HUD"]
-visible = false
-margin_right = 40.0
-margin_bottom = 40.0
-theme = ExtResource( 13 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRect" type="ColorRect" parent="HUD/PopupText"]
-margin_top = 48.0
-margin_right = 320.0
-margin_bottom = 80.0
-color = Color( 0, 0, 0, 0.686275 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Title" type="RichTextLabel" parent="HUD/PopupText"]
-margin_left = 2.0
-margin_top = 56.0
-margin_right = 215.0
-margin_bottom = 67.0
-rect_scale = Vector2( 1.5, 1.5 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-bbcode_enabled = true
-bbcode_text = "[center]Title[/center]"
-text = "Title"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Subtitle" type="RichTextLabel" parent="HUD/PopupText"]
-margin_left = 2.0
-margin_top = 72.0
-margin_right = 643.0
-margin_bottom = 94.0
-rect_scale = Vector2( 0.5, 0.5 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-bbcode_enabled = true
-bbcode_text = "[center]Subtitle[/center]"
-text = "Subtitle"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Tween" type="Tween" parent="HUD/PopupText"]
-
-[node name="PopupDestination" type="Position2D" parent="HUD"]
+[node name="HUD" parent="." instance=ExtResource( 3 )]
 
 [node name="GlobalEventManager" type="Node2D" parent="."]
 script = ExtResource( 7 )
@@ -201,10 +56,6 @@ script = ExtResource( 17 )
 stream = ExtResource( 11 )
 volume_db = -80.0
 
-[node name="SaveManager" type="Node2D" parent="."]
-position = Vector2( 160, -32 )
-script = ExtResource( 10 )
-
 [node name="CommandManager" type="Node2D" parent="."]
 script = ExtResource( 14 )
 
@@ -215,12 +66,10 @@ color = Color( 0.611765, 0.611765, 0.611765, 1 )
 [node name="Dungeon NPC" parent="." instance=ExtResource( 2 )]
 position = Vector2( 214, 104 )
 
-[connection signal="tween_completed" from="HUD/PopupText/Tween" to="GlobalEventManager" method="_on_Tween_tween_completed"]
 [connection signal="messageEntered" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="messageEntered" from="GlobalEventManager" to="CommandManager" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="playerHeal" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHeal"]
 [connection signal="playerHit" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHit"]
-[connection signal="playerHit" from="GlobalEventManager" to="HUD" method="_on_GlobalEventManager_playerHit"]
 [connection signal="popupText" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_popupText"]
 [connection signal="shake" from="GlobalEventManager" to="Camera2D/ScreenShake" method="_on_GlobalEventManager_shake"]
 [connection signal="upgradePickedUp" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_upgradePickedUp"]

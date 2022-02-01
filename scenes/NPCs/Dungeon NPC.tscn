@@ -14,7 +14,6 @@ height = 8.0
 radius = 48.0104
 
 [node name="Dungeon NPC" type="Area2D"]
-position = Vector2( -62, -8 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_group_": true
@@ -69,7 +68,7 @@ margin_left = -43.0
 margin_top = -5.0
 margin_right = 43.0
 margin_bottom = 5.0
-text = "Enter a Dungeon"
+text = "Enter the Dungeon"
 __meta__ = {
 "_edit_use_anchors_": false
 }
