@@ -11,7 +11,7 @@ export (int, "D", "C", "B", "A", "S") var quality = 0
 export var popup:String = "Picked up"
 export (String, MULTILINE) var lore = "This item has no lore."
 
-func _enter_tree():
+func _ready():
 	if (_name == ""):
 		print_debug("ITEM HAS NO NAME!!!!!!")
 		_name = "GenericItem"

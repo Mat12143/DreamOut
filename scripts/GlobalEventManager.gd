@@ -8,13 +8,6 @@ signal popupText(title, subtitle)
 signal shake(duration, frequency, amplitude, priority)
 onready var startPopupPos = get_tree().current_scene.get_node('HUD/PopupText').rect_position
 
-
-func _on_GlobalEventManager_upgradePickedUp(key, value):
-	print({
-		"youSelected": key,
-		"howMuch": value
-	})
-
 func _on_GlobalEventManager_messageEntered(author:String, text:String):
 	var chatBox = get_tree().current_scene.get_node("HUD/ChatBox/VBoxContainer/ChatLog")
 	var player = owner.get_node("Player")

@@ -45,6 +45,7 @@ var data = { # Questo verra' salvato
 		"screenShake": true
 	},
 	"inventory": [],
+	"consumable": "",
 	"dev": false,
 	"bombs": 0,
 	"keys": 0,
@@ -70,6 +71,13 @@ var loadInv = {}
 var modifiers = {
 	"damagedByExplosions": true
 }
+var consumable
+var consumData = {
+	"charges": 0,
+	"maxCharges": 0,
+	"cooldown": 0,
+	"ephemeral": false
+} # NON USARE ?????
 
 func getFireRate():
 	var upgradeFireRate = (float(data.upgrades.fireRate) / 100)
@@ -139,7 +147,11 @@ func _ready():
 	# --- Salvataggi ---
 	var save = owner.get_node("SaveManager").loadSave("user://plr.save")
 	if !!save:
+		for i in data.keys():
+			if !save.has(i):
+				save[i] = data[i]
 		data = save
+			
 	else:
 		print('plr.save not found, loading defaults')
 		owner.get_node("SaveManager").save(data, "user://plr.save")
@@ -151,6 +163,12 @@ func _ready():
 		var item = itemDB.items[i]
 		loadInv[i] = item
 		item.get_node("Logic").restart(self)
+	if data.consumable != '':
+		consumable = itemDB.items[data.consumable]
+		consumable.get_node("Logic").restart(self)
+		consumable.get_node("ItemEssentials/CollisionShape2D").disabled = true
+		$Items.add_child(consumable)
+		consumable.get_node("Sprite").hide()
 
 var velocity = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer
@@ -209,7 +227,10 @@ func _physics_process(delta):
 			get_tree().current_scene.add_child(b)
 			b.position = position
 			data.bombs -= 1
-			get_tree().current_scene.get_node("HUD").updateHud()			
+			get_tree().current_scene.get_node("HUD").updateHud()
+			
+		if Input.is_action_just_pressed("consumable"):
+			consumable.get_node("Logic").use(self)
 
 func _on_GlobalEventManager_playerHit(damage):
 	event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	

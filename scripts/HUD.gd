@@ -15,7 +15,7 @@ func updateHealth():
 	var half = body.data.health - fulls == 0.5
 	var index = 0
 	
-	print([body.data.health, [fulls, empties, half], totalMaxHealth])
+#	print([body.data.health, [fulls, empties, half], totalMaxHealth])
 	
 	if ($Health.get_child_count() < totalMaxHealth):
 		for _i in range(totalMaxHealth - $Health.get_child_count()):
