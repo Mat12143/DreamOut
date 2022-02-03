@@ -7,6 +7,7 @@
 extents = Vector2( 2.00001, 1.99999 )
 
 [node name="Bullet" type="Area2D"]
+modulate = Color( 1.5, 1.5, 1.5, 1 )
 script = ExtResource( 2 )
 speed = 75
 damage = 0.5

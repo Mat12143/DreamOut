@@ -9,10 +9,45 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "DiscordRPC",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/DiscordRPC.gd"
+}, {
+"base": "Reference",
+"class": "DiscordRPCEnum",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/DiscordRPCEnum.gd"
+}, {
 "base": "",
 "class": "GitAPI",
 "language": "NativeScript",
 "path": "res://addons/godot-git-plugin/git_api.gdns"
+}, {
+"base": "Reference",
+"class": "IPC",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/IPC.gd"
+}, {
+"base": "Reference",
+"class": "IPCModule",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/module/IPCModule.gd"
+}, {
+"base": "Reference",
+"class": "IPCPayload",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/IPCPayload.gd"
+}, {
+"base": "Reference",
+"class": "IPCPipe",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/pipe/IPCPipe.gd"
+}, {
+"base": "Reference",
+"class": "IPCUtil",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/util/IPCUtil.gd"
 }, {
 "base": "Node",
 "class": "Item",
@@ -24,6 +59,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/rngtools/RNGTools.gd"
 }, {
+"base": "Reference",
+"class": "RichPresence",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/module/rich presence/RichPresence.gd"
+}, {
+"base": "Reference",
+"class": "RichPresenceButton",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/module/rich presence/RichPresenceButton.gd"
+}, {
+"base": "IPCModule",
+"class": "RichPresenceModule",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/module/rich presence/RichPresenceModule.gd"
+}, {
 "base": "Camera",
 "class": "ShakeCamera",
 "language": "GDScript",
@@ -34,28 +84,79 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/camera_shake/camera_scripts/shake_camera_2D.gd"
 }, {
+"base": "",
+"class": "StreamPeerUnix",
+"language": "NativeScript",
+"path": "res://addons/godot_editor_discord_presence/godot-unix-socket/unix-socket.gdns"
+}, {
+"base": "Reference",
+"class": "URLUtil",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/util/URLUtil.gd"
+}, {
+"base": "Reference",
+"class": "UUID",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/util/UUID.gd"
+}, {
+"base": "IPCPipe",
+"class": "UnixPipe",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/pipe/UnixPipe.gd"
+}, {
+"base": "IPCPayload",
+"class": "UpdateRichPresencePayload",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/module/rich presence/UpdateRichPresencePayload.gd"
+}, {
+"base": "IPCPipe",
+"class": "WindowsPipe",
+"language": "GDScript",
+"path": "res://addons/godot_editor_discord_presence/Discord RPC/ipc/pipe/WindowsPipe.gd"
+}, {
 "base": "Node",
 "class": "nanoid",
 "language": "GDScript",
 "path": "res://scripts/nanoid.gd"
 } ]
 _global_script_class_icons={
+"DiscordRPC": "",
+"DiscordRPCEnum": "",
 "GitAPI": "",
+"IPC": "",
+"IPCModule": "",
+"IPCPayload": "",
+"IPCPipe": "",
+"IPCUtil": "",
 "Item": "",
 "RNGTools": "",
+"RichPresence": "",
+"RichPresenceButton": "",
+"RichPresenceModule": "",
 "ShakeCamera": "",
 "ShakeCamera2D": "",
+"StreamPeerUnix": "",
+"URLUtil": "",
+"UUID": "",
+"UnixPipe": "",
+"UpdateRichPresencePayload": "",
+"WindowsPipe": "",
 "nanoid": ""
 }
 
 [application]
 
-config/name="Gioco Pazzo"
-config/description="Bullet-hell Roguelite playable on the browser"
-run/main_scene="res://Spawn.tscn"
+config/name="Dreamout"
+config/description="Bullet-hell Roguelite that's all about dreams and nightmares."
+run/main_scene="res://Title.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="giocoPazzo"
-config/icon="res://icon.png"
+config/custom_user_dir_name="dreamout"
+config/icon="res://sprites/logo.png"
+
+[discord_presence]
+
+first_button/label="Play my Game"
+first_button/url="https://dreamout.pyros.dev"
 
 [display]
 
@@ -68,6 +169,10 @@ window/size/test_height=720
 mouse_cursor/custom_image="res://sprites/Cursors/base.png"
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/godot_editor_discord_presence/plugin.cfg" )
 
 [gdnative]
 

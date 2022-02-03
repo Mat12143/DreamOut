@@ -25,20 +25,26 @@ func _on_GlobalEventManager_messageEntered(author:String, text:String):
 
 func _on_GlobalEventManager_popupText(title, subtitle):
 	var popup = get_tree().current_scene.get_node('HUD/PopupText')
-	var tween:Tween = popup.get_node("Tween")
 	popup.show()
-	tween.interpolate_property(popup, "rect_position",
-				Vector2(0, 0), Vector2(0, -100), 0.2,
-				Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 	popup.get_node("Title").bbcode_text = "[center]" + title + "[/center]"
 	popup.get_node("Subtitle").bbcode_text =  "[center]" + subtitle + "[/center]"
-	yield(get_tree().create_timer(2), "timeout")
-	tween.start()
+	$PopupTimer.start(2)
+	
 	
 func _on_Tween_tween_completed(object, key):
 	var popup = get_tree().current_scene.get_node('HUD/PopupText')
 	popup.hide()
-	popup.rect_position.y += 100
+	popup.rect_position.y -= 70
+	
 
 func _on_GlobalEventManager_shake(duration, frequency, amplitude, priority):
 	pass # Replace with function body.
+
+
+func _on_PopupTimer_timeout():
+	var popup = get_tree().current_scene.get_node('HUD/PopupText')
+	var tween = get_tree().current_scene.get_node('HUD/PopupText/Tween')
+	tween.interpolate_property(popup, "rect_position",
+				Vector2(0, 0), Vector2(0, 70), 0.2,
+				Tween.TRANS_SINE, Tween.EASE_OUT)
+	tween.start()

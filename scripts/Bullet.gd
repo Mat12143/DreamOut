@@ -25,6 +25,7 @@ func _physics_process(delta):
 
 func destroy(reason, body):
 	if !body.get("invincible") or body.invincible == false:
+		
 		if bulletType == 3 and !dontMove: # RPG
 	#		$Explosion.show()
 			var boom = explosion.instance()
@@ -52,6 +53,9 @@ func initialize(newDamage, newSpeed, newType, newRange):
 	damage = newDamage
 	speed = newSpeed
 	bulletType = newType
+	if bulletType == 2:
+		randomize()
+		speed = rand_range(newSpeed - 50, newSpeed + 50)
 	gunRange = newRange
 #	print([damage, speed, bulletType, gunRange])
 

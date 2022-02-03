@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
@@ -18,6 +18,11 @@
 [ext_resource path="res://sprites/UI/key.png" type="Texture" id=16]
 [ext_resource path="res://scripts/ScreenShake.gd" type="Script" id=17]
 [ext_resource path="res://items/scripts/itemDB.gd" type="Script" id=18]
+
+[sub_resource type="Environment" id=2]
+background_mode = 4
+glow_enabled = true
+glow_intensity = 1.0
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends RichTextLabel
@@ -44,6 +49,9 @@ script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": "s"
 }
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
 
 [node name="ItemDB" type="Node" parent="."]
 script = ExtResource( 18 )
@@ -162,41 +170,41 @@ __meta__ = {
 }
 
 [node name="ColorRect" type="ColorRect" parent="HUD/PopupText"]
-margin_top = 48.0
-margin_right = 320.0
-margin_bottom = 80.0
+margin_left = 62.0
+margin_top = 120.0
+margin_right = 254.0
+margin_bottom = 152.0
 color = Color( 0, 0, 0, 0.686275 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Title" type="RichTextLabel" parent="HUD/PopupText"]
-margin_left = 2.0
-margin_top = 56.0
-margin_right = 215.0
-margin_bottom = 67.0
+margin_top = 128.0
+margin_right = 213.0
+margin_bottom = 139.0
 rect_scale = Vector2( 1.5, 1.5 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 bbcode_enabled = true
 bbcode_text = "[center]Title[/center]"
-text = "Title"
+text = "[center]Title[/center]"
 scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Subtitle" type="RichTextLabel" parent="HUD/PopupText"]
-margin_left = 2.0
-margin_top = 72.0
-margin_right = 643.0
-margin_bottom = 120.0
+margin_top = 144.0
+margin_right = 641.0
+margin_bottom = 192.0
 rect_scale = Vector2( 0.5, 0.5 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 bbcode_enabled = true
 bbcode_text = "[center]Subtitle[/center]"
-text = "Subtitle"
+tab_size = 0
+text = "[center]Subtitle[/center]"
 scroll_active = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -217,8 +225,8 @@ theme = ExtResource( 13 )
 bbcode_enabled = true
 bbcode_text = "[color=red]Warning[/color]: your file system is not [color=yellow]persistent[/color].
 You will [color=red]lose[/color] data on every restart."
-text = "Warning: your file system is not persistent.
-You will lose data on every restart."
+text = "[color=red]Warning[/color]: your file system is not [color=yellow]persistent[/color].
+You will [color=red]lose[/color] data on every restart."
 fit_content_height = true
 scroll_active = false
 script = SubResource( 1 )
@@ -228,6 +236,9 @@ __meta__ = {
 
 [node name="GlobalEventManager" type="Node2D" parent="."]
 script = ExtResource( 7 )
+
+[node name="PopupTimer" type="Timer" parent="GlobalEventManager"]
+one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 160, 90 )
@@ -268,5 +279,6 @@ color = Color( 0.611765, 0.611765, 0.611765, 1 )
 [connection signal="shake" from="GlobalEventManager" to="Camera2D/ScreenShake" method="_on_GlobalEventManager_shake"]
 [connection signal="upgradePickedUp" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_upgradePickedUp"]
 [connection signal="upgradePickedUp" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_upgradePickedUp"]
+[connection signal="timeout" from="GlobalEventManager/PopupTimer" to="GlobalEventManager" method="_on_PopupTimer_timeout"]
 [connection signal="timeout" from="Camera2D/ScreenShake/Frequency" to="Camera2D/ScreenShake" method="_on_Frequency_timeout"]
 [connection signal="timeout" from="Camera2D/ScreenShake/Duration" to="Camera2D/ScreenShake" method="_on_Duration_timeout"]

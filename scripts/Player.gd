@@ -199,6 +199,10 @@ func shoot():
 			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange)
 			get_tree().current_scene.add_child(b)
 			b.transform = i.global_transform
+			var spread = gunData.spread - data.upgrades.accuracy
+			if spread < 0:
+				spread = 0
+			b.rotation += deg2rad(rand_range(-spread, spread))
 		$ShootSound.play()
 	
 func _physics_process(delta):
