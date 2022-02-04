@@ -4,8 +4,17 @@ onready var heart = preload("res://scenes/Heart.tscn")
 
 func updateHud():
 	updateHealth()
+	updateFrame()
 	$Items/BombCount.text = String(get_parent().get_node("Player").data.bombs)
 	$Items/KeyCount.text = String(get_parent().get_node("Player").data.keys)
+
+func updateFrame():
+	var consumable = get_parent().get_node("Player").consumable
+	if consumable:
+		$ActiveItem.show()
+		$ActiveItem/Item.texture = consumable.get_node("Sprite").texture
+	else:
+		$ActiveItem.hide()
 
 func updateHealth():
 	var body = get_parent().get_node("Player")

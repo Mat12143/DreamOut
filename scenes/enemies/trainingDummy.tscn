@@ -2,9 +2,9 @@
 
 [ext_resource path="res://sprites/Enemies/ninja.png" type="Texture" id=1]
 [ext_resource path="res://scenes/weapons/DoAbsolutelyNothing.tscn" type="PackedScene" id=2]
-[ext_resource path="res://sprites/enemyBar.png" type="Texture" id=3]
+[ext_resource path="res://sprites/Enemies/enemyBar.png" type="Texture" id=3]
 [ext_resource path="res://scenes/ais/StaticAI.tscn" type="PackedScene" id=4]
-[ext_resource path="res://sprites/healthRect.png" type="Texture" id=5]
+[ext_resource path="res://sprites/Enemies/healthRect.png" type="Texture" id=5]
 [ext_resource path="res://sfx/enemyHurt.wav" type="AudioStream" id=6]
 [ext_resource path="res://scripts/enemy.gd" type="Script" id=7]
 

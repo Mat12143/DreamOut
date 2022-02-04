@@ -78,6 +78,7 @@ script = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+disableForDebug = false
 
 [node name="Bg" type="TextureRect" parent="."]
 modulate = Color( 0.223529, 0.223529, 0.223529, 1 )
@@ -123,7 +124,7 @@ button_mask = 7
 text = "pyros.dev"
 underline = 1
 script = SubResource( 4 )
-link = "pyros.dev"
+link = "https://pyros.dev"
 
 [node name="VBoxContainer2" type="HBoxContainer" parent="HBoxContainer"]
 modulate = Color( 1, 1, 1, 0.733333 )
@@ -154,7 +155,7 @@ margin_bottom = 16.0
 focus_mode = 1
 button_mask = 7
 enabled_focus_mode = 1
-text = "Play"
+text = "PLAY"
 script = SubResource( 2 )
 
 [node name="Hub" type="Button" parent="Actions"]
@@ -174,7 +175,7 @@ margin_bottom = 56.0
 focus_mode = 1
 button_mask = 7
 enabled_focus_mode = 1
-text = "Settings"
+text = "SETTINGS"
 
 [node name="Logo" type="TextureRect" parent="."]
 margin_left = 64.0

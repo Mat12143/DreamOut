@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://sprites/exclamation.png" type="Texture" id=1]
+[ext_resource path="res://sprites/Enemies/exclamation.png" type="Texture" id=1]
 
 [sub_resource type="GDScript" id=4]
 script/source = "extends Node2D

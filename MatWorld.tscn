@@ -4,8 +4,8 @@
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
 [ext_resource path="res://sprites/Player/giuratore.png" type="Texture" id=3]
 [ext_resource path="res://sfx/music/corruption.mp3" type="AudioStream" id=4]
-[ext_resource path="res://sprites/playerBar.png" type="Texture" id=5]
-[ext_resource path="res://sprites/PlayerPortrait.png" type="Texture" id=6]
+[ext_resource path="res://sprites/Archives/playerBar.png" type="Texture" id=5]
+[ext_resource path="res://sprites/Archives/PlayerPortrait.png" type="Texture" id=6]
 [ext_resource path="res://scripts/GlobalEventManager.gd" type="Script" id=7]
 [ext_resource path="res://scripts/HUD.gd" type="Script" id=8]
 [ext_resource path="res://sprites/Items/PerfectScope.png" type="Texture" id=9]
@@ -76,6 +76,7 @@ volume_db = -25.0
 script = ExtResource( 8 )
 
 [node name="ActiveItem" type="Control" parent="HUD"]
+visible = false
 margin_left = 274.0
 margin_top = 132.0
 margin_right = 314.0

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/exclamation.png-06c0fdb8619a7f99940d5d5c4dc543b5.stex"
+path="res://.import/enemyBar.png-a82ebfa99b331911dc265fce8571b562.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/exclamation.png"
-dest_files=[ "res://.import/exclamation.png-06c0fdb8619a7f99940d5d5c4dc543b5.stex" ]
+source_file="res://sprites/Enemies/enemyBar.png"
+dest_files=[ "res://.import/enemyBar.png-a82ebfa99b331911dc265fce8571b562.stex" ]
 
 [params]
 

@@ -10,7 +10,6 @@
 script = ExtResource( 2 )
 type = 1
 id = "ueuagliu"
-_name = "Ueuagliu"
 
 [node name="ItemEssentials" parent="." instance=ExtResource( 3 )]
 
