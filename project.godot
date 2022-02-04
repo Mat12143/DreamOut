@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node",
+"class": "ConsumData",
+"language": "GDScript",
+"path": "res://items/scripts/ConsumData.gd"
+}, {
+"base": "Node",
 "class": "DiscordRPC",
 "language": "GDScript",
 "path": "res://addons/godot_editor_discord_presence/Discord RPC/DiscordRPC.gd"
@@ -120,6 +125,7 @@ _global_script_classes=[ {
 "path": "res://scripts/nanoid.gd"
 } ]
 _global_script_class_icons={
+"ConsumData": "",
 "DiscordRPC": "",
 "DiscordRPCEnum": "",
 "GitAPI": "",

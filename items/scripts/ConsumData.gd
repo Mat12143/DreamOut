@@ -1,4 +1,5 @@
 extends Node
+class_name ConsumData
 
 export var maxCharges := 1
 var charges = maxCharges

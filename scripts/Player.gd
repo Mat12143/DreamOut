@@ -233,8 +233,11 @@ func _physics_process(delta):
 			data.bombs -= 1
 			get_tree().current_scene.get_node("HUD").updateHud()
 			
-		if Input.is_action_just_pressed("consumable"):
-			consumable.get_node("Logic").use(self)
+		if Input.is_action_just_pressed("consumable") and consumable and consumable.get_node("ConsumData").charges > 0:
+			var logic = consumable.get_node("Logic")
+			var consumDict:ConsumData = consumable.get_node("ConsumData")
+			logic.use(self)
+			consumDict.charges -= 1
 
 func _on_GlobalEventManager_playerHit(damage):
 	event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	
