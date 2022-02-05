@@ -169,6 +169,7 @@ func _ready():
 		consumable.get_node("ItemEssentials/CollisionShape2D").disabled = true
 		$Items.add_child(consumable)
 		consumable.get_node("Sprite").hide()
+	add_child()
 
 var velocity = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer
