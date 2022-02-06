@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://scripts/ScreenShake.gd" type="Script" id=17]
 [ext_resource path="res://items/scripts/itemDB.gd" type="Script" id=18]
 [ext_resource path="res://sprites/UI/itemFrame.png" type="Texture" id=19]
+[ext_resource path="res://scenes/UI/DynamicTooltip.tscn" type="PackedScene" id=20]
 
 [sub_resource type="Environment" id=2]
 background_mode = 4
@@ -62,6 +63,12 @@ script = ExtResource( 18 )
 
 [node name="DungeonSpawn" type="Node2D" parent="."]
 script = ExtResource( 2 )
+
+[node name="DynamicTooltip" parent="." instance=ExtResource( 20 )]
+margin_left = 136.0
+margin_top = 64.0
+margin_right = 136.0
+margin_bottom = 64.0
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 158, 89 )

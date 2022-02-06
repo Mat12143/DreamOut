@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export var acceleration = 50
 export var max_speed = 15
-export var friction = 900
+export var friction = 10000
 export var fireDelay:float = 0.1
 #export var rollDelay:float = 1
 var maxHealth = 10
@@ -99,7 +99,7 @@ func updateGun():
 			gunData.spread = 15
 		Guns.PISTOL:
 			gunData.damage = 1
-			gunData.fireRate = 0.00001
+			gunData.fireRate = 0.1
 			gunData.projSpeed = 500
 			gunData.autoFire = false
 			gunData.gunRange = 25
@@ -144,6 +144,7 @@ func updateGun():
 	$ShootSound.stream = gunSounds[data.selectedGun]
 
 func _ready():
+	get_tree().current_scene.get_node("DynamicTooltip").initialize("Aaaaaaaaaaaaaaaa", "e")
 	# --- Salvataggi ---
 	var save = owner.get_node("SaveManager").loadSave("user://plr.save")
 	if !!save:
@@ -169,14 +170,14 @@ func _ready():
 		consumable.get_node("ItemEssentials/CollisionShape2D").disabled = true
 		$Items.add_child(consumable)
 		consumable.get_node("Sprite").hide()
-	add_child()
+#	add_child()
 
 var velocity = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer
 
 func shoot():
 #	var t = $GunRecoil
-#	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4))
+#	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(-35 if $Gun/Sprite.rotation_degrees < 0 else 35), (getFireRate()/4))
 #	t.start()
 	event.emit_signal("shake", 0.2, 7* gunData.power, 1 * gunData.power, 0)	
 	if data.selectedGun != Guns.SHOTGUN:
@@ -206,6 +207,7 @@ func shoot():
 			b.rotation += deg2rad(rand_range(-spread, spread))
 		$ShootSound.play()
 	
+	
 func _physics_process(delta):
 #	print(position)
 	if !owner.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
@@ -214,7 +216,7 @@ func _physics_process(delta):
 		input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 		input_vector = input_vector.normalized()
 		if input_vector != Vector2.ZERO:
-			animationPlayer.play("Walk")
+			animationPlayer.play("WalkForward", -1, 0.5)
 			velocity = velocity.move_toward(input_vector * max_speed, acceleration * delta)
 		else:
 			animationPlayer.play("RESET")
@@ -269,6 +271,6 @@ func _on_GlobalEventManager_playerHeal(value):
 
 
 func _on_GunRecoil_tween_completed(object, key):
-	return
-#	$GunRecoil2.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation + deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4) * 3)
-#	$GunRecoil2.start()
+#	return
+	$GunRecoil2.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation + deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4) * 3)
+	$GunRecoil2.start()

@@ -24,8 +24,4 @@ shape = SubResource( 1 )
 
 [node name="Tween" type="Tween" parent="."]
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
-rotation = -1.5708
-collide_with_bodies = false
-
 [connection signal="body_entered" from="." to="." method="_on_Bullet_body_entered"]

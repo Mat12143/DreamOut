@@ -22,7 +22,6 @@ func _physics_process(delta):
 #		print(gunRange)
 		if (distanceTravelled == gunRange):
 			destroy(DISTANCE, {"invincible": false})
-
 func destroy(reason, body):
 	if !body.get("invincible") or body.invincible == false:
 		

@@ -16,3 +16,6 @@ __meta__ = {
 }
 
 [node name="Label" parent="." instance=ExtResource( 2 )]
+margin_right = 35.0
+bbcode_text = "DynamicTooltip"
+text = "DynamicTooltip"
