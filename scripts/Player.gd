@@ -215,8 +215,10 @@ func _physics_process(delta):
 	if !owner.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
 		
 		var clampedGozzo = Vector2(
-			get_global_mouse_position().x / 160,
-			get_global_mouse_position().y / 90
+#			get_global_mouse_position().x / 160,
+#			get_global_mouse_position().y / 90
+			rad2deg($AnimationPointer.global_rotation) / 180,
+			rad2deg($AnimationPointer.global_rotation) / 180
 		) # USARE ROTAAZIONE DI ANIMATIONPOINTER
 		print(clampedGozzo)
 		animationTree.set("parameters/Idle/blend_position", clampedGozzo)
