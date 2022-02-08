@@ -28,7 +28,17 @@ func setname(args):
 	var selected = args[1]
 	player.data.name = selected
 	event.emit_signal("messageEntered", "Console", "Switched name to " + selected)
-	
+
+func setlang(args):
+	var selected = args[1]
+	if !(selected in TranslationServer.get_loaded_locales()):
+		event.emit_signal("messageEntered", "Console", "[color=red]That locale doesn't exist. Valid locales: " + String(TranslationServer.get_loaded_locales()) + "[/color]")
+		return
+	else:
+		TranslationServer.set_locale(selected)
+		event.emit_signal("messageEntered", "Console", "Set language to " + selected)
+#	TranslationServer.set_locale()
+
 func reset(args):
 	player.data = player.baseData
 	event.emit_signal("messageEntered", "Console", "Reset all data")

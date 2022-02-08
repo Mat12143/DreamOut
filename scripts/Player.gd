@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export var acceleration = 50
 export var max_speed = 15
-export var friction = 900
+export var friction = 10000
 export var fireDelay:float = 0.1
 #export var rollDelay:float = 1
 var maxHealth = 10
@@ -99,7 +99,7 @@ func updateGun():
 			gunData.spread = 15
 		Guns.PISTOL:
 			gunData.damage = 1
-			gunData.fireRate = 0.00001
+			gunData.fireRate = 0.1
 			gunData.projSpeed = 500
 			gunData.autoFire = false
 			gunData.gunRange = 25
@@ -144,6 +144,7 @@ func updateGun():
 	$ShootSound.stream = gunSounds[data.selectedGun]
 
 func _ready():
+	get_tree().current_scene.get_node("DynamicTooltip").initialize("Aaaaaaaaaaaaaaaa", "e")
 	# --- Salvataggi ---
 	var save = owner.get_node("SaveManager").loadSave("user://plr.save")
 	if !!save:
@@ -169,13 +170,16 @@ func _ready():
 		consumable.get_node("ItemEssentials/CollisionShape2D").disabled = true
 		$Items.add_child(consumable)
 		consumable.get_node("Sprite").hide()
+#	add_child()
 
 var velocity = Vector2.ZERO
 onready var animationPlayer = $AnimationPlayer
+onready var animationTree = $AnimationTree
+onready var animationState = animationTree.get("parameters/playback")
 
 func shoot():
 #	var t = $GunRecoil
-#	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4))
+#	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(-35 if $Gun/Sprite.rotation_degrees < 0 else 35), (getFireRate()/4))
 #	t.start()
 	event.emit_signal("shake", 0.2, 7* gunData.power, 1 * gunData.power, 0)	
 	if data.selectedGun != Guns.SHOTGUN:
@@ -205,6 +209,7 @@ func shoot():
 			b.rotation += deg2rad(rand_range(-spread, spread))
 		$ShootSound.play()
 	
+	
 func _physics_process(delta):
 #	print(position)
 	if !owner.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
@@ -213,10 +218,12 @@ func _physics_process(delta):
 		input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 		input_vector = input_vector.normalized()
 		if input_vector != Vector2.ZERO:
-			animationPlayer.play("Walk")
+			animationTree.set("parameters/Idle/blend_position", input_vector)
+			animationTree.set("parameters/Walk/blend_position", input_vector)
+			animationState.travel("Walk")
 			velocity = velocity.move_toward(input_vector * max_speed, acceleration * delta)
 		else:
-			animationPlayer.play("RESET")
+			animationState.travel("Idle")
 			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 		
 		velocity = move_and_slide(velocity)
@@ -233,8 +240,11 @@ func _physics_process(delta):
 			data.bombs -= 1
 			get_tree().current_scene.get_node("HUD").updateHud()
 			
-		if Input.is_action_just_pressed("consumable"):
-			consumable.get_node("Logic").use(self)
+		if Input.is_action_just_pressed("consumable") and consumable and consumable.get_node("ConsumData").charges > 0:
+			var logic = consumable.get_node("Logic")
+			var consumDict:ConsumData = consumable.get_node("ConsumData")
+			logic.use(self)
+			consumDict.charges -= 1
 
 func _on_GlobalEventManager_playerHit(damage):
 	event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	
@@ -265,6 +275,6 @@ func _on_GlobalEventManager_playerHeal(value):
 
 
 func _on_GunRecoil_tween_completed(object, key):
-	return
-#	$GunRecoil2.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation + deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4) * 3)
-#	$GunRecoil2.start()
+#	return
+	$GunRecoil2.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation + deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4) * 3)
+	$GunRecoil2.start()

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://sprites/theme_of_themes.tres" type="Theme" id=1]
+[ext_resource path="res://scenes/UI/DynamicLabel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/UI/DynamicTooltip.gd" type="Script" id=3]
+
+[node name="DynamicTooltip" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -220.0
+margin_bottom = -80.0
+theme = ExtResource( 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" parent="." instance=ExtResource( 2 )]
+margin_right = 35.0
+bbcode_text = "DynamicTooltip"
+text = "DynamicTooltip"

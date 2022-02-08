@@ -15,7 +15,6 @@ func _on_ItemEssentials_body_entered(body:Node):
 			var item = get_tree().current_scene.get_node("ItemDB").items[owner.id]
 			body.loadInv[owner.id] = item		
 		elif owner.type == 1:
-			body.consumData = owner.get_node("ConsumData").consumData
 			if typeof(body.consumable) != 0:
 				print_debug("Fai finta che abbia droppato l'oggetto")
 				# TODO drop oggetti
@@ -28,6 +27,7 @@ func _on_ItemEssentials_body_entered(body:Node):
 			body.consumable = owner
 #			print([body.consumable, body.data.consumable])
 		owner.get_node("Logic").pickup(body)
+		get_tree().get_current_scene().get_node("HUD").updateHud() # TODO far si che aggiorni l'interfaccia degli oggettti
 			
 #		get_tree().get_current_scene().get_node("GlobalEventManager").emit_signal("upgradePickedUp", key, value)
 		$AudioStreamPlayer2D.play()
