@@ -19,6 +19,7 @@ onready var door = preload("res://scenes/Door.tscn")
 onready var Player = get_tree().get_current_scene().get_node("Player")
 onready var camera = get_tree().get_current_scene().get_node("Camera2D")
 
+onready var saveManager = get_tree().get_current_scene().get_node("SaveManager")
 var posAndDirections = {
 	"Up" : Vector2(0, -1),
 	"Down" : Vector2(0, 1),
@@ -76,6 +77,7 @@ func createDoor(room, direction):
 
 func movePlayerAndCamera(grid, direction):
 	
+	
 	var room = getRoomByGrid(grid)
 	var cameraPos = Vector2(room.position.x + roomSize.x / 2, room.position.y + roomSize.y / 2) 
 	
@@ -89,11 +91,14 @@ func movePlayerAndCamera(grid, direction):
 #	room.hide()
 	
 	var Door = room.get_node(invertDirection(direction))
+	if (direction != "Center"):
 	
 #	camera.position = cameraPos
-	Player.position = Vector2(room.position.x + Door.position.x + spawnDirections[invertDirection(direction)].x, room.position.y + Door.position.y + spawnDirections[invertDirection(direction)].y)
+		Player.position = Vector2(room.position.x + Door.position.x + spawnDirections[invertDirection(direction)].x, room.position.y + Door.position.y + spawnDirections[invertDirection(direction)].y)
 #	yield(get_tree().create_timer(1), "timeout")
 #	room.show()
+	else:
+		Player.position = Vector2(room.position.x + roomSize.x / 2, room.position.y + roomSize.y / 2)
 	
 	
 func goToRoom(direction):
@@ -227,9 +232,9 @@ func create_room(gridLayout, backDoor = null):
 			roomsGrid[gridToRoom].doors.append(invertDirection(randomDirection))
 			
 			roomDirections.erase(randomDirection)
-		
-		
-
+	
+	saveRooms()
+	
 	roomsGrid[gridLayout] = {
 		"room" : room,
 		"doors" : doors
@@ -237,10 +242,40 @@ func create_room(gridLayout, backDoor = null):
 	
 		
 	createdRooms += 1
-		
+
 	return room
 
 func _ready():
-	randomize()	
-	var firstRoom = create_room(Vector2.ZERO, null)
-	playerRoom = firstRoom
+
+	var save = load("user://lastDungeon.tscn")
+	
+	if save == null:
+		randomize()
+		var firstRoom = create_room(Vector2.ZERO, null)
+		playerRoom = firstRoom
+	else:
+
+		get_tree().get_current_scene().queue_free()
+		
+		get_tree().change_scene(save)
+		print(get_tree().get_current_scene())
+		
+
+func recreateDungeonBySave(savedData, playerRoomData):
+	
+	roomsGrid = savedData
+	playerRoom = playerRoomData
+	
+	for grid in roomsGrid:
+		var room = roomsGrid[grid].room
+		room.instance()
+		add_child(room)
+		room.position = Vector2(0, 0)
+	
+	
+func saveRooms():
+	
+	var packed_scene = PackedScene.new()
+	packed_scene.pack(get_tree().get_current_scene())
+	ResourceSaver.save("user://lastDungeon.tscn", packed_scene)
+	print("SAVED!")
