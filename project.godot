@@ -300,7 +300,7 @@ consumable={
 
 [locale]
 
-test="en"
+test="it"
 translations=PoolStringArray( "res://otherassets/translations.en.translation", "res://otherassets/translations.it.translation" )
 
 [physics]
