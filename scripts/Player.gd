@@ -9,8 +9,14 @@ var maxHealth = 10
 var health = maxHealth
 onready var fireDelayTimer = $FireDelayTimer
 onready var rollDelayTimer = $RollDelayTimer
+
 onready var bomb = preload("res://scenes/bullets/Bomb.tscn")
 onready var bulletShell = preload("res://scenes/BulletShell.tscn")
+
+onready var animationPlayer = $AnimationPlayer
+onready var animationTree = $AnimationTree
+onready var animationState = animationTree.get("parameters/playback")
+
 onready var event = get_tree().current_scene.get_node("GlobalEventManager")
 
 onready var current = get_tree().current_scene
@@ -57,7 +63,6 @@ var data = { # Questo verra' salvato
 	"name": "Player"
 }
 var baseData = data.duplicate()
-
 var gunData = {
 	"damage": 0,
 	"fireRate": 0,
@@ -68,9 +73,7 @@ var gunData = {
 	"spread": 0,
 	"autoFire": true,
 }
-
 var loadInv = {}
-
 var modifiers = {
 	"damagedByExplosions": true
 }
@@ -146,28 +149,32 @@ func updateGun():
 	$Gun/Sprite.frame = data.selectedGun
 	$ShootSound.stream = gunSounds[data.selectedGun]
 
-func init(nickname, start_position, is_slave):
-	data.name = "[center]" + nickname + "[/center]"
+func init(nickname:String, start_position, is_slave):
+	nickname = nickname.strip_edges()#.substr(0, 16)
+	data.name = nickname
 	$GUI/Nickname.text = nickname
 	global_position = start_position
 	if is_slave:
-#		$Sprite.texture = load('res://player/player-alt.png')
-		$GUI/Nickname.rect_size = $GUI/Nickname.get_font("font").get_string_size($GUI/Nickname.bbcode_text)
+#		$GUI/Nickname.rect_size = $GUI/Nickname.get_font("font").get_string_size($GUI/Nickname.text)
 		$GUI/Nickname.show()
 
 func _ready():
+	event.connect("playerHit", self, "_on_GlobalEventManager_playerHit")
+	event.connect("playerHeal", self, "_on_GlobalEventManager_playerHeal")
+	event.connect("upgradePickedUp", self, "_on_GlobalEventManager_upgradePickedUp")
+	
 	current.get_node("DynamicTooltip").initialize("Aaaaaaaaaaaaaaaa", "e")
 	# --- Salvataggi ---
-	var save = SaveManager.loadSave("user://plr.save")
-	if !!save:
-		for i in data.keys():
-			if !save.has(i):
-				save[i] = data[i]
-		data = save
-			
-	else:
-		print('plr.save not found, loading defaults')
-		SaveManager.save(data, "user://plr.save")
+#	var save = SaveManager.loadSave("user://plr.save")
+#	if !!save:
+#		for i in data.keys():
+#			if !save.has(i):
+#				save[i] = data[i]
+#		data = save
+#
+#	else:
+#		print('plr.save not found, loading defaults')
+#		SaveManager.save(data, "user://plr.save")
 	updateGun()
 	
 	# --- Esegui restart su ogni oggetto nell'inventario ---
@@ -182,14 +189,9 @@ func _ready():
 		consumable.get_node("ItemEssentials/CollisionShape2D").disabled = true
 		$Items.add_child(consumable)
 		consumable.get_node("Sprite").hide()
-#	add_child()
-var velocity = Vector2.ZERO
-onready var animationPlayer = $AnimationPlayer
-onready var animationTree = $AnimationTree
-onready var animationState = animationTree.get("parameters/playback")
 
+var velocity = Vector2.ZERO
 puppet var slave_position = Vector2()
-#puppet var slave_movement = MoveDirection.NONE
 
 func shoot():
 #	var t = $GunRecoil
@@ -223,61 +225,83 @@ func shoot():
 			b.rotation += deg2rad(rand_range(-spread, spread))
 		$ShootSound.play()
 	
-	
 func _physics_process(delta):
+	
 #	print(position)
-	if is_network_master():
-		if !current.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
-#			var clampedGozzo = Vector2(
-#	#			get_global_mouse_position().x / 160,
-#	#			get_global_mouse_position().y / 90
-#				rad2deg($AnimationPointer.global_rotation) / 180,
-#				rad2deg($AnimationPointer.global_rotation) / 180
-#			) # USARE ROTAAZIONE DI ANIMATIONPOINTER
-#	#		print(clampedGozzo)
-#			animationTree.set("parameters/Idle/blend_position", clampedGozzo)
-#			animationTree.set("parameters/Walk/blend_position", clampedGozzo)
-			
-			var input_vector = Vector2.ZERO
-			input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-			input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
-			input_vector = input_vector.normalized()
-			if input_vector != Vector2.ZERO:
-				animationState.travel("Walk")
-				velocity = velocity.move_toward(input_vector * max_speed, acceleration * delta)
-			else:
-				animationState.travel("Idle")
-				velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+	if name != "Player":
+		rpc("updateSmallGUI")
+		if is_network_master():
+			if !current.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
+	#			var clampedGozzo = Vector2(
+	#	#			get_global_mouse_position().x / 160,
+	#	#			get_global_mouse_position().y / 90
+	#				rad2deg($AnimationPointer.global_rotation) / 180,
+	#				rad2deg($AnimationPointer.global_rotation) / 180
+	#			) # USARE ROTAAZIONE DI ANIMATIONPOINTER
+	#	#		print(clampedGozzo)
+	#			animationTree.set("parameters/Idle/blend_position", clampedGozzo)
+	#			animationTree.set("parameters/Walk/blend_position", clampedGozzo)
 				
-			print(input_vector)
-			
-			velocity = move_and_slide(velocity)
-			
-			var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
-			if pressedShoot and fireDelayTimer.is_stopped():
-				var fireRate = getFireRate()
-				fireDelayTimer.start(fireRate)
-				shoot()
-			if Input.is_action_just_pressed("bomb") and data.bombs > 0:
-				var b = bomb.instance()
-				current.add_child(b)
-				b.position = position
-				data.bombs -= 1
-				current.get_node("HUD").updateHud()
+				var input_vector = Vector2.ZERO
+				input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+				input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
+				input_vector = input_vector.normalized()
+				if input_vector != Vector2.ZERO:
+	#				animationState.travel("Walk")
+					velocity = velocity.move_toward(input_vector * max_speed, acceleration)
+				else:
+					animationState.travel("Idle")
+					velocity = velocity.move_toward(Vector2.ZERO, friction)
+					
 				
-			if Input.is_action_just_pressed("consumable") and consumable and consumable.get_node("ConsumData").charges > 0:
-				var logic = consumable.get_node("Logic")
-				var consumDict:ConsumData = consumable.get_node("ConsumData")
-				logic.use(self)
-				consumDict.charges -= 1
-		rset_unreliable('slave_position', position)
-#	else: # Puppet code
-##		_move(slave_movement)
-#		position = slave_position
+				
+				velocity = move_and_slide(velocity)
+				
+				var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
+				if pressedShoot and fireDelayTimer.is_stopped():
+					event.emit_signal("playerHit", 0.5)
+					var fireRate = getFireRate()
+					fireDelayTimer.start(fireRate)
+					shoot()
+				if Input.is_action_just_pressed("bomb") and data.bombs > 0:
+					var b = bomb.instance()
+					current.add_child(b)
+					b.position = position
+					data.bombs -= 1
+					current.get_node("HUD").updateHud()
+				if Input.is_action_just_pressed("consumable") and consumable and consumable.get_node("ConsumData").charges > 0:
+					var logic = consumable.get_node("Logic")
+					var consumDict:ConsumData = consumable.get_node("ConsumData")
+					logic.use(self)
+					consumDict.charges -= 1
+			rset_unreliable('slave_position', position)
+			
+		else: # Puppet code
+			position = slave_position
+
+		if get_tree().is_network_server():
+	#		print(name)
+			if name != "Player":
+				Network.update_position(int(name), position)
 		
-#	if get_tree().is_network_server():
-#		Network.update_position(int(name), position)
+# ===== REMOTES =====
+remotesync func updateSmallGUI():
+	# """HEALTHBAR"""
+	var healthPercent = (float(data.health) / (maxHealth + data.upgrades.maxHealth)) * 100
+	if healthPercent > 75:
+		$GUI/Nickname.add_color_override("font_color", "FFFFFF")
+	elif healthPercent > 50:
+		$GUI/Nickname.add_color_override("font_color", "c6bc4a")
+	elif healthPercent > 25:
+		$GUI/Nickname.add_color_override("font_color", "ff8900")
+	else:
+		$GUI/Nickname.add_color_override("font_color", "ff0000")
 		
+		
+		
+	
+
+# ===== SIGNALS =====		
 func _on_GlobalEventManager_playerHit(damage):
 	event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	
 	if $IFrameTimer.is_stopped() and !data.dev:
@@ -291,20 +315,16 @@ func _on_GlobalEventManager_playerHit(damage):
 			else:
 				show()
 
-
 func _on_GlobalEventManager_upgradePickedUp(key, value):
 #	print("ASASD")
 	data.upgrades[key] += value
 	if key == "maxHealth":
 		current.get_node("HUD").updateHealth()
 		data.health = clamp(data.health, 0, maxHealth + data.upgrades.maxHealth)
-#	current.get_node("GlobalEventManager").emit_signal("messageEntered", "Upgrade", "%s + %s" % [key, String(value)])
-
 
 func _on_GlobalEventManager_playerHeal(value):
 	data.health = clamp(data.health + value, 0, maxHealth + data.upgrades.maxHealth)
 	current.get_node("HUD").updateHealth()
-
 
 func _on_GunRecoil_tween_completed(object, key):
 #	return

@@ -67,6 +67,7 @@ script = ExtResource( 18 )
 script = ExtResource( 2 )
 
 [node name="DynamicTooltip" parent="." instance=ExtResource( 20 )]
+visible = false
 margin_left = 136.0
 margin_top = 64.0
 margin_right = 136.0
@@ -78,8 +79,6 @@ position = Vector2( 158, 89 )
 [node name="Player" parent="." instance=ExtResource( 1 )]
 visible = false
 position = Vector2( 158, 89 )
-acceleration = 650
-max_speed = 150
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
@@ -322,12 +321,9 @@ color = Color( 0.611765, 0.611765, 0.611765, 1 )
 [connection signal="messageEntered" from="GlobalEventManager" to="HUD/ChatBox" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="messageEntered" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="messageEntered" from="GlobalEventManager" to="CommandManager" method="_on_GlobalEventManager_messageEntered"]
-[connection signal="playerHeal" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHeal"]
-[connection signal="playerHit" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_playerHit"]
 [connection signal="playerHit" from="GlobalEventManager" to="HUD" method="_on_GlobalEventManager_playerHit"]
 [connection signal="popupText" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_popupText"]
 [connection signal="shake" from="GlobalEventManager" to="Camera2D/ScreenShake" method="_on_GlobalEventManager_shake"]
-[connection signal="upgradePickedUp" from="GlobalEventManager" to="Player" method="_on_GlobalEventManager_upgradePickedUp"]
 [connection signal="upgradePickedUp" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_upgradePickedUp"]
 [connection signal="timeout" from="GlobalEventManager/PopupTimer" to="GlobalEventManager" method="_on_PopupTimer_timeout"]
 [connection signal="timeout" from="Camera2D/ScreenShake/Frequency" to="Camera2D/ScreenShake" method="_on_Frequency_timeout"]

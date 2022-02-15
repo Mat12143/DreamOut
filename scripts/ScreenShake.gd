@@ -8,7 +8,7 @@ onready var camera = get_parent()
 var priority = 0
 
 func start(duration = 0.2, frequency = 15, amplitude = 3, priority = 0):
-	if owner.get_node("Player").data.settings.screenShake:
+#	if owner.get_node("Player").data.settings.screenShake: # TODO
 		if priority >= self.priority and frequency != 0:
 			self.priority = priority
 			self.amplitude = amplitude
