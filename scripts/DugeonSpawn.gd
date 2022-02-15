@@ -247,8 +247,13 @@ func create_room(gridLayout, backDoor = null):
 
 func _ready():
 
+<<<<<<< HEAD
 	#var save = load("user://lastDungeon.tscn")
 
+=======
+	var save = load("user://lastDungeon.tscn")
+	
+>>>>>>> fb955ab2df0ae09f9394263413aa22caf59e56f4
 #	if save == null:
 	randomize()
 	var firstRoom = create_room(Vector2.ZERO, null)

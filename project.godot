@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node",
+"class": "ConsumData",
+"language": "GDScript",
+"path": "res://items/scripts/ConsumData.gd"
+}, {
+"base": "Node",
 "class": "DiscordRPC",
 "language": "GDScript",
 "path": "res://addons/godot_editor_discord_presence/Discord RPC/DiscordRPC.gd"
@@ -125,6 +130,7 @@ _global_script_classes=[ {
 "path": "res://scripts/nanoid.gd"
 } ]
 _global_script_class_icons={
+"ConsumData": "",
 "DiscordRPC": "",
 "DiscordRPCEnum": "",
 "DynamicTooltip": "",
@@ -152,12 +158,22 @@ _global_script_class_icons={
 
 [application]
 
+<<<<<<< HEAD
 config/name="Gioco Pazzo"
 config/description="Bullet-hell Roguelite playable on the browser"
+=======
+config/name="Dreamout"
+config/description="Bullet-hell Roguelite that's all about dreams and nightmares."
+>>>>>>> fb955ab2df0ae09f9394263413aa22caf59e56f4
 run/main_scene="res://Title.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="giocoPazzo"
-config/icon="res://icon.png"
+config/custom_user_dir_name="dreamout"
+config/icon="res://sprites/logo.png"
+
+[discord_presence]
+
+first_button/label="Play my Game"
+first_button/url="https://dreamout.pyros.dev"
 
 [display]
 
@@ -287,9 +303,20 @@ npc_interact={
 }
 consumable={
 "deadzone": 0.5,
+<<<<<<< HEAD
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
  ]
 }
+=======
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
+[locale]
+
+test="it"
+translations=PoolStringArray( "res://otherassets/translations.en.translation", "res://otherassets/translations.it.translation" )
+>>>>>>> fb955ab2df0ae09f9394263413aa22caf59e56f4
 
 [physics]
 

@@ -213,13 +213,22 @@ func shoot():
 func _physics_process(delta):
 #	print(position)
 	if !owner.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
+		
+		var clampedGozzo = Vector2(
+#			get_global_mouse_position().x / 160,
+#			get_global_mouse_position().y / 90
+			rad2deg($AnimationPointer.global_rotation) / 180,
+			rad2deg($AnimationPointer.global_rotation) / 180
+		) # USARE ROTAAZIONE DI ANIMATIONPOINTER
+		print(clampedGozzo)
+		animationTree.set("parameters/Idle/blend_position", clampedGozzo)
+		animationTree.set("parameters/Walk/blend_position", clampedGozzo)
+		
 		var input_vector = Vector2.ZERO
 		input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
 		input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 		input_vector = input_vector.normalized()
 		if input_vector != Vector2.ZERO:
-			animationTree.set("parameters/Idle/blend_position", input_vector)
-			animationTree.set("parameters/Walk/blend_position", input_vector)
 			animationState.travel("Walk")
 			velocity = velocity.move_toward(input_vector * max_speed, acceleration * delta)
 		else:
