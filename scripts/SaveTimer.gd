@@ -7,4 +7,4 @@ func _ready():
 func _process(delta):
 	if is_stopped():
 		start(5)
-		owner.owner.get_node("SaveManager").save(owner.data, "user://plr.save")
+		SaveManager.save(owner.data, "user://plr.save")

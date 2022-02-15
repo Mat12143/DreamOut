@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
@@ -20,6 +20,7 @@
 [ext_resource path="res://items/scripts/itemDB.gd" type="Script" id=18]
 [ext_resource path="res://sprites/UI/itemFrame.png" type="Texture" id=19]
 [ext_resource path="res://scenes/UI/DynamicTooltip.tscn" type="PackedScene" id=20]
+[ext_resource path="res://World.gd" type="Script" id=21]
 
 [sub_resource type="Environment" id=2]
 background_mode = 4
@@ -51,6 +52,7 @@ func _ready():
 "
 
 [node name="World" type="Node2D"]
+script = ExtResource( 21 )
 __meta__ = {
 "_editor_description_": "s"
 }
@@ -70,7 +72,11 @@ margin_top = 64.0
 margin_right = 136.0
 margin_bottom = 64.0
 
+[node name="PlayerSpawnPos" type="Position2D" parent="."]
+position = Vector2( 158, 89 )
+
 [node name="Player" parent="." instance=ExtResource( 1 )]
+visible = false
 position = Vector2( 158, 89 )
 acceleration = 650
 max_speed = 150

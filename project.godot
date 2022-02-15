@@ -165,6 +165,19 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="dreamout"
 config/icon="res://sprites/logo.png"
 
+[autoload]
+
+Network="*res://Network.gd"
+SaveManager="*res://scripts/SaveManager.gd"
+
+[debug]
+
+multirun/number_of_windows=2
+multirun/window_distance=1270
+multirun/add_custom_args=true
+multirun/first_window_args="listen"
+multirun/other_window_args="join"
+
 [discord_presence]
 
 first_button/label="Play my Game"
@@ -184,7 +197,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/godot_editor_discord_presence/plugin.cfg", "res://addons/zylann.translation_editor/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/godot_editor_discord_presence/plugin.cfg", "res://addons/multirun/plugin.cfg", "res://addons/zylann.translation_editor/plugin.cfg" )
 
 [gdnative]
 
@@ -300,7 +313,6 @@ consumable={
 
 [locale]
 
-test="it"
 translations=PoolStringArray( "res://otherassets/translations.en.translation", "res://otherassets/translations.it.translation" )
 
 [physics]
