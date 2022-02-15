@@ -247,18 +247,18 @@ func create_room(gridLayout, backDoor = null):
 
 func _ready():
 
-	var save = load("user://lastDungeon.tscn")
-	
-	if save == null:
-		randomize()
-		var firstRoom = create_room(Vector2.ZERO, null)
-		playerRoom = firstRoom
-	else:
+	#var save = load("user://lastDungeon.tscn")
 
-		get_tree().get_current_scene().queue_free()
-		
-		get_tree().change_scene(save)
-		print(get_tree().get_current_scene())
+#	if save == null:
+	randomize()
+	var firstRoom = create_room(Vector2.ZERO, null)
+	playerRoom = firstRoom
+#	else:
+#
+#		get_tree().get_current_scene().queue_free()
+#
+#		get_tree().change_scene(save)
+#		print(get_tree().get_current_scene())
 		
 
 func recreateDungeonBySave(savedData, playerRoomData):

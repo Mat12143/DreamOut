@@ -29,6 +29,7 @@ script = ExtResource( 10 )
 position = Vector2( 158, 89 )
 acceleration = 650
 max_speed = 150
+friction = null
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )

@@ -242,7 +242,7 @@ func _physics_process(delta):
 			
 		if Input.is_action_just_pressed("consumable") and consumable and consumable.get_node("ConsumData").charges > 0:
 			var logic = consumable.get_node("Logic")
-			var consumDict:ConsumData = consumable.get_node("ConsumData")
+			var consumDict = consumable.get_node("ConsumData")
 			logic.use(self)
 			consumDict.charges -= 1
 
