@@ -1,15 +1,20 @@
 extends CanvasLayer
 
 onready var heart = preload("res://scenes/Heart.tscn")
+var player
+
+func inject(newPlayer):
+	player = newPlayer
 
 func updateHud():
-	updateHealth()
-	updateFrame()
-	$Items/BombCount.text = String(get_parent().get_node("Player").data.bombs)
-	$Items/KeyCount.text = String(get_parent().get_node("Player").data.keys)
+	if !!player:
+		updateHealth()
+		updateFrame()
+		$Items/BombCount.text = String(player.data.bombs)
+		$Items/KeyCount.text = String(player.data.keys)
 
 func updateFrame():
-	var consumable = get_parent().get_node("Player").consumable
+	var consumable = player.consumable
 	if consumable:
 		$ActiveItem.show()
 		$ActiveItem/Item.texture = consumable.get_node("Sprite").texture
@@ -17,7 +22,7 @@ func updateFrame():
 		$ActiveItem.hide()
 
 func updateHealth():
-	var body = get_parent().get_node("Player")
+	var body = player
 	var totalMaxHealth = (body.maxHealth + body.data.upgrades.maxHealth)
 	var fulls = clamp(floor(body.data.health), 0, totalMaxHealth)
 	var empties = totalMaxHealth - fulls

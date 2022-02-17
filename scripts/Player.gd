@@ -159,6 +159,20 @@ func init(nickname:String, start_position, is_slave):
 		$GUI/Nickname.show()
 
 func _ready():
+	if name != "Player":
+		print_debug("Gordo")
+		get_parent().get_node("HUD").inject(self)
+		get_parent().get_node("HUD").updateHud()
+		get_parent().get_node("CommandManager").inject(self)
+		get_parent().get_node("GlobalEventManager").inject(self)
+		get_parent().get_node("DungeonSpawn").inject(self)
+		
+	else:
+		print_debug("NO GORDO")
+#	get_parent().get_node("HUD/ChatBox").inject(self)
+	
+	
+	
 	event.connect("playerHit", self, "_on_GlobalEventManager_playerHit")
 	event.connect("playerHeal", self, "_on_GlobalEventManager_playerHeal")
 	event.connect("upgradePickedUp", self, "_on_GlobalEventManager_upgradePickedUp")

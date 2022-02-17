@@ -9,9 +9,13 @@ signal shake(duration, frequency, amplitude, priority)
 signal roomEnter(roomData)
 onready var startPopupPos = get_tree().current_scene.get_node('HUD/PopupText').rect_position
 
+var player 
+
+func inject(newPlayer):
+	player = newPlayer
+
 func _on_GlobalEventManager_messageEntered(author:String, text:String):
 	var chatBox = get_tree().current_scene.get_node("HUD/ChatBox/VBoxContainer/ChatLog")
-	var player = owner.get_node("Player")
 	text = text.strip_edges()
 	if (text.begins_with('/')):
 		pass

@@ -1,6 +1,9 @@
 extends Node2D
-onready var player = owner.get_node("Player")
+var player
 onready var event = owner.get_node('GlobalEventManager')
+
+func inject(newPlayer):
+	player = newPlayer
 
 func toggleshake(args):
 	player.data.settings.screenShake = !player.data.settings.screenShake

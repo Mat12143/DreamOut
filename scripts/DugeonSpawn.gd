@@ -16,10 +16,14 @@ onready var roomTemplates = [
 	preload("res://rooms/idkRooms/theRock.tscn")
 ]
 onready var door = preload("res://scenes/Door.tscn")
-onready var Player = get_tree().get_current_scene().get_node("Player")
+var Player
 onready var camera = get_tree().get_current_scene().get_node("Camera2D")
 
 onready var saveManager = get_tree().get_current_scene().get_node("SaveManager")
+
+func inject(newPlayer):
+	Player = newPlayer
+
 var posAndDirections = {
 	"Up" : Vector2(0, -1),
 	"Down" : Vector2(0, 1),
