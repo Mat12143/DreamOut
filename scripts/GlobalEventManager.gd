@@ -1,9 +1,9 @@
 extends Node2D
 
-signal playerHit
+signal playerHit(damage, _name)
 signal playerHeal(value)
 signal upgradePickedUp
-signal messageEntered(author, text)
+signal messageEntered(author, text, whisperRecipient)
 signal popupText(title, subtitle)
 signal shake(duration, frequency, amplitude, priority)
 signal roomEnter(roomData)
@@ -13,8 +13,12 @@ var player
 
 func inject(newPlayer):
 	player = newPlayer
-
-func _on_GlobalEventManager_messageEntered(author:String, text:String):
+	
+func _on_GlobalEventManager_messageEntered(author:String, text:String, whisperRecipient:String="nowhisper"):
+	if whisperRecipient != "nowhisper": rpc_id(int(whisperRecipient), "sendMsg", author, text)
+	else: rpc("sendMsg", author, text)
+	
+remotesync func sendMsg(author:String, text:String):
 	var chatBox = get_tree().current_scene.get_node("HUD/ChatBox/VBoxContainer/ChatLog")
 	text = text.strip_edges()
 	if (text.begins_with('/')):
@@ -24,7 +28,6 @@ func _on_GlobalEventManager_messageEntered(author:String, text:String):
 		chatBox.bbcode_text += newText.replace("@%s" % player.data.name, "[color=blue]@%s[/color]" % player.data.name) # TAGGG
 	get_tree().current_scene.get_node("HUD/ChatBox/VBoxContainer/ChatSweeper").start(10)
 	chatBox.show()
-	
 
 
 func _on_GlobalEventManager_popupText(title, subtitle):

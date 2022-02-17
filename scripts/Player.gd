@@ -93,7 +93,7 @@ func getFireRate():
 		fireRate = 0.05
 	return fireRate
 
-func updateGun():
+remotesync func updateGun():
 	match data.selectedGun:
 		Guns.SMG:
 			gunData.damage = 1
@@ -159,10 +159,12 @@ func init(nickname:String, start_position, is_slave):
 		$GUI/Nickname.show()
 
 func _ready():
-	if name != "Player":
+	if name != "Player" and is_network_master():
 		print_debug("Gordo")
+		print(data.name)
 		get_parent().get_node("HUD").inject(self)
 		get_parent().get_node("HUD").updateHud()
+		get_parent().get_node("HUD/ChatBox").inject(self)
 		get_parent().get_node("CommandManager").inject(self)
 		get_parent().get_node("GlobalEventManager").inject(self)
 		get_parent().get_node("DungeonSpawn").inject(self)
@@ -189,7 +191,7 @@ func _ready():
 #	else:
 #		print('plr.save not found, loading defaults')
 #		SaveManager.save(data, "user://plr.save")
-	updateGun()
+	rpc("updateGun")
 	
 	# --- Esegui restart su ogni oggetto nell'inventario ---
 	var itemDB = current.get_node("ItemDB")
@@ -207,14 +209,14 @@ func _ready():
 var velocity = Vector2.ZERO
 puppet var slave_position = Vector2()
 
-func shoot():
+remotesync func shoot():
 #	var t = $GunRecoil
 #	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(-35 if $Gun/Sprite.rotation_degrees < 0 else 35), (getFireRate()/4))
 #	t.start()
 	event.emit_signal("shake", 0.2, 7* gunData.power, 1 * gunData.power, 0)	
 	if data.selectedGun != Guns.SHOTGUN:
 		var b = Bullet.instance()
-		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange)
+		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange, self)
 		current.add_child(b)
 		b.transform = $Gun/Position2D.global_transform
 		var spread = gunData.spread - data.upgrades.accuracy
@@ -230,7 +232,7 @@ func shoot():
 	else:
 		for i in $Gun/ShotGuns.get_children():
 			var b = Bullet.instance()
-			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange)
+			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange, self)
 			current.add_child(b)
 			b.transform = i.global_transform
 			var spread = gunData.spread - data.upgrades.accuracy
@@ -273,10 +275,10 @@ func _physics_process(delta):
 				
 				var pressedShoot = Input.is_action_pressed("shoot") if gunData.autoFire else Input.is_action_just_pressed("shoot")
 				if pressedShoot and fireDelayTimer.is_stopped():
-					event.emit_signal("playerHit", 0.5)
+#					event.emit_signal("playerHit", 0.5)
 					var fireRate = getFireRate()
 					fireDelayTimer.start(fireRate)
-					shoot()
+					rpc("shoot")
 				if Input.is_action_just_pressed("bomb") and data.bombs > 0:
 					var b = bomb.instance()
 					current.add_child(b)
@@ -311,12 +313,13 @@ remotesync func updateSmallGUI():
 	else:
 		$GUI/Nickname.add_color_override("font_color", "ff0000")
 		
-		
-		
-	
 
 # ===== SIGNALS =====		
-func _on_GlobalEventManager_playerHit(damage):
+func _on_GlobalEventManager_playerHit(damage, _name):
+	if _name == name:
+		rpc("damageSynced", damage, _name)
+					
+remotesync func damageSynced(damage, _name):
 	event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	
 	if $IFrameTimer.is_stopped() and !data.dev:
 		$IFrameTimer.start(1)

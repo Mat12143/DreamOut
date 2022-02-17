@@ -15,7 +15,7 @@ func _physics_process(delta):
 func _on_Bullet_body_entered(body):
 		get_tree().current_scene.get_node("BulletSounds").play()
 		if body.is_in_group("Player"):
-			get_tree().get_current_scene().get_node("GlobalEventManager").emit_signal("playerHit", damage)
+			get_tree().get_current_scene().get_node("GlobalEventManager").emit_signal("playerHit", damage, body.name)
 #				body.health -= 1mmmkmlmlm
 ##				print(get_parent())
 #				get_parent().get_node('HUD/PortraitAndHealth/BarEmpty/HPBar').value = (float(body.health) / body.maxHealth * 100)

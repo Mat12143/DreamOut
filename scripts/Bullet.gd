@@ -9,6 +9,7 @@ var dontMove = false
 var explosionRadius = 50
 export (PackedScene) var explosion
 onready var hitParticle = preload("res://scenes/particles/enemyHit.tscn")
+var shooter
 
 enum {
 	DISTANCE,
@@ -47,7 +48,7 @@ func destroy(reason, body):
 	else:
 		rotation = -rotation
 		
-func initialize(newDamage, newSpeed, newType, newRange):
+func initialize(newDamage, newSpeed, newType, newRange, newShooter):
 	$CollisionShape2D.shape.radius = 3
 	damage = newDamage
 	speed = newSpeed
@@ -56,6 +57,7 @@ func initialize(newDamage, newSpeed, newType, newRange):
 		randomize()
 		speed = rand_range(newSpeed - 50, newSpeed + 50)
 	gunRange = newRange
+	shooter = newShooter
 #	print([damage, speed, bulletType, gunRange])
 
 func _on_Bullet_body_entered(body):
@@ -78,7 +80,7 @@ func _on_Bullet_body_entered(body):
 					if body.get_node("AI").state == 0:
 						body.get_node("AI").set_state(1)
 						body.get_node("AI/FireDelayTimer").start(1)
-					body.get_node("AI").player = get_parent().get_node("Player")
+					body.get_node("AI").player = shooter
 				var p = hitParticle.instance()
 				get_tree().current_scene.add_child(p)
 				p.rotation = rotation

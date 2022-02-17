@@ -21,7 +21,7 @@ func setgun(args):
 	var selected = args[1].to_int()
 #			print(selected)
 	player.data.selectedGun = selected
-	player.updateGun()
+	player.rpc("updateGun")
 	event.emit_signal("messageEntered", "Console", "Switched weapon")
 
 func hello(args):
@@ -50,11 +50,11 @@ func reset(args):
 func heal(args):
 	player.data.health = player.maxHealth + player.data.upgrades.maxHealth
 	event.emit_signal("messageEntered", "Console", "Fully healed")
-	event.emit_signal("playerHit", 0)
+	event.emit_signal("playerHit", 0, player.name)
 
 func damage(args):
 #	player.data.health = player.maxHealth + player.data.upgrades.maxHealth
-	event.emit_signal("playerHit", 0.5)
+	event.emit_signal("playerHit", 0.5, player.name)
 	event.emit_signal("messageEntered", "Console", "Damaged you")
 
 var commands = {
@@ -155,6 +155,10 @@ func _on_GlobalEventManager_messageEntered(author, text:String):
 #	print(args)
 	if text.begins_with('/'):
 		if has_method(args[0].replace("/", "")):
+			if commands[args[0].replace("/", "")].cheat and !get_tree().is_network_server():
+				event.emit_signal("messageEntered", "Console", "[color=red]Only admins can use this command[/color]", player.name)
+				return
 			call(args[0].replace("/", ""), args)
 		else:
-			event.emit_signal("messageEntered", "Console", "[color=red]No command found.[/color]")
+			event.emit_signal("messageEntered", "Console", "[color=red]No command found.[/color]", player.name)
+		

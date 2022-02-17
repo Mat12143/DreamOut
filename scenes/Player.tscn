@@ -286,7 +286,6 @@ valign = 1
 autowrap = true
 clip_text = true
 uppercase = true
-percent_visible = -0.25
 __meta__ = {
 "_edit_use_anchors_": false
 }

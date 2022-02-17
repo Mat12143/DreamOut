@@ -81,7 +81,7 @@ func updateHealth():
 #		index += 1
 #	print(index)
 	
-#	print([body.data.health, fulls, empties, half])
+#	print([body.data.health, fulls, empties, half"])
 #	for i in range(body.data.health)
 
 func _ready():
@@ -90,7 +90,7 @@ func _ready():
 #	var body = get_parent().get_node("Player")
 #	$PortraitAndHealth/Portrait/HPBar.value = (float(body.data.health) / (body.maxHealth + body.data.upgrades.maxHealth) * 100)
 
-func _on_GlobalEventManager_playerHit(_damage):
+func _on_GlobalEventManager_playerHit(_damage, _name):
 	updateHealth()
 #	var body = get_parent().get_node("Player")
 #

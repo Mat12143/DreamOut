@@ -3,6 +3,10 @@ extends Control
 onready var chatLog = get_node("VBoxContainer/ChatLog")
 onready var inputField = get_node("VBoxContainer/LineEdit")
 
+var player
+
+func inject(newPlayer):
+	player = newPlayer
 
 func _ready():
 	inputField.hide()
@@ -24,7 +28,7 @@ func _on_LineEdit_text_entered(new_text):
 	if (new_text != ''):
 #		print(new_text)
 		inputField.text = ''
-		get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", get_tree().current_scene.get_node("Player").data.name, new_text)
+		get_tree().current_scene.get_node("GlobalEventManager").emit_signal("messageEntered", player.data.name, new_text)
 		inputField.release_focus()
 		inputField.hide()
 
