@@ -36,6 +36,10 @@ func _connected_to_server():
 	rpc('_send_player_info', local_player_id, self_data)
 
 func _on_player_disconnected(id):
+	if id == 1:
+		get_tree().network_peer = null
+		get_tree().change_scene("res://ErrorScreen.tscn")
+		get_tree().current_scene.get_node("TextChanger").changeText("ASD", "ASD")
 	players.erase(id)
 
 func _on_player_connected(connected_player_id):
