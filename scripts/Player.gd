@@ -148,6 +148,12 @@ remotesync func updateGun():
 			print("NO GUN FOUND")
 	$Gun/Sprite.frame = data.selectedGun
 	$ShootSound.stream = gunSounds[data.selectedGun]
+	rpc("remoteUpdateGunVisuals", data)
+
+remote func remoteUpdateGunVisuals(currentData):
+	yield(get_tree().create_timer(0.05), "timeout")
+	$Gun/Sprite.frame = data.selectedGun
+	$ShootSound.stream = gunSounds[data.selectedGun]
 
 func init(nickname:String, start_position, is_slave):
 	nickname = nickname.strip_edges()#.substr(0, 16)
@@ -291,7 +297,7 @@ func _physics_process(delta):
 					logic.use(self)
 					consumDict.charges -= 1
 			rset_unreliable('slave_position', position)
-			
+
 		else: # Puppet code
 			position = slave_position
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://sprites/Player/playersheet.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://scripts/SaveTimer.gd" type="Script" id=9]
 [ext_resource path="res://sprites/Archives/light.png" type="Texture" id=10]
 [ext_resource path="res://sprites/Player/orb.png" type="Texture" id=11]
+[ext_resource path="res://scripts/NetworkSyncer.gd" type="Script" id=12]
 
 [sub_resource type="DynamicFontData" id=39]
 font_path = "res://sprites/pixellated.ttf"
@@ -265,6 +266,10 @@ acceleration = 650
 max_speed = 150
 fireDelay = 0.08
 Bullet = ExtResource( 3 )
+
+[node name="DataSyncer" type="Node" parent="."]
+script = ExtResource( 12 )
+syncedProperties = PoolStringArray( "data", "gunData" )
 
 [node name="GUI" type="Control" parent="."]
 margin_right = 40.0
