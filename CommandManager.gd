@@ -54,7 +54,10 @@ func heal(args):
 
 func damage(args):
 #	player.data.health = player.maxHealth + player.data.upgrades.maxHealth
-	event.emit_signal("playerHit", 0.5, player.name)
+	var damageToDeal = 0.5
+	if args.size() > 1:
+		damageToDeal = float(args[1])
+	event.emit_signal("playerHit", damageToDeal, player.name, "magic")
 	event.emit_signal("messageEntered", "Console", "Damaged you")
 
 var commands = {
@@ -66,6 +69,11 @@ var commands = {
 	},
 	"hello": {
 		"description": "Greets you",
+		"args": 0,
+		"cheat": false
+	},
+	"help": {
+		"description": "Shows this page",
 		"args": 0,
 		"cheat": false
 	},
@@ -156,9 +164,9 @@ func _on_GlobalEventManager_messageEntered(author, text:String):
 	if text.begins_with('/'):
 		if has_method(args[0].replace("/", "")):
 			if commands[args[0].replace("/", "")].cheat and !get_tree().is_network_server():
-				event.emit_signal("messageEntered", "Console", "[color=red]Only admins can use this command[/color]", player.name)
+				event.emit_signal("messageEntered", "Console", "[color=red]Only admins can use this command[/color]", {"whisperRecipient": player.name})
 				return
 			call(args[0].replace("/", ""), args)
 		else:
-			event.emit_signal("messageEntered", "Console", "[color=red]No command found.[/color]", player.name)
+			event.emit_signal("messageEntered", "Console", "[color=red]No command found.[/color]", {"whisperRecipient": player.name})
 		

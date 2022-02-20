@@ -1,26 +1,34 @@
 extends KinematicBody2D
 
+# == EXPORTS ==
 export var acceleration = 50
 export var max_speed = 15
 export var friction = 10000
 export var fireDelay:float = 0.1
-#export var rollDelay:float = 1
+
+# == HEALTH ==
 var maxHealth = 10
 var health = maxHealth
+
+# == TIMERS ==
 onready var fireDelayTimer = $FireDelayTimer
 onready var rollDelayTimer = $RollDelayTimer
 
+# == PRELOADS ==
 onready var bomb = preload("res://scenes/bullets/Bomb.tscn")
 onready var bulletShell = preload("res://scenes/BulletShell.tscn")
+export (PackedScene) var Bullet
 
+# == ANIMATIONS ==
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 
+# == UTILS ==
 onready var event = get_tree().current_scene.get_node("GlobalEventManager")
-
 onready var current = get_tree().current_scene
 
+# == CONSTANTS and ENUMS ==
 onready var gunSounds = [
 	preload("res://sfx/projectilehit.wav"),
 	preload("res://sfx/projectilehit.wav"),
@@ -29,7 +37,6 @@ onready var gunSounds = [
 	preload("res://sfx/sniper.wav"),
 	preload("res://sfx/projectilehit.wav"),
 ]
-
 enum Guns {
 	SMG, # 0
 	PISTOL, # 1
@@ -38,8 +45,8 @@ enum Guns {
 	RIFLE, # 4
 	PYROS # 5, dev only
 }
-export (PackedScene) var Bullet
 
+# == DATA AND INVENTORIES ==
 var data = { # Questo verra' salvato
 	"upgrades": {
 		"damage": 0,
@@ -60,7 +67,8 @@ var data = { # Questo verra' salvato
 	"keys": 0,
 	"health": maxHealth,
 	"selectedGun": Guns.SMG, # Viene salvato come numero (ENUM GUNS)
-	"name": "Player"
+	"name": "Player",
+	"damageReason": "idk"
 }
 var baseData = data.duplicate()
 var gunData = {
@@ -215,45 +223,13 @@ func _ready():
 var velocity = Vector2.ZERO
 puppet var slave_position = Vector2()
 
-remotesync func shoot():
-#	var t = $GunRecoil
-#	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(-35 if $Gun/Sprite.rotation_degrees < 0 else 35), (getFireRate()/4))
-#	t.start()
-	event.emit_signal("shake", 0.2, 7* gunData.power, 1 * gunData.power, 0)	
-	if data.selectedGun != Guns.SHOTGUN:
-		var b = Bullet.instance()
-		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange, self)
-		current.add_child(b)
-		b.transform = $Gun/Position2D.global_transform
-		var spread = gunData.spread - data.upgrades.accuracy
-		if spread < 0:
-			spread = 0
-		b.rotation += deg2rad(rand_range(-spread, spread))
-		$ShootSound.play()
-		
-#		var sh = bulletShell.instance()
-#		current.add_child(sh)
-#		sh.position = $Gun.global_position
-#		sh.rotation = deg2rad(rand_range(0, 360))
-	else:
-		for i in $Gun/ShotGuns.get_children():
-			var b = Bullet.instance()
-			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange, self)
-			current.add_child(b)
-			b.transform = i.global_transform
-			var spread = gunData.spread - data.upgrades.accuracy
-			if spread < 0:
-				spread = 0
-			b.rotation += deg2rad(rand_range(-spread, spread))
-		$ShootSound.play()
-	
 func _physics_process(delta):
 	
 #	print(position)
 	if name != "Player":
 		rpc("updateSmallGUI")
 		if is_network_master():
-			if !current.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible() and health > 0:
+			if !current.get_node("HUD/ChatBox/VBoxContainer/LineEdit").is_visible():
 	#			var clampedGozzo = Vector2(
 	#	#			get_global_mouse_position().x / 160,
 	#	#			get_global_mouse_position().y / 90
@@ -296,6 +272,10 @@ func _physics_process(delta):
 					var consumDict:ConsumData = consumable.get_node("ConsumData")
 					logic.use(self)
 					consumDict.charges -= 1
+			if float(data.health) <= 0:
+				event.emit_signal("dead", self)
+				event.emit_signal("messageEntered", data.name, "[color=red]%s was killed by %s[/color]" % [data.name, data.damageReason], {"hideAuthor": true})
+				rpc("die")
 			rset_unreliable('slave_position', position)
 
 		else: # Puppet code
@@ -318,26 +298,65 @@ remotesync func updateSmallGUI():
 		$GUI/Nickname.add_color_override("font_color", "ff8900")
 	else:
 		$GUI/Nickname.add_color_override("font_color", "ff0000")
+remotesync func shoot():
+#	var t = $GunRecoil
+#	t.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation - deg2rad(-35 if $Gun/Sprite.rotation_degrees < 0 else 35), (getFireRate()/4))
+#	t.start()
+	event.emit_signal("shake", 0.2, 7* gunData.power, 1 * gunData.power, 0)	
+	if data.selectedGun != Guns.SHOTGUN:
+		var b = Bullet.instance()
+		b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange, self)
+		current.add_child(b)
+		b.transform = $Gun/Position2D.global_transform
+		var spread = gunData.spread - data.upgrades.accuracy
+		if spread < 0:
+			spread = 0
+		b.rotation += deg2rad(rand_range(-spread, spread))
+		$ShootSound.play()
 		
-
-# ===== SIGNALS =====		
-func _on_GlobalEventManager_playerHit(damage, _name):
-	if _name == name:
-		rpc("damageSynced", damage, _name)
-					
+#		var sh = bulletShell.instance()
+#		current.add_child(sh)
+#		sh.position = $Gun.global_position
+#		sh.rotation = deg2rad(rand_range(0, 360))
+	else:
+		for i in $Gun/ShotGuns.get_children():
+			var b = Bullet.instance()
+			b.initialize(gunData.damage + data.upgrades.damage, gunData.projSpeed + data.upgrades.projSpeed, data.selectedGun, gunData.gunRange + data.upgrades.gunRange, self)
+			current.add_child(b)
+			b.transform = i.global_transform
+			var spread = gunData.spread - data.upgrades.accuracy
+			if spread < 0:
+				spread = 0
+			b.rotation += deg2rad(rand_range(-spread, spread))
+		$ShootSound.play()
 remotesync func damageSynced(damage, _name):
-	event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	
 	if $IFrameTimer.is_stopped() and !data.dev:
+		event.emit_signal("shake", 0.1, 20, 5 if damage == 0.5 else 10, 0)	
 		$IFrameTimer.start(1)
 		data.health -= damage
-		$HitSound.play()
+		if damage == 0.5: $Sounds/HitSound.play()
+		elif damage == 1: $Sounds/HitSound.play() # TODO suono apposta
+#		if float(health) > 0:
 		for _i in range(0, 10):
 			yield(get_tree().create_timer(0.1), "timeout")
 			if visible:
 				hide()
 			else:
 				show()
+remotesync func die():
+	$Gun.hide()
+	set_physics_process(false)
+#	hide()
+	$HitBox.disabled = true
+	yield(get_tree().create_timer(0.1), "timeout")
+	animationState.travel("Death")
 
+# ===== SIGNALS =====		
+func _on_GlobalEventManager_playerHit(damage, _name, reason = "the unknown"):
+	if _name == name:
+		data.damageReason = reason
+		rpc("damageSynced", damage, _name)
+					
 func _on_GlobalEventManager_upgradePickedUp(key, value):
 #	print("ASASD")
 	data.upgrades[key] += value

@@ -16,3 +16,6 @@ func _on_player_disconnected(id):
 
 func _on_server_disconnected():
 	get_tree().change_scene('res://ErrorScreen.tscn')
+
+
+

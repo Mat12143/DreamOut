@@ -1,21 +1,31 @@
 extends Node2D
 
-signal playerHit(damage, _name)
+signal playerHit(damage, _name, reason)
 signal playerHeal(value)
+signal dead(player)
 signal upgradePickedUp
-signal messageEntered(author, text, whisperRecipient)
+signal messageEntered(author, text, optionalData)
 signal popupText(title, subtitle)
 signal shake(duration, frequency, amplitude, priority)
 signal roomEnter(roomData)
+
 onready var startPopupPos = get_tree().current_scene.get_node('HUD/PopupText').rect_position
+var msgDataTemplate = {"whisperRecipient": "nowhisper", "hideAuthor": false}
 
 var player 
 
 func inject(newPlayer):
 	player = newPlayer
 	
-func _on_GlobalEventManager_messageEntered(author:String, text:String, whisperRecipient:String="nowhisper"):
-	if whisperRecipient != "nowhisper": rpc_id(int(whisperRecipient), "sendMsg", author, text)
+func _on_GlobalEventManager_messageEntered(author:String, text:String, optionalData:Dictionary = msgDataTemplate):
+	for i in msgDataTemplate:
+		if !optionalData.has(i):
+			optionalData[i] = msgDataTemplate[i]
+		
+	if optionalData.hideAuthor: author = ''
+	else: author = "[" + author + "] "
+	
+	if optionalData.whisperRecipient != "nowhisper": rpc_id(int(optionalData.whisperRecipient), "sendMsg", author, text)
 	else: rpc("sendMsg", author, text)
 	
 remotesync func sendMsg(author:String, text:String):
@@ -24,7 +34,7 @@ remotesync func sendMsg(author:String, text:String):
 	if (text.begins_with('/')):
 		pass
 	else:
-		var newText = "\n[color=grey][%s][/color] %s" % [author, text]
+		var newText = "\n[color=grey]%s[/color]%s" % [author, text]
 		chatBox.bbcode_text += newText.replace("@%s" % player.data.name, "[color=blue]@%s[/color]" % player.data.name) # TAGGG
 	get_tree().current_scene.get_node("HUD/ChatBox/VBoxContainer/ChatSweeper").start(10)
 	chatBox.show()

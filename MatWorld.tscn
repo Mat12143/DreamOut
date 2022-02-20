@@ -1,6 +1,5 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
-[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
 [ext_resource path="res://sprites/Player/giuratore.png" type="Texture" id=3]
 [ext_resource path="res://sfx/music/corruption.mp3" type="AudioStream" id=4]
@@ -51,11 +50,50 @@ func _ready():
 #	pass
 "
 
+[sub_resource type="GDScript" id=4]
+script/source = "extends Camera2D
+
+
+func _ready():
+	pass
+
+
+func _on_GlobalEventManager_dead(player):
+	var t1 = Tween.new()
+	var t2 = Tween.new()
+	var t3 = Tween.new()
+	add_child(t1)
+	add_child(t2)
+	add_child(t3)
+	t1.interpolate_property(self, \"position\", position, player.position, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	t1.start()
+	t2.interpolate_property(self, \"zoom\", zoom, Vector2(0.4, 0.4), 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	t2.start()
+	t3.interpolate_property(self, \"rotation\", rotation, deg2rad(20), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	t3.start()
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends ColorRect
+
+
+func _on_GlobalEventManager_dead(_player):
+	pass
+#	show()
+#	var t = Tween.new()
+#	add_child(t)
+#	t.interpolate_property(self, \"modulate\", modulate, Color(\"ff0000\"), 0.2)
+"
+
 [node name="World" type="Node2D"]
 script = ExtResource( 21 )
 __meta__ = {
 "_editor_description_": "s"
 }
+
+[node name="TickTimer" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 2 )
@@ -75,9 +113,6 @@ margin_bottom = 64.0
 
 [node name="PlayerSpawnPos" type="Position2D" parent="."]
 position = Vector2( 158, 89 )
-
-[node name="Player" parent="." instance=ExtResource( 1 )]
-visible = false
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
@@ -290,7 +325,9 @@ one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 160, 90 )
+rotating = true
 current = true
+script = SubResource( 4 )
 
 [node name="ScreenShake" type="Node" parent="Camera2D"]
 script = ExtResource( 17 )
@@ -316,7 +353,21 @@ script = ExtResource( 14 )
 visible = false
 color = Color( 0.611765, 0.611765, 0.611765, 1 )
 
+[node name="DeathRect" type="ColorRect" parent="."]
+visible = false
+margin_right = 328.0
+margin_bottom = 184.0
+color = Color( 0, 0, 0, 0.109804 )
+script = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="timeout" from="TickTimer" to="HUD" method="_on_TickTimer_timeout"]
 [connection signal="tween_completed" from="HUD/PopupText/Tween" to="GlobalEventManager" method="_on_Tween_tween_completed"]
+[connection signal="dead" from="GlobalEventManager" to="HUD" method="_on_GlobalEventManager_dead"]
+[connection signal="dead" from="GlobalEventManager" to="Camera2D" method="_on_GlobalEventManager_dead"]
+[connection signal="dead" from="GlobalEventManager" to="DeathRect" method="_on_GlobalEventManager_dead"]
 [connection signal="messageEntered" from="GlobalEventManager" to="HUD/ChatBox" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="messageEntered" from="GlobalEventManager" to="GlobalEventManager" method="_on_GlobalEventManager_messageEntered"]
 [connection signal="messageEntered" from="GlobalEventManager" to="CommandManager" method="_on_GlobalEventManager_messageEntered"]

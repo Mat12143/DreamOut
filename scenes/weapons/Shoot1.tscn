@@ -12,6 +12,7 @@ func shoot(player):
 #		print(i)
 		i.look_at(player.global_position)
 		var b = Bullet.instance()
+		b.inject(player)
 		get_tree().current_scene.add_child(b)
 #		print(i.global)
 		b.transform = i.global_transform

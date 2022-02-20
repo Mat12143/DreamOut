@@ -8,6 +8,7 @@ func inject(newPlayer):
 
 func updateHud():
 	if !!player:
+#		yield(get_tree().create_timer(0.01), "timeout")
 		updateHealth()
 		updateFrame()
 		$Items/BombCount.text = String(player.data.bombs)
@@ -90,8 +91,19 @@ func _ready():
 #	var body = get_parent().get_node("Player")
 #	$PortraitAndHealth/Portrait/HPBar.value = (float(body.data.health) / (body.maxHealth + body.data.upgrades.maxHealth) * 100)
 
-func _on_GlobalEventManager_playerHit(_damage, _name):
-	updateHealth()
+func _on_GlobalEventManager_playerHit(_damage, _name, _reason):
+	updateHud()
 #	var body = get_parent().get_node("Player")
 #
 #	$PortraitAndHealth/Portrait/HPBar.value = (float(body.data.health) / (body.maxHealth + body.data.upgrades.maxHealth) * 100)
+
+
+func _on_TickTimer_timeout():
+	updateHud()
+
+
+func _on_GlobalEventManager_dead(player):
+	pass
+#	var t = Tween.new()
+#	add_child(t)
+#	t.interpolate_property(self, "modulate", modulate, Color("00ffffff"), 0.5)
