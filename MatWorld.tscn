@@ -1,5 +1,6 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
+[ext_resource path="res://scenes/UI/Transitioner.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=2]
 [ext_resource path="res://sprites/Player/giuratore.png" type="Texture" id=3]
 [ext_resource path="res://sfx/music/corruption.mp3" type="AudioStream" id=4]
@@ -362,6 +363,8 @@ script = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Transitioner" parent="." instance=ExtResource( 1 )]
 
 [connection signal="timeout" from="TickTimer" to="HUD" method="_on_TickTimer_timeout"]
 [connection signal="tween_completed" from="HUD/PopupText/Tween" to="GlobalEventManager" method="_on_Tween_tween_completed"]

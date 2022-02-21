@@ -276,6 +276,8 @@ func _physics_process(delta):
 				event.emit_signal("dead", self)
 				event.emit_signal("messageEntered", data.name, "[color=red]%s was killed by %s[/color]" % [data.name, data.damageReason], {"hideAuthor": true})
 				rpc("die")
+				yield(get_tree().create_timer(2), "timeout")
+				current.get_node("Transitioner").transition(true)
 			rset_unreliable('slave_position', position)
 
 		else: # Puppet code
@@ -348,6 +350,7 @@ remotesync func die():
 	set_physics_process(false)
 #	hide()
 	$HitBox.disabled = true
+	$Sounds/Death.play()
 	yield(get_tree().create_timer(0.1), "timeout")
 	animationState.travel("Death")
 
@@ -372,3 +375,4 @@ func _on_GunRecoil_tween_completed(object, key):
 #	return
 	$GunRecoil2.interpolate_property($Gun/Sprite, "rotation", $Gun/Sprite.rotation, $Gun/Sprite.rotation + deg2rad(35 if $Gun/Sprite.rotation_degrees < 0 else -35), (getFireRate()/4) * 3)
 	$GunRecoil2.start()
+	

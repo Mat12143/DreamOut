@@ -171,6 +171,10 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="dreamout"
 config/icon="res://sprites/logo.png"
 
+[audio]
+
+default_bus_layout=""
+
 [autoload]
 
 Network="*res://Network.gd"

@@ -1,0 +1,96 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://sprites/theme_of_themes.tres" type="Theme" id=1]
+
+[sub_resource type="GDScript" id=4]
+script/source = "extends Control
+
+
+func initialize():
+	# Controlla se tutti i giocatori sono morti, se si abilita MenuButton
+	# Mostra in modo carino tutte le statistiche
+	# Bottone per copiare le statistiche da mandare agli amici
+	# Bottone per SPECTARE i tuoi amici
+	pass
+
+
+func _on_MenuButton_pressed():
+	get_tree().change_scene(\"res://Title.tscn\")
+"
+
+[sub_resource type="DynamicFontData" id=2]
+font_path = "res://sprites/Pixolletta8px.ttf"
+
+[sub_resource type="DynamicFont" id=3]
+size = 30
+font_data = SubResource( 2 )
+
+[node name="ErrorScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextChanger" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = SubResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 320.0
+margin_bottom = 180.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Texts" type="VBoxContainer" parent="."]
+margin_top = 33.0
+margin_right = 320.0
+margin_bottom = 156.0
+alignment = 1
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="RichTextLabel" parent="Texts"]
+margin_right = 320.0
+margin_bottom = 59.0
+rect_clip_content = false
+size_flags_vertical = 3
+custom_fonts/normal_font = SubResource( 3 )
+bbcode_enabled = true
+bbcode_text = "[center][color=red]Job Failed[/color][/center]"
+text = "Job Failed"
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Description" type="RichTextLabel" parent="Texts"]
+margin_top = 63.0
+margin_right = 320.0
+margin_bottom = 123.0
+size_flags_vertical = 3
+bbcode_enabled = true
+bbcode_text = "[center]There will be some stats here.[/center]"
+text = "There will be some stats here."
+
+[node name="MenuButton" type="Button" parent="."]
+margin_left = 114.0
+margin_top = 140.0
+margin_right = 205.0
+margin_bottom = 156.0
+size_flags_horizontal = 4
+text = "Return to menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="MenuButton" to="TextChanger" method="_on_MenuButton_pressed"]
