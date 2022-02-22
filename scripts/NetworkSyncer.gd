@@ -1,6 +1,10 @@
 extends Node
 class_name NetworkSyncer, "res://sprites/Icons/NetworkSyncer.svg"
 
+# Made by Tesohh (Simone Tesini) from Pyros.
+# Created for Dreamout (dreamout.pyros.dev)
+# Checkout my stuff: pyros.dev
+
 export (PoolStringArray) var syncedProperties # Variables to sync
 export (bool) var unreliable = false # Determines if the rset should be unreliable or not
 

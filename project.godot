@@ -200,7 +200,6 @@ first_button/url="https://dreamout.pyros.dev"
 
 window/size/width=320
 window/size/height=180
-window/size/resizable=false
 window/size/test_width=640
 window/size/test_height=360
 mouse_cursor/custom_image="res://sprites/Cursors/base.png"

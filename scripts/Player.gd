@@ -68,7 +68,8 @@ var data = { # Questo verra' salvato
 	"health": maxHealth,
 	"selectedGun": Guns.SMG, # Viene salvato come numero (ENUM GUNS)
 	"name": "Player",
-	"damageReason": "idk"
+	"damageReason": "idk",
+	"joinTime": OS.get_ticks_msec()
 }
 var baseData = data.duplicate()
 var gunData = {
@@ -277,7 +278,8 @@ func _physics_process(delta):
 				event.emit_signal("messageEntered", data.name, "[color=red]%s was killed by %s[/color]" % [data.name, data.damageReason], {"hideAuthor": true})
 				rpc("die")
 				yield(get_tree().create_timer(2), "timeout")
-				current.get_node("Transitioner").transition(true)
+				current.add_child(load("res://scenes/UI/DeathScreen.tscn").instance())
+				current.get_node("DeathScreen").initialize(self)
 			rset_unreliable('slave_position', position)
 
 		else: # Puppet code
