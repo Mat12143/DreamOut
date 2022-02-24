@@ -1,7 +1,7 @@
 extends Node2D
 
 var roomsGrid = {}
-var roomSize = Vector2(320, 180)
+var roomSize = Vector2(320, 208)
 var spaceBetweenRooms = 30
 var playerRoom = null
 var maxNumberRoom = 1000
@@ -30,8 +30,8 @@ var posAndDirections = {
 var spawnDirections = {
 	"Right": Vector2(-20, 0),
 	"Left": Vector2(20, 0),
-	"Down": Vector2(0, -15),
-	"Up": Vector2(0, 15)
+	"Down": Vector2(0, -25),
+	"Up": Vector2(0, 25)
 }
 
 var directions = [
@@ -247,13 +247,10 @@ func create_room(gridLayout, backDoor = null):
 
 func _ready():
 
-<<<<<<< HEAD
-	#var save = load("user://lastDungeon.tscn")
 
-=======
+	#var save = load("user://lastDungeon.tscn")
 	var save = load("user://lastDungeon.tscn")
-	
->>>>>>> fb955ab2df0ae09f9394263413aa22caf59e56f4
+
 #	if save == null:
 	randomize()
 	var firstRoom = create_room(Vector2.ZERO, null)

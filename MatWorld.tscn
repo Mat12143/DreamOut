@@ -116,6 +116,7 @@ __meta__ = {
 }
 
 [node name="ChatBox" parent="HUD" instance=ExtResource( 12 )]
+margin_right = 272.0
 
 [node name="Health" type="HBoxContainer" parent="HUD"]
 margin_left = 24.0
