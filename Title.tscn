@@ -164,7 +164,7 @@ margin_bottom = 40.0
 focus_mode = 1
 button_mask = 7
 enabled_focus_mode = 1
-text = "PLAY"
+text = "Host"
 
 [node name="Play2" type="Button" parent="Actions"]
 margin_top = 44.0
@@ -186,6 +186,7 @@ enabled_focus_mode = 1
 text = "Hub"
 
 [node name="Settings" type="Button" parent="Actions"]
+visible = false
 margin_top = 64.0
 margin_right = 72.0
 margin_bottom = 80.0
@@ -193,6 +194,30 @@ focus_mode = 1
 button_mask = 7
 enabled_focus_mode = 1
 text = "SETTINGS"
+
+[node name="Lobby" type="VBoxContainer" parent="."]
+visible = false
+margin_left = 213.0
+margin_top = 28.0
+margin_right = 295.0
+margin_bottom = 101.0
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="Label" parent="Lobby"]
+margin_right = 82.0
+margin_bottom = 10.0
+text = "-- Players --"
+align = 1
+
+[node name="StartButton" type="Button" parent="Lobby"]
+visible = false
+margin_top = 14.0
+margin_right = 82.0
+margin_bottom = 30.0
+text = "Start Game"
 
 [node name="Logo" type="TextureRect" parent="."]
 margin_left = 64.0
@@ -289,6 +314,7 @@ script = ExtResource( 5 )
 [connection signal="pressed" from="Actions/Play2" to="Actions" method="_on_Play2_pressed"]
 [connection signal="pressed" from="Actions/Hub" to="." method="_on_Hub_pressed"]
 [connection signal="pressed" from="Actions/Hub" to="Actions" method="_on_Hub_pressed"]
+[connection signal="pressed" from="Lobby/StartButton" to="Actions" method="_on_StartButton_pressed"]
 [connection signal="pressed" from="Socials/Discord" to="Socials/Discord" method="_on_Button_pressed"]
 [connection signal="pressed" from="Socials/Youtube" to="Socials/Youtube" method="_on_Button_pressed"]
 [connection signal="pressed" from="Socials/Twitter" to="Socials/Twitter" method="_on_Button_pressed"]

@@ -65,7 +65,10 @@ remote func _send_player_info(id, info):
 	new_player.set_network_master(id)
 	players[id].playerScene = new_player
 	new_player.init(info.name, info.position, true)
-	addToWorld(id)
+	var label = Label.new()
+	$'/root/TitleScreen/Lobby'.add_child_below_node($"/root/TitleScreen/Lobby/Title", label)
+	label.text = info.name
+#	addToWorld(id)
 	print(players)
 	
 
@@ -75,3 +78,6 @@ func update_position(id, position):
 remote func addToWorld(id):
 	
 	$'/root/World/'.add_child(players[id].playerScene)
+	
+
+	
