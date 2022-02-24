@@ -247,9 +247,11 @@ func _physics_process(delta):
 				input_vector = input_vector.normalized()
 				if input_vector != Vector2.ZERO:
 	#				animationState.travel("Walk")
+					$AnimationPlayer.play("Walk Front", -1, 0.5)
 					velocity = velocity.move_toward(input_vector * max_speed, acceleration)
 				else:
-					animationState.travel("Idle")
+#					animationState.travel("Idle")
+					$AnimationPlayer.play("Idle Front", -1, 0.1)
 					velocity = velocity.move_toward(Vector2.ZERO, friction)
 					
 				
@@ -354,7 +356,7 @@ remotesync func die():
 	$HitBox.disabled = true
 	$Sounds/Death.play()
 	yield(get_tree().create_timer(0.1), "timeout")
-	animationState.travel("Death")
+#	animationState.travel("Death")
 
 # ===== SIGNALS =====		
 func _on_GlobalEventManager_playerHit(damage, _name, reason = "the unknown"):
