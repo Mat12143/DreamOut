@@ -63,9 +63,15 @@ remote func _send_player_info(id, info):
 	var new_player = load('res://scenes/Player.tscn').instance()
 	new_player.name = str(id)
 	new_player.set_network_master(id)
-	$'/root/World/'.add_child(new_player)
+	players[id].playerScene = new_player
 	new_player.init(info.name, info.position, true)
+	addToWorld(id)
 	print(players)
+	
 
 func update_position(id, position):
 	players[id].position = position
+
+remote func addToWorld(id):
+	
+	$'/root/World/'.add_child(players[id].playerScene)
