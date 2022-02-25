@@ -165,6 +165,7 @@ remote func remoteUpdateGunVisuals(currentData):
 	$ShootSound.stream = gunSounds[data.selectedGun]
 
 func init(nickname:String, start_position, is_slave):
+	print(start_position)
 	nickname = nickname.strip_edges()#.substr(0, 16)
 	data.name = nickname
 	$GUI/Nickname.text = nickname
@@ -175,17 +176,14 @@ func init(nickname:String, start_position, is_slave):
 
 func _ready():
 	if name != "Player" and is_network_master():
-		print_debug("Gordo")
-		print(data.name)
+#		print_debug("Gordo")
+#		print(data.name)
 		get_parent().get_node("HUD").inject(self)
 		get_parent().get_node("HUD").updateHud()
 		get_parent().get_node("HUD/ChatBox").inject(self)
 		get_parent().get_node("CommandManager").inject(self)
 		get_parent().get_node("GlobalEventManager").inject(self)
 		get_parent().get_node("DungeonSpawn").inject(self)
-		
-	else:
-		print_debug("NO GORDO")
 #	get_parent().get_node("HUD/ChatBox").inject(self)
 	
 	
@@ -282,10 +280,13 @@ func _physics_process(delta):
 				yield(get_tree().create_timer(2), "timeout")
 				current.add_child(load("res://scenes/UI/DeathScreen.tscn").instance())
 				current.get_node("DeathScreen").initialize(self)
+				
+#			if $CantMoveNetwork.is_stopped():
 			rset_unreliable('slave_position', position)
 
 		else: # Puppet code
-			position = slave_position
+#			if $CantMoveNetwork.is_stopped():
+				position = slave_position
 
 		if get_tree().is_network_server():
 	#		print(name)

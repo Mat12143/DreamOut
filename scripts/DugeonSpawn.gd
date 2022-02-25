@@ -258,7 +258,7 @@ remote func createFirstRoomForAll(doorsDir):
 	
 	var firstRoom = create_room(Vector2.ZERO, null, doorsDir)
 	playerRoom = firstRoom
-	Player.position = Vector2.ZERO
+#	Player.position = Vector2.ZERO
 	
 	print("RICEVUTO!")
 

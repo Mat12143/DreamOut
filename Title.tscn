@@ -212,6 +212,16 @@ margin_bottom = 10.0
 text = "-- Players --"
 align = 1
 
+[node name="RichTextLabel" type="RichTextLabel" parent="Lobby"]
+margin_top = 14.0
+margin_right = 82.0
+margin_bottom = 47.0
+bbcode_enabled = true
+bbcode_text = "Connecting..."
+text = "Connecting..."
+fit_content_height = true
+scroll_active = false
+
 [node name="StartButton" type="Button" parent="Lobby"]
 visible = false
 margin_top = 14.0

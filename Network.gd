@@ -7,7 +7,7 @@ const DEFAULT_PORT = 31400
 const MAX_PLAYERS = 5
 
 var players = { }
-var self_data = { name = '', position = Vector2(222, 100) }
+var self_data = { name = '', position = Vector2(222, 100), playerScene = load('res://scenes/Player.tscn').instance()  }
 
 signal player_disconnected
 signal server_disconnected
@@ -18,6 +18,7 @@ func _ready():
 
 func create_server(player_nickname):
 	self_data.name = player_nickname
+#	self_data.playerScene =
 	players[1] = self_data
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(DEFAULT_PORT, MAX_PLAYERS)
@@ -65,9 +66,9 @@ remote func _send_player_info(id, info):
 	new_player.set_network_master(id)
 	players[id].playerScene = new_player
 	new_player.init(info.name, info.position, true)
-	var label = Label.new()
-	$'/root/TitleScreen/Lobby'.add_child_below_node($"/root/TitleScreen/Lobby/Title", label)
-	label.text = info.name
+#	var label = Label.new()
+	$'/root/TitleScreen/Actions'.refreshLobby() #.add_child_below_node($"/root/TitleScreen/Lobby/Title", label)
+#	label.text = info.name
 #	addToWorld(id)
 	print(players)
 	
@@ -76,7 +77,6 @@ func update_position(id, position):
 	players[id].position = position
 
 remote func addToWorld(id):
-	
 	$'/root/World/'.add_child(players[id].playerScene)
 	
 
