@@ -173,6 +173,9 @@ func init(nickname:String, start_position, is_slave):
 	if is_slave:
 #		$GUI/Nickname.rect_size = $GUI/Nickname.get_font("font").get_string_size($GUI/Nickname.text)
 		$GUI/Nickname.show()
+	else:
+		if Network.players.size() != 1:
+			$GUI/Pointer.show()
 
 func _ready():
 	if name != "Player" and is_network_master():

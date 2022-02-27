@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/NPCs/Dungeon NPC.tscn" type="PackedScene" id=2]
 [ext_resource path="res://HUD.tscn" type="PackedScene" id=3]
 [ext_resource path="res://sfx/music/corruption.mp3" type="AudioStream" id=4]
@@ -11,6 +11,7 @@
 [ext_resource path="res://CommandManager.gd" type="Script" id=14]
 [ext_resource path="res://scripts/ScreenShake.gd" type="Script" id=17]
 [ext_resource path="res://items/scripts/itemDB.gd" type="Script" id=18]
+
 
 [node name="Spawn" type="Node2D"]
 script = ExtResource( 9 )

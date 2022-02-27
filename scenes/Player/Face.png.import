@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Belt.png-224f60e91d6b297dcd3ca51af9664669.stex"
+path="res://.import/Face.png-f25158758fd365738328325cc2546d16.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/Belt.png"
-dest_files=[ "res://.import/Belt.png-224f60e91d6b297dcd3ca51af9664669.stex" ]
+source_file="res://scenes/Player/Face.png"
+dest_files=[ "res://.import/Face.png-f25158758fd365738328325cc2546d16.stex" ]
 
 [params]
 

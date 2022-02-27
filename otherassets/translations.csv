@@ -1,6 +1,8 @@
 id,en,it
 PLAY,Play,Gioca
+PLAYERS,Players,Giocatori
 SETTINGS,Settings,Impostazioni
+STARTGAME,Start Game,Inizia Partita
 antibomb,"The Unbomber
 You are immune to your own explosions","Il Debombatore
 Sei immune alle tue bombe"

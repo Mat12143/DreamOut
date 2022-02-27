@@ -7,7 +7,7 @@ const DEFAULT_PORT = 31400
 const MAX_PLAYERS = 5
 
 var players = { }
-var self_data = { name = '', position = Vector2(222, 100), playerScene = load('res://scenes/Player.tscn').instance()  }
+var self_data = { name = '', position = Vector2(222, 100), playerScene = load('res://scenes/Player/Player.tscn').instance()  }
 
 signal player_disconnected
 signal server_disconnected
@@ -39,8 +39,7 @@ func _connected_to_server():
 func _on_player_disconnected(id):
 	if id == 1:
 		get_tree().network_peer = null
-		get_tree().change_scene("res://ErrorScreen.tscn")
-		get_tree().current_scene.get_node("TextChanger").changeText("ASD", "ASD")
+#		get_tree().change_scene("res://ErrorScreen.tscn")
 	players.erase(id)
 
 func _on_player_connected(connected_player_id):
@@ -61,7 +60,7 @@ remote func _request_players(request_from_id):
 
 remote func _send_player_info(id, info):
 	players[id] = info
-	var new_player = load('res://scenes/Player.tscn').instance()
+	var new_player = load('res://scenes/Player/Player.tscn').instance()
 	new_player.name = str(id)
 	new_player.set_network_master(id)
 	players[id].playerScene = new_player

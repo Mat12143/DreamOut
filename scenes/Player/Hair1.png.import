@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Shirt1.png-7606388b01c8aa9075acf37a63c6a7cd.stex"
+path="res://.import/Hair1.png-737f2c0fdd0cc824dc4ff27081477e23.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/Shirt1.png"
-dest_files=[ "res://.import/Shirt1.png-7606388b01c8aa9075acf37a63c6a7cd.stex" ]
+source_file="res://scenes/Player/Hair1.png"
+dest_files=[ "res://.import/Hair1.png-737f2c0fdd0cc824dc4ff27081477e23.stex" ]
 
 [params]
 

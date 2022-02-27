@@ -1,9 +1,34 @@
 extends Node2D
 var player
 onready var event = owner.get_node('GlobalEventManager')
+var whisperLastRecipient
 
 func inject(newPlayer):
 	player = newPlayer
+	
+func w(args:Array):
+	if !!whisperLastRecipient and args.size() < 2:
+		event.emit_signal("messageEntered", "Console", "[color=red]Please type a message.[/color]", {"whisperRecipient": player.name})			
+	elif !whisperLastRecipient and args.size() < 3:
+		event.emit_signal("messageEntered", "Console", "[color=red]Please type the name of the recipient and a message.[/color]", {"whisperRecipient": player.name})
+	
+	var recipient	
+	for k in Network.players.keys():
+		var v = Network.players[k]
+		if v.name == args[1]:
+			recipient = k
+	
+	if !!whisperLastRecipient:
+		recipient = whisperLastRecipient
+	
+	print(recipient, args)
+	
+	if !!recipient:
+		args.remove(1)
+		whisperLastRecipient = recipient
+		event.emit_signal("messageEntered", player.data.name + "-> You", args.slice(2, args.size()), {"whisperRecipient": recipient})
+	else:
+		event.emit_signal("messageEntered", "Console", "[color=red]No recipient found.[/color]", {"whisperRecipient": player.name})
 
 func toggleshake(args):
 	player.data.settings.screenShake = !player.data.settings.screenShake
@@ -110,6 +135,11 @@ var commands = {
 	"toggleshake": {
 		"description": "Toggles screen shake",
 		"args": 0,
+		"cheat": false
+	},
+	"w": {
+		"description": "Send a private message to a player",
+		"args": 2,
 		"cheat": false
 	},
 }

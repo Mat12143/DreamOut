@@ -74,8 +74,9 @@ func _on_StartButton_pressed():
 remotesync func startGame():
 	get_tree().change_scene("res://MatWorld.tscn")
 	for i in Network.players.keys():
-		Network.rpc("addToWorld", i)
-		print(Network.players[i])
-		if Network.players[i].playerScene.is_network_master():
-#			Network.update_position(i, Vector2(222, 100))
-			Network.addToWorld(i)
+#		if i != 1:
+			Network.rpc("addToWorld", i)
+	#		print(Network.players[i])
+			if Network.players[i].playerScene.is_network_master():
+	#			Network.update_position(i, Vector2(222, 100))
+				Network.addToWorld(i)
