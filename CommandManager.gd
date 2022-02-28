@@ -85,7 +85,17 @@ func damage(args):
 	event.emit_signal("playerHit", damageToDeal, player.name, "magic")
 	event.emit_signal("messageEntered", "Console", "Damaged you")
 
+func zoom(args):
+	var zoomPercent = (1 / (float(args[1]) / 100))
+	get_tree().current_scene.get_node("Camera2D").zoom = Vector2(zoomPercent, zoomPercent)
+
 var commands = {
+	"zoom": {
+		"description": "Sets camera zoom. Only for devs",\
+		"args": 1,
+		"cheat": true,
+		"devOnly": true
+	},
 	"setgun": {
 		"description": "Sets your gun",
 		"helpDesc": "Sets your gun. To see a list of numbers for the guns, run /help guns",
@@ -196,6 +206,8 @@ func _on_GlobalEventManager_messageEntered(author, text:String):
 			if commands[args[0].replace("/", "")].cheat and !get_tree().is_network_server():
 				event.emit_signal("messageEntered", "Console", "[color=red]Only admins can use this command[/color]", {"whisperRecipient": player.name})
 				return
+			if commands[args[0].replace("/", "")].has("devOnly") and commands[args[0].replace("/", "")].devOnly and !player.data.dev:
+				event.emit_signal("messageEntered", "Console", "[color=red]Only developers can use this command[/color]", {"whisperRecipient": player.name})
 			call(args[0].replace("/", ""), args)
 		else:
 			event.emit_signal("messageEntered", "Console", "[color=red]No command found.[/color]", {"whisperRecipient": player.name})

@@ -9,7 +9,6 @@ extents = Vector2( 5.00002, 4.99998 )
 [node name="Bullet" type="Area2D"]
 modulate = Color( 1.5, 1.5, 1.5, 1 )
 script = ExtResource( 2 )
-speed = 350
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708

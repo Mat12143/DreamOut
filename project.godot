@@ -29,6 +29,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scenes/UI/DynamicTooltip.gd"
 }, {
+"base": "EditorProperty",
+"class": "EC_CreateCategory",
+"language": "GDScript",
+"path": "res://addons/export_categories/ec_create_category.gd"
+}, {
+"base": "Area2D",
+"class": "EnemyBullet",
+"language": "GDScript",
+"path": "res://scenes/bullets/BaseBullet.gd"
+}, {
+"base": "Node",
+"class": "EnemyWeapon",
+"language": "GDScript",
+"path": "res://scenes/weapons/BaseEnemyWeapon.gd"
+}, {
 "base": "",
 "class": "GitAPI",
 "language": "NativeScript",
@@ -139,6 +154,9 @@ _global_script_class_icons={
 "DiscordRPC": "",
 "DiscordRPCEnum": "",
 "DynamicTooltip": "",
+"EC_CreateCategory": "",
+"EnemyBullet": "",
+"EnemyWeapon": "",
 "GitAPI": "",
 "IPC": "",
 "IPCModule": "",
@@ -212,7 +230,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/AsepriteWizard/plugin.cfg", "res://addons/godot_editor_discord_presence/plugin.cfg", "res://addons/multirun/plugin.cfg", "res://addons/zylann.translation_editor/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/AsepriteWizard/plugin.cfg", "res://addons/export_categories/plugin.cfg", "res://addons/godot_editor_discord_presence/plugin.cfg", "res://addons/multirun/plugin.cfg", "res://addons/zylann.translation_editor/plugin.cfg" )
 
 [gdnative]
 

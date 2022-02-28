@@ -33,10 +33,10 @@ var posAndDirections = {
 }
 
 var spawnDirections = {
-	"Right": Vector2(-20, 0),
-	"Left": Vector2(20, 0),
-	"Down": Vector2(0, -15),
-	"Up": Vector2(0, 15)
+	"Right": Vector2(-25, 0),
+	"Left": Vector2(25, 0),
+	"Down": Vector2(0, -20),
+	"Up": Vector2(0, 20)
 }
 
 var directions = [
@@ -136,7 +136,9 @@ func create_room(gridLayout, backDoor = null, doorsDir = null, roomTemplate = nu
 	if createdRooms == 0: room = firstRoom.instance()
 	else: 
 		if roomTemplate == null:
-			var index = randi() % len(roomTemplates.keys()) - 1
+#			print("AAA")
+			var index = randi() % len(roomTemplates.keys()) # - 1 @Mat Dava problemi
+			print(index)
 			var indexInAnalyse = 0
 			
 			for key in roomTemplates.keys():
@@ -144,6 +146,7 @@ func create_room(gridLayout, backDoor = null, doorsDir = null, roomTemplate = nu
 					room = roomTemplates[key].instance()
 				indexInAnalyse += 1
 		else:
+#			print("BBB")			
 			room = roomTemplates[roomTemplate].instance()
 	add_child(room)
 	

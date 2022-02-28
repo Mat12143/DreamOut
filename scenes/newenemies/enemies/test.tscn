@@ -1,13 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://sprites/Enemies/pyroslogo.png" type="Texture" id=1]
-[ext_resource path="res://scenes/weapons/SupremeCalamitas.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/weapons/Cross4.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/weapons/CrazyBubbles1.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/newenemies/EnemyEssentials.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/weapons/OrangeFlurry.tscn" type="PackedScene" id=5]
 
 [sub_resource type="GDScript" id=2]
-script/source = "extends KinematicBody2D
+script/source = "1extends KinematicBody2D
 
 var legacy = false
 "
@@ -19,8 +17,8 @@ extents = Vector2( 8, 8 )
 script = SubResource( 2 )
 
 [node name="EnemyEssentials" parent="." instance=ExtResource( 4 )]
-weapons = [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 5 ) ]
-shuffleAttacks = true
+weapons = [ ExtResource( 2 ) ]
+bulletModulate = Color( 0.678431, 1, 0.780392, 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 scale = Vector2( 0.05, 0.05 )

@@ -25,6 +25,8 @@ one_shot = true
 stream = ExtResource( 4 )
 volume_db = -35.0
 
+[node name="ShootSound" type="AudioStreamPlayer2D" parent="."]
+
 [node name="DeleteCorpse" type="Timer" parent="."]
 one_shot = true
 

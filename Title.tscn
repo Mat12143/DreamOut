@@ -74,8 +74,8 @@ script/source = "extends ColorRect
 
 
 func _ready():
-	if !OS.has_feature(\"standalone\"):
-		queue_free()
+#	if !OS.has_feature(\"standalone\"):
+#		queue_free()
 	$LighterSound.play()
 	yield(get_tree().create_timer(0.7), \"timeout\")
 	$AnimationPlayer.play(\"To Left\")

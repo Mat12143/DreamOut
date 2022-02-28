@@ -43,10 +43,14 @@ func _physics_process(_delta):
 #				var velocity = actor.global_position.direction_to(player.global_position)
 #				actor.move_and_collide(velocity * speed * delta)
 				if fireDelayTimer.is_stopped():
+					if get_parent().animationPlayer.has_animation(\"Attack\"):
+						get_parent().animationState.travel(\"Attack\")
+					get_parent().get_node(\"ShootSound\").play()
 					fireDelayTimer.start(fireDelay)
-					weapon.get_children()[attackIndex].shoot(player)
+					var currentWeapon = weapon.get_children()[attackIndex]
+					currentWeapon.shoot(player)
 					attackIndex += 1
-					if attackIndex >=weapon.get_children().size():
+					if attackIndex >= weapon.get_children().size():
 						attackIndex = 0
 			else:
 				print('Engaging, but missing weapon or player')
@@ -66,7 +70,7 @@ func set_state(new_state: int):
 	emit_signal(\"state_changed\", state)
 	
 func _on_PlayerDetection_body_entered(body: Node):
-	if body.is_in_group(\"Player\"):
+	if body.is_in_group(\"Player\") and $VisibilityNotifier.is_on_screen():
 		$Exclamation.show()
 		if ($Exclamation.frame == 0):
 			$Exclamation/AnimationPlayer.play(\"Disappear\")
@@ -78,10 +82,14 @@ func _on_PlayerDetection_body_exited(body):
 	if body.is_in_group(\"Player\") and !forceEngage:
 		set_state(State.PATROL)
 		player = body
+
+
+func _on_VisibilityEnabler2D_screen_exited():
+	set_state(State.PATROL)
 "
 
-[sub_resource type="CircleShape2D" id=3]
-radius = 104.0
+[sub_resource type="CircleShape2D" id=7]
+radius = 160.0
 
 [sub_resource type="Animation" id=5]
 resource_name = "Disappear"
@@ -118,13 +126,15 @@ tracks/0/keys = {
 script = SubResource( 4 )
 speed = 0
 
+[node name="VisibilityNotifier" type="VisibilityNotifier2D" parent="."]
+
 [node name="FireDelayTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="PlayerDetection" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
-shape = SubResource( 3 )
+shape = SubResource( 7 )
 
 [node name="Exclamation" type="Sprite" parent="."]
 visible = false
@@ -137,5 +147,6 @@ hframes = 16
 anims/Disappear = SubResource( 5 )
 anims/RESET = SubResource( 6 )
 
+[connection signal="screen_exited" from="VisibilityNotifier" to="." method="_on_VisibilityEnabler2D_screen_exited"]
 [connection signal="body_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]
 [connection signal="body_exited" from="PlayerDetection" to="." method="_on_PlayerDetection_body_exited"]

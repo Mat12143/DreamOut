@@ -8,14 +8,18 @@ script/source = "extends EnemyBullet
 
 func _physics_process(delta):
 	._physics_process(delta)
-	if distanceTravelled < 40:
-		look_at(player.global_position)
+	if !destroyingIncoming:
+		speed -= distanceTravelled + rand_range(-20, 10)
+		speed = clamp(speed, 20, 9999999)
+		if speed == 20:
+			destroyingIncoming = true
+			destroyAfterABit()
 "
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 5.00002, 4.99998 )
 
-[node name="HomingMissile" type="Area2D"]
+[node name="BubblyBullet" type="Area2D"]
 modulate = Color( 1.5, 1.5, 1.5, 1 )
 script = SubResource( 2 )
 
