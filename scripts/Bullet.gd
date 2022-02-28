@@ -23,6 +23,7 @@ func _physics_process(delta):
 #		print(gunRange)
 		if (distanceTravelled == gunRange):
 			destroy(DISTANCE, {"invincible": false})
+			
 func destroy(reason, body):
 	if !body.get("invincible") or body.invincible == false:
 		
@@ -63,36 +64,38 @@ func initialize(newDamage, newSpeed, newType, newRange, newShooter):
 func _on_Bullet_body_entered(body):
 		var reason
 		if body.is_in_group("mobs"):
+			var target = body.get_node("EnemyEssentials") if !body.legacy else body
+			print(target)			
 			reason = HITENEMY
-			if !body.get("invincible") or body.invincible == false:
-				if body.get_node("IFrameTimer").is_stopped() or body.hitFromShotGun:
+			if !target.get("invincible") or target.invincible == false:
+				if target.get_node("IFrameTimer").is_stopped() or target.hitFromShotGun:
 					# 2 = shotgun
-					body.hitFromShotGun = bulletType == 2
-					body.get_node("IFrameTimer").start(0.3)
-					body.health -= damage
-					body.get_node("HPBar").show()
-					body.get_node("HPBar").value = (float(body.health) / body.maxHealth * 100)
-					body.get_node("AI/Exclamation").show()
-					if (body.get_node("AI/Exclamation").frame == 0):
-						body.get_node("AI/Exclamation/AnimationPlayer").play("Disappear")
-					body.get_node("HurtSound").play()
-					body.get_node("AI").forceEngage = true
-					if body.get_node("AI").state == 0:
-						body.get_node("AI").set_state(1)
-						body.get_node("AI/FireDelayTimer").start(1)
-					body.get_node("AI").player = shooter
+					target.hitFromShotGun = bulletType == 2
+					target.get_node("IFrameTimer").start(0.3)
+					target.health -= damage
+					target.get_node("HPBar").show()
+					target.get_node("HPBar").value = (float(target.health) / target.maxHealth * 100)
+					target.get_node("AI/Exclamation").show()
+					if (target.get_node("AI/Exclamation").frame == 0):
+						target.get_node("AI/Exclamation/AnimationPlayer").play("Disappear")
+					target.get_node("HurtSound").play()
+					target.get_node("AI").forceEngage = true
+					if target.get_node("AI").state == 0:
+						target.get_node("AI").set_state(1)
+						target.get_node("AI/FireDelayTimer").start(1)
+					target.get_node("AI").player = shooter
 				var p = hitParticle.instance()
 				get_tree().current_scene.add_child(p)
 				p.rotation = rotation
-				p.position = body.global_position
-			elif body.get_node("HitInvincible"):
-				body.get_node("HitInvincible").play()
+				p.position = target.global_position
+			elif target.get_node("HitInvincible"):
+				target.get_node("HitInvincible").play()
 				
 			
 					
-#		print(body.is_in_group("friendlyProjectilesPassThrough"))
-		if body.is_in_group('Soft'):
-			body.health -= 1
+#		print(target.is_in_group("friendlyProjectilesPassThrough"))
+#		if body.is_in_group('Soft'):
+#			body.health -= 1
 		if !body.is_in_group('friendlyProjectilesPassThrough') and $CollisionShape2D.shape.radius != explosionRadius:
 			reason = HITWALL
 			destroy(reason, body)

@@ -8,6 +8,7 @@ var hitFromShotGun = false
 var toTweenOrNotToTween = true
 var invincible = false
 onready var blood = preload("res://scenes/particles/EnemyDeath.tscn")
+var legacy = true
 
 func _ready():
 	AI.initialize(self, weapon)

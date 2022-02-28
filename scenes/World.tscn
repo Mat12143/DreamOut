@@ -9,7 +9,7 @@
 [ext_resource path="res://sprites/Player/giuratore.png" type="Texture" id=7]
 [ext_resource path="res://sfx/wallHit.wav" type="AudioStream" id=8]
 [ext_resource path="res://scenes/Player/Player.tscn" type="PackedScene" id=9]
-[ext_resource path="res://ChatBox.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/UI/ChatBox.tscn" type="PackedScene" id=10]
 [ext_resource path="res://scripts/DugeonSpawn.gd" type="Script" id=11]
 
 [node name="World" type="YSort"]

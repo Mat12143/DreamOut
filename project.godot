@@ -169,6 +169,10 @@ config/description="Bullet-hell Roguelite that's all about dreams and nightmares
 run/main_scene="res://Title.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="dreamout"
+boot_splash/image="res://sprites/Icons/pixellogo/singlelogo.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://sprites/logo.png"
 
 [audio]

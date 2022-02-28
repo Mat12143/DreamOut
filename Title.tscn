@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://theo.png" type="Texture" id=1]
 [ext_resource path="res://sprites/theme_of_themes.tres" type="Theme" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://sprites/Icons/discord.png" type="Texture" id=9]
 [ext_resource path="res://sprites/Icons/pyros.png" type="Texture" id=10]
 [ext_resource path="res://scripts/MenuActions.gd" type="Script" id=11]
+[ext_resource path="res://sprites/Icons/pixellogo/lighter.mp3" type="AudioStream" id=12]
+[ext_resource path="res://sprites/Icons/pixellogo/fire(1).mp3" type="AudioStream" id=14]
 
 [sub_resource type="GDScript" id=3]
 script/source = "extends Control
@@ -66,6 +68,105 @@ func _ready():
 func _on_Button_pressed():
 	OS.shell_open(\"https://\" + link)
 "
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends ColorRect
+
+
+func _ready():
+	if !OS.has_feature(\"standalone\"):
+		queue_free()
+	$LighterSound.play()
+	yield(get_tree().create_timer(0.7), \"timeout\")
+	$AnimationPlayer.play(\"To Left\")
+	yield(get_tree().create_timer(0.1), \"timeout\")	
+	$FireSound.play()
+#	$Tween.interpolate_property($Sprite, \"modulate\", Color(\"00ffffff\"), Color(\"ffffff\"), 0.8)
+#	$Tween.start()
+	
+
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim_name == \"To Left\":
+		yield(get_tree().create_timer(1), \"timeout\")
+#		owner.get_node(\"Actions\").show()
+		$Tween.interpolate_property(self, \"modulate\", modulate, Color(\"00ffffff\"), 0.6)
+		$Tween.start()
+
+
+
+func _on_FireSound_finished():
+	queue_free()
+"
+
+[sub_resource type="StreamTexture" id=6]
+load_path = "res://.import/logo.png-cca8726399059c8d4f806e28e356b14d.stex"
+
+[sub_resource type="Animation" id=7]
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 9.0 ]
+}
+
+[sub_resource type="Animation" id=8]
+length = 0.1
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 0.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 0.0 ]
+}
+tracks/1/type = "audio"
+tracks/1/path = NodePath("FireSound")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/keys = {
+"clips": [  ],
+"times": PoolRealArray(  )
+}
+tracks/2/type = "audio"
+tracks/2/path = NodePath("LighterSound")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/keys = {
+"clips": [  ],
+"times": PoolRealArray(  )
+}
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
@@ -319,6 +420,40 @@ script = ExtResource( 5 )
 
 [node name="Transitioner" parent="." instance=ExtResource( 3 )]
 
+[node name="LoadingScreen" type="ColorRect" parent="."]
+margin_right = 320.0
+margin_bottom = 184.0
+color = Color( 0, 0, 0, 1 )
+script = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="LoadingScreen"]
+position = Vector2( 160, 90 )
+texture = SubResource( 6 )
+hframes = 4
+vframes = 4
+frame = 9
+__meta__ = {
+"_editor_description_": "YXNlcHJpdGVfd2l6YXJkX2NvbmZpZwpwbGF5ZXJ8PUxvYWRpbmdTY3JlZW4vQW5pbWF0aW9uUGxheWVyCnNvdXJjZXw9cmVzOi8vc3ByaXRlcy9JY29ucy9waXhlbGxvZ28vbG9nby5hc2Vwcml0ZQpsYXllcnw9Cm9wX2V4cHw9RmFsc2UKb19mb2xkZXJ8PQpvX25hbWV8PQpvbmx5X3Zpc2libGV8PUZhbHNlCm9fZXhfcHw9Cg=="
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="LoadingScreen"]
+"anims/Fire Starter" = SubResource( 7 )
+anims/Static = SubResource( 8 )
+"anims/To Left" = SubResource( 9 )
+
+[node name="Tween" type="Tween" parent="LoadingScreen"]
+
+[node name="LighterSound" type="AudioStreamPlayer" parent="LoadingScreen"]
+stream = ExtResource( 12 )
+volume_db = 10.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="LoadingScreen"]
+stream = ExtResource( 14 )
+volume_db = -6.0
+
 [connection signal="text_changed" from="Actions/NameInput" to="Actions" method="_on_NameInput_text_changed"]
 [connection signal="pressed" from="Actions/Play" to="Actions" method="_on_Play_pressed"]
 [connection signal="pressed" from="Actions/Play2" to="Actions" method="_on_Play2_pressed"]
@@ -330,3 +465,5 @@ script = ExtResource( 5 )
 [connection signal="pressed" from="Socials/Twitter" to="Socials/Twitter" method="_on_Button_pressed"]
 [connection signal="pressed" from="Socials/Insta" to="Socials/Insta" method="_on_Button_pressed"]
 [connection signal="pressed" from="Socials/Tiktok" to="Socials/Tiktok" method="_on_Button_pressed"]
+[connection signal="animation_finished" from="LoadingScreen/AnimationPlayer" to="LoadingScreen" method="_on_AnimationPlayer_animation_finished"]
+[connection signal="finished" from="LoadingScreen/FireSound" to="LoadingScreen" method="_on_FireSound_finished"]

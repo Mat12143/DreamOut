@@ -41,6 +41,9 @@ func scal(_player):
 	
 func missile(_player):
 	$Homing.shoot(_player)
+	
+func shoot(_player):
+	missile(_player)
 "
 
 [node name="Weapon" type="Node2D"]

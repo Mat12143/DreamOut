@@ -21,13 +21,16 @@ var player = null
 var actor = null
 var weapon = null
 var forceEngage = false
+var shuffle = false
+var attackIndex = 0
 export var speed = 10
 export var fireDelay = 1.2
 var dontChangeStateOnHit = false
 
-func initialize(actor, weapon):
+func initialize(actor, weapon, shuffle=false):
 	self.actor = actor
 	self.weapon = weapon
+	self.shuffle = shuffle
 
 func _physics_process(_delta):
 	match state:
@@ -41,7 +44,10 @@ func _physics_process(_delta):
 #				actor.move_and_collide(velocity * speed * delta)
 				if fireDelayTimer.is_stopped():
 					fireDelayTimer.start(fireDelay)
-					weapon.shoot(player)
+					weapon.get_children()[attackIndex].shoot(player)
+					attackIndex += 1
+					if attackIndex >=weapon.get_children().size():
+						attackIndex = 0
 			else:
 				print('Engaging, but missing weapon or player')
 		State.SHOOT:

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/lighter.mp3-04c44fe974f1fd7cf02458b257f5e6d6.mp3str"
+
+[deps]
+
+source_file="res://sprites/Icons/pixellogo/lighter.mp3"
+dest_files=[ "res://.import/lighter.mp3-04c44fe974f1fd7cf02458b257f5e6d6.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/fire(1).mp3-6b194c5474ec7a79c1910dfa1d4064ce.mp3str"
+
+[deps]
+
+source_file="res://sprites/Icons/pixellogo/fire(1).mp3"
+dest_files=[ "res://.import/fire(1).mp3-6b194c5474ec7a79c1910dfa1d4064ce.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

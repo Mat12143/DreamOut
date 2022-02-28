@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scenes/newenemies/EnemyEssentials.gd" type="Script" id=1]
 [ext_resource path="res://scripts/NetworkSyncer.gd" type="Script" id=2]
 [ext_resource path="res://scenes/enemies/HPBar.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sfx/enemyHurt.wav" type="AudioStream" id=4]
 
 [node name="EnemyEssentials" type="Node2D"]
 script = ExtResource( 1 )
@@ -16,3 +17,17 @@ unreliable = true
 doubleOwner = true
 
 [node name="Weapons" type="Node2D" parent="."]
+
+[node name="IFrameTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+volume_db = -35.0
+
+[node name="DeleteCorpse" type="Timer" parent="."]
+one_shot = true
+
+[node name="Tween" type="Tween" parent="."]
+
+[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]

@@ -9,7 +9,7 @@ export (PoolStringArray) var syncedProperties # Variables to sync
 export (bool) var unreliable = false # Determines if the rset should be unreliable or not
 export (bool) var doubleOwner = false
 
-var target = owner
+onready var target = owner
 
 puppet var puppets = {}
 var masters = {}
